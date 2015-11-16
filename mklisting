@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+out_name="listing.tex"
+
+cat ./basetex > $out_name
+echo "\begin{document}" >> $out_name
+
+for arg in "$@"
+do
+    echo "\lstinputlisting{$arg}" >> $out_name
+done
+
+echo "\end{document}" >> $out_name
