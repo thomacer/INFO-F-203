@@ -63,7 +63,7 @@ public class Parking {
 
         for ( int i = 0; i < this.carList.length(); ++i ) {
             if ( this.carList[i] == toMoveCar ) {
-                result[i] = toMoveCar.forward()
+                result[i] = newCarPos;
             } else {
                 result[i] = carElem.copy();
             }
@@ -83,23 +83,24 @@ public class Parking {
         // TODO la même qu'au dessus.
     }
 
-    public Car set_goal_car (int x_pos, int y_pos) {
+    public Car set_goal_car (int[] x_pos, int[] y_pos) {
         this.goal_car = this.append_car (x_pos, y_pos); 
-        // Est-ce qu'aucune copie ne va être fait,
-        // est-ce qu'on a les même réfèrence ? 
 
         return this.goal_car;
     }
 
-    public Car append_car (int x_pos, int y_pos) {
+    public Car append_car (int[] x_pos, int[] y_pos) {
         Car newCar = new Car(x_pos, y_pos);
-        this.carList.add( newCar );
 
-        // TODO Prendre en compte que l'on peut avoir plusieurs positions.
-        // TODO On peut faire cette opération avant pour attraper 
-        //      les éventuels erreurs qu'il peut y avoir si il y a
-        //      déjà une voiture à cette position.
-        this.parkingMatrix[x_pos][y_pos] = true;
+        for ( int[2] pos : newCar ) {
+            if (this.parkingMatrix[x_pos][y_pos]) {
+                throw "Position déjà occupée par une autre voiture.";
+            } else {
+                this.parkingMatrix[x_pos][y_pos] = true; 
+            }
+        }
+
+        this.carList.add( newCar );
 
         return newCar;
     }
@@ -117,9 +118,13 @@ public class Parking {
         this.carList = carList;
 
         this.parkingMatrix = new boolean[x_size][y_size];
-        for () {
-            for () {
-                // TODO Ajouter le tout à la matrice.
+        for ( Car car : carList ) {
+            for ( int[2] pos : car ) {
+                if (this.parkingMatrix[x_pos][y_pos]) {
+                    throw "Position déjà occupée par une autre voiture.";
+                } else {
+                    this.parkingMatrix[pos[0]][pos[1]] = true;
+                }
             }
         }
     }
