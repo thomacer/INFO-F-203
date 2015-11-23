@@ -18,25 +18,27 @@ public class Parking {
      */
     @Override
     public Iterator<Car> iterator () {
-        Iterator<Car> it = new Iterator<Car>();
+        Iterator<Car> it = new Iterator<Car>() {
 
-        private int currentIndex = 0;
+            private int currentIndex = 0;
 
-        @Override
-        public boolean hasNext() {
-            return currentIndex < carList.length;
-        }
+            @Override
+            public boolean hasNext() {
+                return currentIndex < carList.length;
+            }
 
-        @Override
-        public Car next() {
-            ++currentIndex;
-            return carList[currentIndex];
-        }
+            @Override
+            public Car next() {
+                ++currentIndex;
+                return carList[currentIndex];
+            }
 
-        @Override
-        public void remove() {
-            throw new UnsupportedOperationException();
-        }
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
+        return it;
     }
 
     /* @desc Renvoie un la manière dont le parking serait si
@@ -49,7 +51,7 @@ public class Parking {
     public Parking move_forward( Car toMoveCar ) {
         // Vérification que la voiture sait avancer.
         Car newCarPos = toMoveCar.forward();
-        for ( int[2] newPosition : toMoveCar ) {
+        for ( int[] newPosition : toMoveCar ) {
             if ( newPosition[0] > this.x_size
                     || newPosition[1] > this.y_size
                     || this.parkingMatrix[newPosition[0]][newPosition[1]] ) {
@@ -92,7 +94,7 @@ public class Parking {
     public Car append_car (int[] x_pos, int[] y_pos) {
         Car newCar = new Car(x_pos, y_pos);
 
-        for ( int[2] pos : newCar ) {
+        for ( int[] pos : newCar ) {
             if (this.parkingMatrix[x_pos][y_pos]) {
                 throw "Position déjà occupée par une autre voiture.";
             } else {
@@ -119,7 +121,7 @@ public class Parking {
 
         this.parkingMatrix = new boolean[x_size][y_size];
         for ( Car car : carList ) {
-            for ( int[2] pos : car ) {
+            for ( int[] pos : car ) {
                 if (this.parkingMatrix[x_pos][y_pos]) {
                     throw "Position déjà occupée par une autre voiture.";
                 } else {
