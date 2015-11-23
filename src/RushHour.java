@@ -43,8 +43,6 @@ public class RushHour {
             // Si il n'est pas dans la liste.
             parkingList.add(newParking);
             this._add_entry_to_graph(); // Rajoute de la place pour {i}
-        } else {
-            i = -1;
         }
 
         return i;
@@ -56,25 +54,30 @@ public class RushHour {
      * @param {parking_conf} : Un objet parking qui contient 
      *      la configuration d'un parking (position voiture
      *      + taille du parking).
+     *
+     *  @return {Index du noeud} : Retourne l'index du noeud qui a été traité.
+     *      
      */
     private int _generate_parkings(Parking parkingConf) {
         int i = this._put_in_graph (parkingConf);
-        if ( i == -1 ) {
-            return -1; // Le sommet à déjà été traiter pas de sens de continuer
+        if ( i < (parkingList.size() - 1) ) {
+            // Si i est plus petit que la taille de "parkingList - 1"
+            // ça veut dire que l'on a déjà traité ce sommet, ou qu'il est
+            // occupé d'être traité.
+            return i;
         }
 
         int j; // Sert à savoir quel noeud à été ajouté
         for ( Car specific_car : parkingConf ) {
-            // On avance la voiture tant que c'est possible.
-
             // TODO Trouver un moyen plus joli pour faire le backtracking.
+
+            // On avance la voiture tant que c'est possible.
             Parking tmp_parking_conf = parkingConf.move_forward( specific_car );
             while ( tmp_parking_conf != null ) {
                 j = this._generate_parkings( tmp_parking_conf );
-                if ( j > -1 ) {
-                    // Création d'une arrête entre les deux.
-                    this.parkingGraph.get(i).set(j, true);
-                }
+                // Création d'une arrête entre les deux.
+                this.parkingGraph.get(i).set(j, true);
+
                 tmp_parking_conf = parkingConf.move_forward( specific_car );
             }
 
@@ -82,10 +85,9 @@ public class RushHour {
             tmp_parking_conf = parkingConf.move_backward( specific_car );
             while ( tmp_parking_conf != null ) {
                 j = this._generate_parkings( tmp_parking_conf );
-                if ( j > -1 ) {
-                   // Création d'une arrête entre les deux.
-                   this.parkingGraph.get(i).set(j, true);
-                }
+                // Création d'une arrête entre les deux.
+                this.parkingGraph.get(i).set(j, true);
+
                 tmp_parking_conf = parkingConf.move_backward( specific_car );
             }
         }
