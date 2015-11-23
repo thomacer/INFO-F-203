@@ -22,18 +22,19 @@ public class ParkingIN {
 		BufferedReader file_reader=null;
 		try{
 			file_reader=new BufferedReader(new FileReader(this._filename));
-			this.parse_parking(file_reader);
+			Parking baseParking = this.parse_parking(file_reader);
 			this.parse_element(file_reader);
-			this.parse_emplaceme(file_reader);
+			this.parse_emplaceme(file_reader, baseParking);
 			file_reader=new BufferedReader(new FileReader(this._filename));		//reouvre le fichier
 			this.parse_exit(file_reader);
 		}
 		catch( FileNotFoundException exception){
 			System.out.print("File not found!Try again");
 		}
+        return baseParking;
 	}
 	
-	public void parse_parking(BufferedReader file){
+	public Parking parse_parking(BufferedReader file){
 		try{
 			String line;
 			line=file.readLine();
@@ -41,8 +42,10 @@ public class ParkingIN {
 			this._ySize=this.get_next_int(line, line.indexOf("s"));
 			
 		}catch(IOException ioe){
-			System.out.print("Erreur --"+ioe.toString());
+			System.out.print("Erreur --"+ioe.toString()); // TODO Throw au lieu d'un simple message d'erreur.
 		}
+
+        return new Parking(this._xSize, this._ySize);
 	}
 	public void parse_element(BufferedReader file){
 		try{
@@ -60,23 +63,29 @@ public class ParkingIN {
 			System.out.print("Erreur --"+ioe.toString());
 		}
 	}
-	public void parse_emplaceme(BufferedReader file){
+	public void parse_emplaceme(BufferedReader file, Parking parkingRef){
 		try{
 			String line;
-			line=file.readLine(); 		
+			line=file.readLine();
+            ArrayList<int> xPos;
+            ArrayList<int> yPos;
 			for (int i=0;i<this._nbreGoal+this._nbreVoiture;++i){
-				line=file.readLine();	//chaque ligne
-				int x=this.get_next_int(line, line.indexOf("("));//premier x coord
-				int y=this.get_next_int(line, line.indexOf(","));//premier y coord
+				line=file.readLine(); //chaque ligne
+
+                xPos = new ArrayList(0);
+                yPos = new ArrayList(0);
+
+				xPos.add( this.get_next_int(line, line.indexOf("(")) ); //premier x coord
+				yPos.add( this.get_next_int(line, line.indexOf(",")) ); //premier y coord
 				//System.out.print(x);			//premier x coord
 				//System.out.print(y);			//premier y coord
-				int xt=this.get_next_int(line, line.lastIndexOf("(")); 	//deuximee x coord
-				int yt=this.get_next_int(line, line.lastIndexOf(","));	//deuxiem y coord
+				xPos.add( this.get_next_int(line, line.lastIndexOf("(")) ); //deuximee x coord
+				yPos.add( this.get_next_int(line, line.lastIndexOf(",")) ); //deuxiem y coord
 				//System.out.print(" ");
 				//System.out.print(xt);	//deuximee x coord
 				//System.out.print(yt);	//deuxiem y coord
 				//System.out.print(" ");
-				
+			    parkingRef.add_car(xPos, yPos)
 			}
 			
 		}catch(IOException ioe){
