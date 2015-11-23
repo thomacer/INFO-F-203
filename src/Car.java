@@ -12,26 +12,29 @@ public class Car {
     private Direction dir;
 
     @Override
-    public Iterator<int[2]> iterator () {
-        Iterator<int[2]> it = new Iterator<int[2]>(); 
+    public Iterator<int[]> iterator () {
+        Iterator<int[]> it = new Iterator<int[]>() {
 
-        private int currentIndex = 0;
+            private int currentIndex = 0;
 
-        @Override
-        public boolean hasNext() {
-            return currentIndex < x_position.length;
-        }
+            @Override
+            public boolean hasNext() {
+                return currentIndex < x_position.length;
+            }
 
-        @Override
-        public int[2] next() {
-            ++currentIndex;
-            return { x_position[i], y_position[i] };
-        }
+            @Override
+            public int[] next() {
+                ++currentIndex;
+                int[] result = { x_position[currentIndex], y_position[currentIndex] };
+                return result;
+            }
 
-        @Override
-        public void remove() {
-            throw new UnsupportedOperationException();
-        }
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
+        return it;
     }
     
     /* @desc Renvoie la position de la voiture si on doit
@@ -43,24 +46,24 @@ public class Car {
         Car result;
         if ( this.dir == HORIZONTAL ) {
             // Change la position de tout les éléments
-            int newXpos[this.x_position.length];
+            int[] newXpos = new int[this.x_position.length];
             for ( int i = 0; i < this.x_position.length; ++i ) {
                 newXpos[i] = (this.x_position[i] + 1);
             }
             result = new Car( newXpos,
                               this.y_position, 
                               this.dir
-                             )
+                             );
         } else {
             // Change la position de tout les éléments
-            int newYpos[this.y_position.length];
+            int[] newYpos = new int[this.y_position.length];
             for ( int i = 0; i < this.y_position.length; ++i ) {
                 newYpos[i] = (this.y_position[i] + 1);
             }
             result = new Car( this.x_position,
                               newYpos,
                               this.dir
-                             )
+                             );
         }
         return result;
     }
@@ -74,7 +77,7 @@ public class Car {
         Car result;
         if ( this.dir == HORIZONTAL ) {
             // Change la position de tout les éléments
-            int newXpos[this.x_position.length];
+            int[] newXpos = new int[this.x_position.length];
             for ( int i = 0; i < this.x_position.length; ++i ) {
                 newXpos[i] = (this.x_position[i] - 1);
             }
@@ -82,17 +85,17 @@ public class Car {
             result = new Car( newXpos,
                               this.y_position, 
                               this.dir
-                             )
+                             );
         } else {
             // Change la position de tout les éléments
-            int newYpos[this.y_position.length];
+            int[] newYpos = new int[this.y_position.length];
             for ( int i = 0; i < this.y_position.length; ++i ) {
                 newYpos[i] = (this.y_position[i] - 1);
             }
             result = new Car( this.x_position,
                               newYpos,
                               this.dir
-                             )
+                             );
         }
         return result;
     }
