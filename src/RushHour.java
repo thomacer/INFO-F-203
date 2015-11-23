@@ -16,16 +16,15 @@ public class RushHour {
     private void _generate_parkings(Parking parking_conf) {
         // TODO Savoir quoi faire avec tout les parkings généré.
         for ( Car specific_car : parking_conf ) {
-            Parking tmp_parking_conf;
-            tmp_parking_conf = parking_conf.move_forward( specific_car );
             // On avance la voiture tant que c'est possible.
+            Parking tmp_parking_conf = parking_conf.move_forward( specific_car );
             while ( tmp_parking_conf != null ) {
                 this._generate_parkings( tmp_parking_conf );
                 tmp_parking_conf = parking_conf.move_forward( specific_car );
             }
 
-            tmp_parking_conf = parking_conf.move_backward( specific_car );
             // On recule la voiture tant que c'est possible.
+            tmp_parking_conf = parking_conf.move_backward( specific_car );
             while ( tmp_parking_conf != null ) {
                 this._generate_parkings( parking_conf.move_backward(specic_car) )
                 tmp_parking_conf = parking_conf.move_backward( specific_car );

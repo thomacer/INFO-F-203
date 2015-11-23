@@ -30,7 +30,7 @@ public class Parking {
         @Override
         public Car next() {
             ++currentIndex;
-            carList[currentIndex];
+            return carList[currentIndex];
         }
 
         @Override
@@ -49,11 +49,13 @@ public class Parking {
     public Parking move_forward( Car toMoveCar ) {
         // Vérification que la voiture sait avancer.
         Car newCarPos = toMoveCar.forward();
-        int[2] newPosition = newCarPos.position();
-        if ( newPosition[0] > this.x_size
-                || newPosition[1] > this.y_size
-                || this.parkingMatrix[newPosition[0]][newPosition[1]] ) {
-            return null;
+        for ( int[2] newPosition : toMoveCar ) {
+            if ( newPosition[0] > this.x_size
+                    || newPosition[1] > this.y_size
+                    || this.parkingMatrix[newPosition[0]][newPosition[1]] ) {
+                // TODO problème ici car il y aura toujours les positions de la voiture.
+                return null;
+            }
         }
 
         // COPY de {carList} mais en remplaçant {toMoveCar}.

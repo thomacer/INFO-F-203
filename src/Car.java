@@ -1,4 +1,5 @@
 import java.util.EnumSet;
+import java.util.Iterator;
 
 public class Car {
     public enum Direction {
@@ -10,11 +11,29 @@ public class Car {
     private int[] y_position;
     private Direction dir;
 
-    public int[] get_position () {
-        // TODO Trouver un moyen d'avoir les positions
-        // ---> iterator ?
-    }
+    @Override
+    public Iterator<int[2]> iterator () {
+        Iterator<int[2]> it = new Iterator<int[2]>(); 
 
+        private int currentIndex = 0;
+
+        @Override
+        public boolean hasNext() {
+            return currentIndex < x_position.length;
+        }
+
+        @Override
+        public int[2] next() {
+            ++currentIndex;
+            return { x_position[i], y_position[i] };
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+    }
+    
     /* @desc Renvoie la position de la voiture si on doit
      *      l'avancer.
      *
