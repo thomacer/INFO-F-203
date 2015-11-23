@@ -1,7 +1,8 @@
 import java.util.EnumSet;
 import java.util.Iterator;
+import java.lang.Iterable;
 
-public class Car {
+public class Car implements Iterable<int[]> {
     public enum Direction {
         HORIZONTAL,
         VERTICAL
@@ -13,7 +14,7 @@ public class Car {
 
     @Override
     public Iterator<int[]> iterator () {
-        Iterator<int[]> it = new Iterator<int[]>() {
+        Iterator<int[]> it = new Iterator<int[]> () {
 
             private int currentIndex = 0;
 
@@ -44,7 +45,7 @@ public class Car {
      */
     public Car forward () {
         Car result;
-        if ( this.dir == HORIZONTAL ) {
+        if ( this.dir == Direction.HORIZONTAL ) {
             // Change la position de tout les éléments
             int[] newXpos = new int[this.x_position.length];
             for ( int i = 0; i < this.x_position.length; ++i ) {
@@ -75,7 +76,7 @@ public class Car {
      */
     public Car backward () {
         Car result;
-        if ( this.dir == HORIZONTAL ) {
+        if ( this.dir == Direction.HORIZONTAL ) {
             // Change la position de tout les éléments
             int[] newXpos = new int[this.x_position.length];
             for ( int i = 0; i < this.x_position.length; ++i ) {
@@ -104,5 +105,16 @@ public class Car {
         this.x_position = x_pos;
         this.y_position = y_pos;
         this.dir = dir;
+    }
+
+    Car ( int[] x_pos, int[] y_pos) {
+        this.x_position = x_pos;
+        this.y_position = y_pos;
+
+        if (x_pos[0] == x_pos[1]) {
+            this.dir = Direction.VERTICAL;
+        } else {
+            this.dir = Direction.HORIZONTAL;
+        }
     }
 }

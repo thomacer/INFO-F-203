@@ -1,16 +1,20 @@
-import java.io.IOException;
-import java.io.FileReader;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.util.Iterator;
-import Car;
+import java.util.ArrayList;
 
-public class Parking {
+public class Parking implements Iterable<Car> {
     private int x_size;
     private int y_size;
     private Car goal_car;
-    private Car[] carList;
+    private ArrayList<Car> carList = new ArrayList<Car>(0);
     private boolean[][] parkingMatrix;
+
+    public boolean[][] get_parkingMatrix () {
+        return this.parkingMatrix;
+    }
+
+    public boolean equals(Parking other) {
+        return this.get_parkingMatrix() == other.get_parkingMatrix();
+    }
 
     /* http://stackoverflow.com/questions/5849154/can-we-write-our-own-iterator-in-java
      * @desc Iterateur sur les véhicules de la classe pour acceder
@@ -24,13 +28,13 @@ public class Parking {
 
             @Override
             public boolean hasNext() {
-                return currentIndex < carList.length;
+                return currentIndex < carList.size();
             }
 
             @Override
             public Car next() {
                 ++currentIndex;
-                return carList[currentIndex];
+                return carList.get(currentIndex);
             }
 
             @Override
@@ -61,13 +65,13 @@ public class Parking {
         }
 
         // COPY de {carList} mais en remplaçant {toMoveCar}.
-        Car[] result = new Car[this.carList.length];
+        ArrayList<Car> result = new ArrayList<Car>( this.carList.size() );
 
-        for ( int i = 0; i < this.carList.length(); ++i ) {
-            if ( this.carList[i] == toMoveCar ) {
-                result[i] = newCarPos;
+        for ( int i = 0; i < this.carList.size(); ++i ) {
+            if ( this.carList.get(i) == toMoveCar ) {
+                result.set(i, newCarPos);
             } else {
-                result[i] = carElem.copy();
+                result.set(i, this.carList.get(i)); // TODO .clone());
             }
         }
 
@@ -83,6 +87,7 @@ public class Parking {
      */
     public Parking move_backward( Car toMoveCar ) {
         // TODO la même qu'au dessus.
+        return null;
     }
 
     public Car set_goal_car (int[] x_pos, int[] y_pos) {
@@ -95,10 +100,10 @@ public class Parking {
         Car newCar = new Car(x_pos, y_pos);
 
         for ( int[] pos : newCar ) {
-            if (this.parkingMatrix[x_pos][y_pos]) {
-                throw "Position déjà occupée par une autre voiture.";
+            if (this.parkingMatrix[pos[0]][pos[1]]) {
+                // throw "Position déjà occupée par une autre voiture.";
             } else {
-                this.parkingMatrix[x_pos][y_pos] = true; 
+                this.parkingMatrix[pos[0]][pos[1]] = true; 
             }
         }
 
@@ -114,7 +119,7 @@ public class Parking {
         this.parkingMatrix = new boolean[x_size][y_size];
     }
 
-    Parking (int x_size, int y_size, Car carList) {
+    Parking (int x_size, int y_size, ArrayList<Car> carList) {
         this.x_size = x_size;
         this.y_size = y_size;
         this.carList = carList;
@@ -122,8 +127,8 @@ public class Parking {
         this.parkingMatrix = new boolean[x_size][y_size];
         for ( Car car : carList ) {
             for ( int[] pos : car ) {
-                if (this.parkingMatrix[x_pos][y_pos]) {
-                    throw "Position déjà occupée par une autre voiture.";
+                if (this.parkingMatrix[pos[0]][pos[1]]) {
+                    // throw "Position déjà occupée par une autre voiture.";
                 } else {
                     this.parkingMatrix[pos[0]][pos[1]] = true;
                 }

@@ -1,10 +1,54 @@
-import Parking;
-import ParkingIN;
-import Car;
+import java.util.ArrayList;
 
 public class RushHour {
-    // private Car[] carList;
     private Parking baseParking;
+
+    private ArrayList<ArrayList<Boolean>> parkingGraph = new ArrayList(new ArrayList(0));
+    // Chaques configuration de parking vont être stockée ici.
+    private ArrayList<Parking> parkingList = new ArrayList<Parking>(0);
+
+
+    // TODO Mettre les opération sur les matrices dans une classe ou quelque
+    // chose comme ça pour une lecture plus facile du code.
+    /* @desc Ajoute une entrée (pour le sommet) dans le graph.
+     */
+    private void _add_entry_to_graph () {
+        // Ajout à chaque colonne d'une nouvelle entrée.
+        for ( int i = 0; i < parkingGraph.size(); ++i ) {
+            parkingGraph.get(i).add(false);
+        }
+
+        // Création de la nouvelle colonne
+        int newSize = (parkingGraph.size() + 1);
+        ArrayList<Boolean> newColumn = new ArrayList(newSize);
+        for ( int i = 0; i < newColumn.size(); ++i ) {
+            newColumn.set(i, false);
+        }
+        parkingGraph.add(newColumn);
+    }
+
+    /* @desc Place dans le graph que l'on vient de générer.
+     *
+     * @param {newParking} : Nouveau parking à placer dans le graphe.
+     *
+     * @return {index} du nouvel élément si on a dû l'ajouter, sinon -1.
+     */
+    private int _put_in_graph (Parking newParking) {
+        int i = 0;
+        // Recherche pour savoir si il y a déjà un {newParking} dans la liste.
+        while ( (i < parkingList.size()) && (parkingList.get(i) != newParking) ) {
+            ++i;
+        }
+        if (i == parkingList.size()) {
+            // Si il n'est pas dans la liste.
+            parkingList.add(newParking);
+            this._add_entry_to_graph(); // Rajoute de la place pour {i}
+        } else {
+            i = -1;
+        }
+
+        return i;
+    }
 
     /* @desc Génère récursivement toutes les configurations 
      *      possible de parking.
@@ -13,23 +57,39 @@ public class RushHour {
      *      la configuration d'un parking (position voiture
      *      + taille du parking).
      */
-    private void _generate_parkings(Parking parking_conf) {
-        // TODO Savoir quoi faire avec tout les parkings généré.
-        for ( Car specific_car : parking_conf ) {
+    private int _generate_parkings(Parking parkingConf) {
+        int i = this._put_in_graph (parkingConf);
+        if ( i == -1 ) {
+            return -1; // Le sommet à déjà été traiter pas de sens de continuer
+        }
+
+        int j; // Sert à savoir quel noeud à été ajouté
+        for ( Car specific_car : parkingConf ) {
             // On avance la voiture tant que c'est possible.
-            Parking tmp_parking_conf = parking_conf.move_forward( specific_car );
+
+            // TODO Trouver un moyen plus joli pour faire le backtracking.
+            Parking tmp_parking_conf = parkingConf.move_forward( specific_car );
             while ( tmp_parking_conf != null ) {
-                this._generate_parkings( tmp_parking_conf );
-                tmp_parking_conf = parking_conf.move_forward( specific_car );
+                j = this._generate_parkings( tmp_parking_conf );
+                if ( j > -1 ) {
+                    // Création d'une arrête entre les deux.
+                    this.parkingGraph.get(i).set(j, true);
+                }
+                tmp_parking_conf = parkingConf.move_forward( specific_car );
             }
 
             // On recule la voiture tant que c'est possible.
-            tmp_parking_conf = parking_conf.move_backward( specific_car );
+            tmp_parking_conf = parkingConf.move_backward( specific_car );
             while ( tmp_parking_conf != null ) {
-                this._generate_parkings( parking_conf.move_backward(specic_car) )
-                tmp_parking_conf = parking_conf.move_backward( specific_car );
+                j = this._generate_parkings( tmp_parking_conf );
+                if ( j > -1 ) {
+                   // Création d'une arrête entre les deux.
+                   this.parkingGraph.get(i).set(j, true);
+                }
+                tmp_parking_conf = parkingConf.move_backward( specific_car );
             }
         }
+        return i;
     }
 
     public static void main (String[] args) {
@@ -37,7 +97,7 @@ public class RushHour {
             ParkingIN parsedParking = new ParkingIN(args[1]);
             baseParking = parsedParking.parseParking();
 
-            ParkingGraph result_graph = _generate_parkings(baseParking);
+            _generate_parkings(baseParking);
         } else {
             // print usage.
         }
