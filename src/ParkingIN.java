@@ -42,7 +42,7 @@ public class ParkingIN {
 			line=file.readLine();
 			this._xSize=this.get_next_int(line, line.indexOf(":"));
 			this._ySize=this.get_next_int(line, line.indexOf("s"));
-			
+			System.out.print("parking"+this._xSize);
 		}catch(IOException ioe){
 			System.out.print("Erreur --"+ioe.toString()); // TODO Throw au lieu d'un simple message d'erreur.
 		}
@@ -101,7 +101,7 @@ public class ParkingIN {
 			String line;
 			line=file.readLine();			//on lit les deux ligne qui ne nous servent a rien
 			line=file.readLine();
-			int j=1;						//conteur pour savoir le nombre de ligne qu'on saute
+			int j=1;					//conteur pour savoir le nombre de ligne qu'on saute
 			for (int i=1;(i<=this._ySize*2-1);++i){
 				line=file.readLine();
 				if (i%2==0){					//pas les ligne qui contien +---+
@@ -140,7 +140,7 @@ public class ParkingIN {
         int j = i;
         String res="";
         while (j < line.length() && Character.isDigit(line.charAt(j))) {
-        	res+=line.charAt(i);
+        	res+=line.charAt(j);
             ++j;
         }
 
