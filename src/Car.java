@@ -9,6 +9,9 @@ public class Car implements Iterable<int[]> {
         VERTICAL
     }
 
+    static private int carNumber = 0;
+    private int personalNum;
+
     private ArrayList<Integer> x_position;
     private ArrayList<Integer> y_position;
     private Direction dir;
@@ -39,6 +42,10 @@ public class Car implements Iterable<int[]> {
         return it;
     }
     
+    public int get_num () {
+        return this.personalNum;
+    }
+
     /* @desc Renvoie la position de la voiture si on doit
      *      l'avancer.
      *
@@ -105,12 +112,19 @@ public class Car implements Iterable<int[]> {
     Car ( ArrayList<Integer> x_pos, ArrayList<Integer> y_pos, Direction dir) {
         this.x_position = x_pos;
         this.y_position = y_pos;
+
+        this.personalNum = this.carNumber;
+        ++this.carNumber;
+
         this.dir = dir;
     }
 
     Car ( ArrayList<Integer> x_pos, ArrayList<Integer> y_pos) {
         this.x_position = x_pos;
         this.y_position = y_pos;
+
+        this.personalNum = this.carNumber;
+        ++this.carNumber;
 
         if (x_pos.get(0) == x_pos.get(1)) {
             // Conformément à l'énoncé toutes voiture doit au moins
