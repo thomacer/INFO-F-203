@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class RushHour {
     private Parking baseParking;
 
-    private ArrayList<ArrayList<Boolean>> parkingGraph = new ArrayList(new ArrayList(0));
+    private ArrayList<ArrayList<Integer>> parkingGraph = new ArrayList(new ArrayList(0));
     // Chaques configuration de parking vont être stockée ici.
     private ArrayList<Parking> parkingList = new ArrayList<Parking>(0);
 
@@ -20,7 +20,7 @@ public class RushHour {
 
         // Création de la nouvelle colonne
         int newSize = (parkingGraph.size() + 1);
-        ArrayList<Boolean> newColumn = new ArrayList(newSize);
+        ArrayList<Integer> newColumn = new ArrayList(newSize);
         for ( int i = 0; i < newColumn.size(); ++i ) {
             newColumn.set(i, false);
         }
@@ -75,8 +75,9 @@ public class RushHour {
             Parking tmp_parking_conf = parkingConf.move_forward( specific_car );
             while ( tmp_parking_conf != null ) {
                 j = this._generate_parkings( tmp_parking_conf );
-                // Création d'une arrête entre les deux.
-                this.parkingGraph.get(i).set(j, true);
+                // Création d'une arrête entre les deux en indiquant quel
+                // voiture à été bougée. 
+                this.parkingGraph.get(i).set(j, specific_car.get_num() );
 
                 tmp_parking_conf = parkingConf.move_forward( specific_car );
             }
@@ -85,8 +86,9 @@ public class RushHour {
             tmp_parking_conf = parkingConf.move_backward( specific_car );
             while ( tmp_parking_conf != null ) {
                 j = this._generate_parkings( tmp_parking_conf );
-                // Création d'une arrête entre les deux.
-                this.parkingGraph.get(i).set(j, true);
+                // Création d'une arrête entre les deux en indiquant quel
+                // voiture à été bougée. 
+                this.parkingGraph.get(i).set( j, specific_car.get_num() );
 
                 tmp_parking_conf = parkingConf.move_backward( specific_car );
             }
