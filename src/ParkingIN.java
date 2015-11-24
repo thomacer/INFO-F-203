@@ -133,7 +133,7 @@ public class ParkingIN {
 	}
 
     private int get_next_int(String line, int i) {
-        while (i < line.length() && Character.isDigit(line.charAt(i))) {
+        while (i < line.length() && !Character.isDigit(line.charAt(i))) {
             ++i;
         }
 

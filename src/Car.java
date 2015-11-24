@@ -26,8 +26,8 @@ public class Car implements Iterable<int[]> {
 
             @Override
             public int[] next() {
-                ++currentIndex;
                 int[] result = { x_position.get(currentIndex), y_position.get(currentIndex) };
+                ++currentIndex;
                 return result;
             }
 

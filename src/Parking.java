@@ -98,7 +98,6 @@ public class Parking implements Iterable<Car> {
 
     public Car add_car (ArrayList<Integer> xPos, ArrayList<Integer> yPos) {
         Car newCar = new Car(xPos, yPos);
-
         for ( int[] pos : newCar ) {
             if (this.parkingMatrix[pos[0]][pos[1]]) {
                 // throw "Position déjà occupée par une autre voiture.";
