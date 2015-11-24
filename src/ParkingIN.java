@@ -19,7 +19,7 @@ public class ParkingIN {
 		_filename=file;								//a appler dans main principal
 	}
 	
-	public Parking parse_input_file(){				//a apepler poir que tout fonctionne.
+	public Parking parse_input_file(){				//a apepler poir que tout
 		BufferedReader file_reader;
         Parking baseParking = null;
 		try{
@@ -29,9 +29,13 @@ public class ParkingIN {
 			this.parse_element(file_reader);
 			baseParking=new Parking(this._xSize,this._ySize,this._exit);
 			this.parse_emplaceme(file_reader, baseParking);
+			file_reader.close();
 		}
 		catch( FileNotFoundException exception){
 			System.out.print("File not found!Try again");
+		}
+		catch(IOException file){
+			System.out.print("File cannot be closed");
 		}
         return baseParking;
 	}
