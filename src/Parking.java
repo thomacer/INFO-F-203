@@ -11,6 +11,7 @@ public class Parking implements Iterable<Car> {
     private int x_size;
     private int y_size;
     private int[] _exit;
+    private boolean _isWin;
     private Car goal_car;
     private ArrayList<Car> carList = new ArrayList<Car>(0);
     private boolean[][] parkingMatrix;
@@ -52,6 +53,29 @@ public class Parking implements Iterable<Car> {
         return it;
     }
 
+    private int[] _get_head_f(Car carToGet) {
+        int[] head = new int[2];
+        head[0] = 0;
+        head[1] = 0;
+        for ( int[] pos : movedCar ) {
+            if ( (pos[0] > head[0]) || (pos[1] > head[1]) ) {
+                head = pos;
+            }
+        }
+        return head;
+    }
+
+    private int[] _get_head_b(Car carToGet) {
+        int[] head = new int[2];
+        head[0] = this.parkingMatrix.length;
+        head[1] = this.parkingMatrix.length;
+        for ( int[] pos : movedCar ) {
+            if ( (pos[0] < head[0]) || (pos[1] < head[1]) ) {
+                head = pos;
+            }
+        }
+    }
+
     /* @desc Cette fonction permet de vérifier si suite à un déplacement,
      *      l'on a fait l'on se trouve toujours dans une configuration valide
      *      du parking, càd dans les limites du parking et en ne touchant pas
@@ -65,22 +89,10 @@ public class Parking implements Iterable<Car> {
         int[] head = new int[2];
         if (dir == _Direction.FORWARD) {
             // Si FORWARD il faut trouver la plus grande coord.
-            head[0] = 0;
-            head[1] = 0;
-            for ( int[] pos : movedCar ) {
-                if ( (pos[0] > head[0]) || (pos[1] > head[1]) ) {
-                    head = pos;
-                }
-            }
+            head = this._get_head_f(movedCar);
         } else {
             // Si BACKWARD il faut trouver la plus petite coord.
-            head[0] = this.parkingMatrix.length;
-            head[1] = this.parkingMatrix.length;
-            for ( int[] pos : movedCar ) {
-                if ( (pos[0] < head[0]) || (pos[1] < head[1]) ) {
-                    head = pos;
-                }
-            }
+            head = this._get_head_b(movedCar);
         }
         return ( this.parkingMatrix[head[0]][head[1]] 
             && (0 <= head[0] && head[0] < this.x_size)
@@ -180,6 +192,7 @@ public class Parking implements Iterable<Car> {
         this.carList = carList;
         this._exit = exit.clone();
 
+        // On place les voitures dans la matrice.
         this.parkingMatrix = new boolean[x_size][y_size];
         for ( Car car : carList ) {
             for ( int[] pos : car ) {
@@ -187,6 +200,36 @@ public class Parking implements Iterable<Car> {
                     // throw "Position déjà occupée par une autre voiture.";
                 } else {
                     this.parkingMatrix[pos[0]][pos[1]] = true;
+                }
+            }
+        }
+
+        // Ajout de la voiture "goal" 
+        if (carList.size() > 0) {
+            // La voiture "goal" qui est toujours dans la liste à l'index "0".
+            this.goal_car = carList.get(0);
+        }
+
+        // Vérification que le parking est une configuration gagnant ou non.
+        this._isWin = true;
+        if (this._exit[0] == 0) {
+            // Si la sortie à été définie à gauche. 
+            int[] currentPos = this._get_head_b(this.goal_car);
+            for (int i = currentPos[0]; i >= 0; --i) {
+                if ( this.parkingMatrix[i][currentPos[1]] ) {
+                    // Si il y a un obstacle sur le chemin on ne sait pas gagner
+                    this._isWin = false;
+                    break;
+                }
+            }
+        } else {
+            // Si la sortie à été définie à droite.
+            int[] currentPos = this._get_head_f(this.goal_car);
+            for (int i = currentPos[0]; i < this.x_size; ++i) {
+                if ( this.parkingMatrix[i][currentPos[1]] ) {
+                    // Si il y a un obstacle sur le chemin on ne sait pas gagner
+                    this._isWin = false;
+                    break;
                 }
             }
         }
