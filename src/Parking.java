@@ -16,12 +16,8 @@ public class Parking implements Iterable<Car> {
     private ArrayList<Car> carList = new ArrayList<Car>(0);
     private boolean[][] parkingMatrix;
 
-    public boolean[][] get_parkingMatrix () {
-        return this.parkingMatrix;
-    }
-
-    public boolean equals(Parking other) {
-        return this.get_parkingMatrix() == other.get_parkingMatrix();
+    public boolean is_won () {
+        return this._isWin; 
     }
 
     /* http://stackoverflow.com/questions/5849154/can-we-write-our-own-iterator-in-java
@@ -54,10 +50,8 @@ public class Parking implements Iterable<Car> {
     }
 
     private int[] _get_head_f(Car carToGet) {
-        int[] head = new int[2];
-        head[0] = 0;
-        head[1] = 0;
-        for ( int[] pos : movedCar ) {
+        int[] head = {0, 0};
+        for ( int[] pos : carToGet ) {
             if ( (pos[0] > head[0]) || (pos[1] > head[1]) ) {
                 head = pos;
             }
@@ -66,14 +60,13 @@ public class Parking implements Iterable<Car> {
     }
 
     private int[] _get_head_b(Car carToGet) {
-        int[] head = new int[2];
-        head[0] = this.parkingMatrix.length;
-        head[1] = this.parkingMatrix.length;
-        for ( int[] pos : movedCar ) {
+        int[] head = {this.parkingMatrix.length, this.parkingMatrix.length};
+        for ( int[] pos : carToGet ) {
             if ( (pos[0] < head[0]) || (pos[1] < head[1]) ) {
                 head = pos;
             }
         }
+        return head;
     }
 
     /* @desc Cette fonction permet de vérifier si suite à un déplacement,
