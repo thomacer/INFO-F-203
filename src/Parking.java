@@ -1,7 +1,13 @@
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.ArrayList;
 
 public class Parking implements Iterable<Car> {
+    private enum _Direction {
+        FORWARD,
+        BACKWARD
+    }
+
     private int x_size;
     private int y_size;
     private Car goal_car;
@@ -45,6 +51,41 @@ public class Parking implements Iterable<Car> {
         return it;
     }
 
+    /* @desc Cette fonction permet de vérifier si suite à un déplacement,
+     *      l'on a fait l'on se trouve toujours dans une configuration valide
+     *      du parking, càd dans les limites du parking et en ne touchant pas
+     *      d'autre véhicule.
+     *
+     * @return {Boolean} Vrai si configuration correct, faux si configuration
+     *      incorrect.
+     */
+    private boolean _check_movement( Car movedCar, _Direction dir ) {
+        // On commence par recherche la "tête" du véhicule.
+        int[] head = new int[2];
+        if (dir == _Direction.FORWARD) {
+            // Si FORWARD il faut trouver la plus grande coord.
+            head[0] = 0;
+            head[1] = 0;
+            for ( int[] pos : movedCar ) {
+                if ( (pos[0] > head[0]) || (pos[1] > head[1]) ) {
+                    head = pos;
+                }
+            }
+        } else {
+            // Si BACKWARD il faut trouver la plus petite coord.
+            head[0] = this.parkingMatrix.length;
+            head[1] = this.parkingMatrix.length;
+            for ( int[] pos : movedCar ) {
+                if ( (pos[0] < head[0]) || (pos[1] < head[1]) ) {
+                    head = pos;
+                }
+            }
+        }
+        return ( this.parkingMatrix[head[0]][head[1]] 
+            && (0 <= head[0] && head[0] < this.x_size)
+            && (0 <= head[1] && head[1] < this.y_size) );
+    }
+
     /* @desc Renvoie un la manière dont le parking serait si
      *      la voiture {toMoveCar} était bougée en avant.
      *
@@ -55,13 +96,9 @@ public class Parking implements Iterable<Car> {
     public Parking move_forward( Car toMoveCar ) {
         // Vérification que la voiture sait avancer.
         Car newCarPos = toMoveCar.forward();
-        for ( int[] newPosition : toMoveCar ) {
-            if ( newPosition[0] > this.x_size
-                    || newPosition[1] > this.y_size
-                    || this.parkingMatrix[newPosition[0]][newPosition[1]] ) {
-                // TODO problème ici car il y aura toujours les positions de la voiture.
-                return null;
-            }
+
+        if (!this._check_movement(toMoveCar, _Direction.FORWARD)) {
+            return null;
         }
 
         // COPY de {carList} mais en remplaçant {toMoveCar}.
@@ -86,8 +123,25 @@ public class Parking implements Iterable<Car> {
      * @return {Parking} : La nouvelle forme du parking.
      */
     public Parking move_backward( Car toMoveCar ) {
-        // TODO la même qu'au dessus.
-        return null;
+        // Vérification que la voiture sait avancer.
+        Car newCarPos = toMoveCar.backward();
+
+        if (!this._check_movement(toMoveCar, _Direction.BACKWARD)) {
+            return null;
+        }
+
+        // COPY de {carList} mais en remplaçant {toMoveCar}.
+        ArrayList<Car> result = new ArrayList<Car>( this.carList.size() );
+
+        for ( int i = 0; i < this.carList.size(); ++i ) {
+            if ( this.carList.get(i) == toMoveCar ) {
+                result.set(i, newCarPos);
+            } else {
+                result.set(i, this.carList.get(i)); // TODO .clone());
+            }
+        }
+
+        return new Parking(this.x_size, this.y_size, result);
     }
 
     public Car set_goal_car (ArrayList<Integer> xPos, ArrayList<Integer> yPos) {
