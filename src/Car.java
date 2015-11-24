@@ -1,4 +1,5 @@
 import java.util.EnumSet;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.lang.Iterable;
 
@@ -8,8 +9,8 @@ public class Car implements Iterable<int[]> {
         VERTICAL
     }
 
-    private int[] x_position;
-    private int[] y_position;
+    private ArrayList<Integer> x_position;
+    private ArrayList<Integer> y_position;
     private Direction dir;
 
     @Override
@@ -20,13 +21,13 @@ public class Car implements Iterable<int[]> {
 
             @Override
             public boolean hasNext() {
-                return currentIndex < x_position.length;
+                return currentIndex < x_position.size();
             }
 
             @Override
             public int[] next() {
                 ++currentIndex;
-                int[] result = { x_position[currentIndex], y_position[currentIndex] };
+                int[] result = { x_position.get(currentIndex), y_position.get(currentIndex) };
                 return result;
             }
 
@@ -47,9 +48,9 @@ public class Car implements Iterable<int[]> {
         Car result;
         if ( this.dir == Direction.HORIZONTAL ) {
             // Change la position de tout les éléments
-            int[] newXpos = new int[this.x_position.length];
-            for ( int i = 0; i < this.x_position.length; ++i ) {
-                newXpos[i] = (this.x_position[i] + 1);
+            ArrayList<Integer> newXpos = new ArrayList<>(this.x_position.size());
+            for ( int i = 0; i < this.x_position.size(); ++i ) {
+                newXpos.set(i, this.x_position.get(i) + 1);
             }
             result = new Car( newXpos,
                               this.y_position, 
@@ -57,9 +58,9 @@ public class Car implements Iterable<int[]> {
                              );
         } else {
             // Change la position de tout les éléments
-            int[] newYpos = new int[this.y_position.length];
-            for ( int i = 0; i < this.y_position.length; ++i ) {
-                newYpos[i] = (this.y_position[i] + 1);
+            ArrayList<Integer> newYpos = new ArrayList<>(this.y_position.size());
+            for ( int i = 0; i < this.y_position.size(); ++i ) {
+                newYpos.set(i, this.y_position.get(i) + 1);
             }
             result = new Car( this.x_position,
                               newYpos,
@@ -78,9 +79,9 @@ public class Car implements Iterable<int[]> {
         Car result;
         if ( this.dir == Direction.HORIZONTAL ) {
             // Change la position de tout les éléments
-            int[] newXpos = new int[this.x_position.length];
-            for ( int i = 0; i < this.x_position.length; ++i ) {
-                newXpos[i] = (this.x_position[i] - 1);
+            ArrayList<Integer> newXpos = new ArrayList<>(this.x_position.size());
+            for ( int i = 0; i < this.x_position.size(); ++i ) {
+                newXpos.set(i, this.x_position.get(i) - 1);
             }
 
             result = new Car( newXpos,
@@ -89,9 +90,9 @@ public class Car implements Iterable<int[]> {
                              );
         } else {
             // Change la position de tout les éléments
-            int[] newYpos = new int[this.y_position.length];
-            for ( int i = 0; i < this.y_position.length; ++i ) {
-                newYpos[i] = (this.y_position[i] - 1);
+            ArrayList<Integer> newYpos = new ArrayList<>(this.y_position.size());
+            for ( int i = 0; i < this.y_position.size(); ++i ) {
+                newYpos.set(i, this.y_position.get(i) - 1);
             }
             result = new Car( this.x_position,
                               newYpos,
@@ -101,17 +102,19 @@ public class Car implements Iterable<int[]> {
         return result;
     }
 
-    Car ( int[] x_pos, int[] y_pos, Direction dir) {
+    Car ( ArrayList<Integer> x_pos, ArrayList<Integer> y_pos, Direction dir) {
         this.x_position = x_pos;
         this.y_position = y_pos;
         this.dir = dir;
     }
 
-    Car ( int[] x_pos, int[] y_pos) {
+    Car ( ArrayList<Integer> x_pos, ArrayList<Integer> y_pos) {
         this.x_position = x_pos;
         this.y_position = y_pos;
 
-        if (x_pos[0] == x_pos[1]) {
+        if (x_pos.get(0) == x_pos.get(1)) {
+            // Conformément à l'énoncé toutes voiture doit au moins
+            // être de taille 2.
             this.dir = Direction.VERTICAL;
         } else {
             this.dir = Direction.HORIZONTAL;

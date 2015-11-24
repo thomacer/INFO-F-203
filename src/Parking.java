@@ -90,13 +90,13 @@ public class Parking implements Iterable<Car> {
         return null;
     }
 
-    public Car set_goal_car (int[] xPos, int[] yPos) {
+    public Car set_goal_car (ArrayList<Integer> xPos, ArrayList<Integer> yPos) {
         this.goal_car = this.add_car (xPos, yPos); 
 
         return this.goal_car;
     }
 
-    public Car add_car (int[] xPos, int[] yPos) {
+    public Car add_car (ArrayList<Integer> xPos, ArrayList<Integer> yPos) {
         Car newCar = new Car(xPos, yPos);
 
         for ( int[] pos : newCar ) {

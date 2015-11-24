@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -18,11 +19,12 @@ public class ParkingIN {
 		_filename=file;
 	}
 	
-	public void parse_input_file(){
-		BufferedReader file_reader=null;
+	public Parking parse_input_file(){
+		BufferedReader file_reader;
+        Parking baseParking = null;
 		try{
 			file_reader=new BufferedReader(new FileReader(this._filename));
-			Parking baseParking = this.parse_parking(file_reader);
+			baseParking = this.parse_parking(file_reader);
 			this.parse_element(file_reader);
 			this.parse_emplaceme(file_reader, baseParking);
 			file_reader=new BufferedReader(new FileReader(this._filename));		//reouvre le fichier
@@ -67,13 +69,13 @@ public class ParkingIN {
 		try{
 			String line;
 			line=file.readLine();
-            ArrayList<int> xPos;
-            ArrayList<int> yPos;
+            ArrayList<Integer> xPos;
+            ArrayList<Integer> yPos;
 			for (int i=0;i<this._nbreGoal+this._nbreVoiture;++i){
 				line=file.readLine(); //chaque ligne
 
-                xPos = new ArrayList(0);
-                yPos = new ArrayList(0);
+                xPos = new ArrayList<Integer>(0);
+                yPos = new ArrayList<Integer>(0);
 
 				xPos.add( this.get_next_int(line, line.indexOf("(")) ); //premier x coord
 				yPos.add( this.get_next_int(line, line.indexOf(",")) ); //premier y coord
@@ -85,7 +87,8 @@ public class ParkingIN {
 				//System.out.print(xt);	//deuximee x coord
 				//System.out.print(yt);	//deuxiem y coord
 				//System.out.print(" ");
-			    parkingRef.add_car(xPos, yPos)
+
+			    parkingRef.add_car(xPos, yPos);
 			}
 			
 		}catch(IOException ioe){
@@ -128,46 +131,29 @@ public class ParkingIN {
 			System.out.print("Erreur --"+ioe.toString());
 		}
 	}
-	private int get_next_int(String line, int i) {
-		boolean cycle=true;
-        while (i < line.length() && cycle)
-        {
-        	if (Character.isDigit(line.charAt(i))){
-        		cycle=false;
-        	}
-        	else{
-        		++i;
-        	}
+
+    private int get_next_int(String line, int i) {
+        while (i < line.length() && Character.isDigit(line.charAt(i))) {
+            ++i;
         }
+
         int j = i;
-        ++j;
-        cycle=true;
-        while (j < line.length() && cycle)
-        {
-        	if (!Character.isDigit(line.charAt(j))){
-        		cycle=false;
-        	}
-        	else{
-        		++j;
-        	}
-        }
         String res="";
-        for(int k=i;k<j;++k){
-        	res+=line.charAt(k);
+        while (j < line.length() && Character.isDigit(line.charAt(j))) {
+        	res+=line.charAt(i);
+            ++j;
         }
+
         int result = Integer.parseInt(res);
+
         return result;
     }
+
 	public static void main(String args[]){
 		Scanner scan=new Scanner(System.in);
 		System.out.print("Enter file name :");
 		String file=scan.nextLine();
 		ParkingIN test=new ParkingIN(file);
 		test.parse_input_file();
-		
-		
-		
-		
 	}
-	
 }
