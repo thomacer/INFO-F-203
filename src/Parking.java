@@ -4,6 +4,7 @@ import java.util.ArrayList;
 public class Parking implements Iterable<Car> {
     private int x_size;
     private int y_size;
+    private int[] _exit;
     private Car goal_car;
     private ArrayList<Car> carList = new ArrayList<Car>(0);
     private boolean[][] parkingMatrix;
@@ -111,9 +112,10 @@ public class Parking implements Iterable<Car> {
         return newCar;
     }
 
-    Parking (int x_size, int y_size) {
+    Parking (int x_size, int y_size,int[] exit) {
         this.x_size = x_size;
         this.y_size = y_size;
+        this._exit=exit.clone();
 
         this.parkingMatrix = new boolean[x_size][y_size];
     }
