@@ -113,7 +113,7 @@ public class Parking implements Iterable<Car> {
             }
         }
 
-        return new Parking(this.x_size, this.y_size, result);
+        return new Parking(this.x_size, this.y_size, this._exit, result);
     }
 
     /* @desc Renvoie un la manière dont le parking serait si
@@ -142,7 +142,7 @@ public class Parking implements Iterable<Car> {
             }
         }
 
-        return new Parking(this.x_size, this.y_size, result);
+        return new Parking(this.x_size, this.y_size, this._exit, result);
     }
 
     public Car set_goal_car (ArrayList<Integer> xPos, ArrayList<Integer> yPos) {
@@ -166,7 +166,7 @@ public class Parking implements Iterable<Car> {
         return newCar;
     }
 
-    Parking (int x_size, int y_size,int[] exit) {
+    Parking (int x_size, int y_size, int[] exit) {
         this.x_size = x_size;
         this.y_size = y_size;
         this._exit=exit.clone();
@@ -174,10 +174,11 @@ public class Parking implements Iterable<Car> {
         this.parkingMatrix = new boolean[x_size][y_size];
     }
 
-    Parking (int x_size, int y_size, ArrayList<Car> carList) {
+    Parking (int x_size, int y_size, int[] exit, ArrayList<Car> carList) {
         this.x_size = x_size;
         this.y_size = y_size;
         this.carList = carList;
+        this._exit = exit.clone();
 
         this.parkingMatrix = new boolean[x_size][y_size];
         for ( Car car : carList ) {
