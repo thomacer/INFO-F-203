@@ -16,19 +16,19 @@ public class ParkingIN {
 	private int[] _exit;
 	
 	ParkingIN(String file){			//constructor
-		_filename=file;
+		_filename=file;								//a appler dans main principal
 	}
 	
-	public Parking parse_input_file(){
+	public Parking parse_input_file(){				//a apepler poir que tout fonctionne.
 		BufferedReader file_reader;
         Parking baseParking = null;
 		try{
 			file_reader=new BufferedReader(new FileReader(this._filename));
-			baseParking = this.parse_parking(file_reader);
-			this.parse_element(file_reader);
-			this.parse_emplaceme(file_reader, baseParking);
-			file_reader=new BufferedReader(new FileReader(this._filename));		//reouvre le fichier
+			this.parse_parking(file_reader);
 			this.parse_exit(file_reader);
+			this.parse_element(file_reader);
+			baseParking=new Parking(this._xSize,this._ySize,this._exit);
+			this.parse_emplaceme(file_reader, baseParking);
 		}
 		catch( FileNotFoundException exception){
 			System.out.print("File not found!Try again");
@@ -36,28 +36,23 @@ public class ParkingIN {
         return baseParking;
 	}
 	
-	public Parking parse_parking(BufferedReader file){
+	public void parse_parking(BufferedReader file){
 		try{
 			String line;
 			line=file.readLine();
 			this._xSize=this.get_next_int(line, line.indexOf(":"));
 			this._ySize=this.get_next_int(line, line.indexOf("s"));
-			System.out.print("parking"+this._xSize);
 		}catch(IOException ioe){
 			System.out.print("Erreur --"+ioe.toString()); // TODO Throw au lieu d'un simple message d'erreur.
 		}
-
-        return new Parking(this._xSize, this._ySize);
 	}
 	public void parse_element(BufferedReader file){
 		try{
 			String line;
-			line=file.readLine();
-			for (int i=0;i<=this._ySize*2+1;++i){
-				line=file.readLine();
-			}
+			line=file.readLine();	//emplacement:
+			line=file.readLine();	//voiture GOAL
 			this._nbreGoal=this.get_next_int(line, line.indexOf(":"));
-			line=file.readLine();
+			line=file.readLine();	//voiture 
 			this._nbreVoiture=this.get_next_int(line, line.indexOf(":"));
 			
 			
@@ -68,7 +63,7 @@ public class ParkingIN {
 	public void parse_emplaceme(BufferedReader file, Parking parkingRef){
 		try{
 			String line;
-			line=file.readLine();
+			line=file.readLine();	//emplacement
             ArrayList<Integer> xPos;
             ArrayList<Integer> yPos;
 			for (int i=0;i<this._nbreGoal+this._nbreVoiture;++i){
@@ -79,16 +74,9 @@ public class ParkingIN {
 
 				xPos.add( this.get_next_int(line, line.indexOf("(")) ); //premier x coord
 				yPos.add( this.get_next_int(line, line.indexOf(",")) ); //premier y coord
-				//System.out.print(x);			//premier x coord
-				//System.out.print(y);			//premier y coord
 				xPos.add( this.get_next_int(line, line.lastIndexOf("(")) ); //deuximee x coord
 				yPos.add( this.get_next_int(line, line.lastIndexOf(",")) ); //deuxiem y coord
-				//System.out.print(" ");
-				//System.out.print(xt);	//deuximee x coord
-				//System.out.print(yt);	//deuxiem y coord
-				//System.out.print(" ");
-
-			    parkingRef.add_car(xPos, yPos);
+			    parkingRef.add_car(xPos, yPos);			//ajout des position
 			}
 			
 		}catch(IOException ioe){
@@ -99,8 +87,7 @@ public class ParkingIN {
 		try{
 			this._exit=new int[4];			// position 0,1 premiere coorde position 2,3 deuxieme coordonne
 			String line;
-			line=file.readLine();			//on lit les deux ligne qui ne nous servent a rien
-			line=file.readLine();
+			line=file.readLine();		//premiere ligne +---+
 			int j=1;					//conteur pour savoir le nombre de ligne qu'on saute
 			for (int i=1;(i<=this._ySize*2-1);++i){
 				line=file.readLine();
@@ -126,6 +113,9 @@ public class ParkingIN {
 					System.out.print("("+this._exit[0]+","+this._exit[1]+")"+", "+"("+this._exit[2]+","+this._exit[3]+")");
 					}
 				}
+				line=file.readLine();				//derniere ligne du tableau
+				//System.out.print(line);
+
 			}
 		catch(IOException ioe){
 			System.out.print("Erreur --"+ioe.toString());
@@ -150,9 +140,9 @@ public class ParkingIN {
     }
 
 	public static void main(String args[]){
-		Scanner scan=new Scanner(System.in);
-		System.out.print("Enter file name :");
-		String file=scan.nextLine();
+		//Scanner scan=new Scanner(System.in);
+		//System.out.print("Enter file name :");
+		String file="../test/test1.txt";
 		ParkingIN test=new ParkingIN(file);
 		test.parse_input_file();
 	}
