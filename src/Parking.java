@@ -247,11 +247,11 @@ public class Parking implements Iterable<Car> {
         String result="";
         int taille=delimiter.length();
         int j=1;
-        for (int i=1;j<=this._ySize*2-1;++i){
+        for (int i=1;i<=this._ySize*2-1;++i){
             if(i%2==1){
                 result+=this.is_exit(i-j,0);
-                result+=this.make_line(" ", taille-3);
-                result+=this.is_exit(j-i,1);
+                result+=this.is_car(i-j,taille-3);
+                result+=this.is_exit(i-j,1);
                 result+="\n"; 
             }
             else if(i%2==0){
@@ -262,56 +262,35 @@ public class Parking implements Iterable<Car> {
             }   
         }
         result=delimiter+result+delimiter;
-        /*
-        delimiter += "\n";
-
-        String result = delimiter;
-        int j = 0;
-        while (true) {
-            // Ajout de "|   |   |   |"
-            result += "|";
-            for (int i = 0; i < this._xSize; ++i) {
-                int carNum = this.parkingMatrix[i][j];
-                if ( carNum > 0 ) {
-                    // TODO Faire en fonciton de la taille du chiffre
-                    result += String.format("%3d ", carNum);
-                } else {
-                    result += "    ";
-                }
-            }
-            result += "|\n";
-
-            if (j >= (this._ySize - 1))  {
-        //String result = "";
-        //int i = 0;
-        //while (true) {
-            // Ajout de "|   |   |   |"
-          //  for (int j = 0; i < this._xSize; ++i) {
-            //    int carNum = this.parkingMatrix[i][j];
-              //  if ( carNum > 0 ) {
-                    // TODO Faire en fonciton de la taille du chiffre
-                //} else {
-                  //  result += "|   ";
-                //}
-            //}
-            //result += "|\n";
-            if (i == (this._ySize - 1))  {
-                // Fin du tableau
-                result += delimiter;
-                break;
-            }
-            // Ajout de "+   +   +   +"
-            for (int i = 0; i < this._xSize; ++i) {
-                result += "+   ";
-            }
-            result += "+\n";
-
-            ++i;
-            ++j;
-        }
-        }*/
         return result;
     }
+    private String is_car(int ligne,int fin){
+        String res="";
+        for (int j = 0; j < this._xSize; ++j) {
+            int carNum = this.parkingMatrix[j][ligne];
+            if ( carNum > 0 ) {
+                if (carNum==1){
+                  res+=" G ";
+                  //res+= String.format("%3s", "G");
+                }
+                else if(carNum>1){
+                  res +=" V"+carNum;
+              }
+            }
+            else{ 
+                res+="   ";
+            }
+            if (j==this._xSize-1){
+            res+="";
+            }
+            else{
+              res+=" ";
+            }
+
+          }
+          res+=make_line(" ",fin-res.length());
+        return res;
+  }
     private String is_exit(int ligne,int mode){
         String res="";
         if (mode==0){

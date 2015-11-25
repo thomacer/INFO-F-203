@@ -13,7 +13,7 @@ public class ParkingOUT {
 
 	}
 	
-	public BufferedWriter creating_file(){
+	private BufferedWriter creating_file(){
 		BufferedWriter bw=null;
 		try{
 		File file=new File(this._filename);
@@ -34,7 +34,12 @@ public class ParkingOUT {
 			content=this.title();
 			System.out.print(content);
 			file.write(content);
-			content=this.tableau();		
+			for (int i=0;i<this._chemin.lenght();++i){
+				content="\n";
+				content+=this._chemin[i].toString();
+				file.write(content)
+			}
+			content=;		
 			System.out.print(content);
 			
 			
@@ -47,39 +52,18 @@ public class ParkingOUT {
 			System.out.print("Cannot close file!");
 		}
 	}
-	public String title(){
+	private String title(){
 		String res="Solution finale :\n";
 		return res;
 	}
-	public String tableau(){
-		String res="";
-		res+=this.make_line("+---",this._xSize);
-		res+="+\n";
-		int taille=res.length();
-		//System.out.print(taille);
-		for (int j=1;j<=this._ySize*2-1;++j){
-			if(j%2==1){
-				res+="|";
-				res+=this.make_line(" ", taille-3);		///fonction qui va checker si qqch sur la ligne ou bien si exit gauche ou droite
-				res+="|\n";	
-			}
-			else if(j%2==0){
-				res+="+";
-				res+=this.make_line("   +", this._xSize);
-				res+="\n";
-				}	
+	private String nbr_chemin(boolean reussi){
+		String res="Il n'y a pas moyen de sortir du parking."
+		if (reussi){
+			res+="Une façon de sortir du parking en "+(this._chemin.lenght()-1)+"a été trouvée."
 		}
-		res+=this.make_line("+---",this._xSize);
-		res+="+\n";
 		return res;
 	}
-	public String make_line(String c,int fin){
-		String chaine="";
-		for (int i=0;i<fin;++i){
-			chaine+=c;
-		}
-		return chaine;
-	}
+
 	
 	public static void main(String args[]){
 		ParkingOUT fichier_out=new ParkingOUT("test.txt",5,5);
