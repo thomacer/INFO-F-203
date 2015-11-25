@@ -9,13 +9,15 @@ public class Car implements Iterable<int[]> {
         VERTICAL
     }
 
-    static private int carNumber = 0;
+    static private int carNumber = 1;
     private int personalNum;
 
     private ArrayList<Integer> x_position;
     private ArrayList<Integer> y_position;
     private Direction dir;
 
+    /* @desc Iterateur sur les coordonnées de la voiture.
+     */
     @Override
     public Iterator<int[]> iterator () {
         Iterator<int[]> it = new Iterator<int[]> () {
@@ -42,6 +44,10 @@ public class Car implements Iterable<int[]> {
         return it;
     }
     
+    /* @desc Permet de savoir quel est le numéro adressé à la voiture.
+     *
+     * @return Le numéro de la voiture.
+     */
     public int get_num () {
         return this.personalNum;
     }
@@ -80,7 +86,7 @@ public class Car implements Iterable<int[]> {
     }
 
     /* @desc Renvoie la position de la voiture si on doit
-     *      l'avancer.
+     *      la reculer.
      *
      * @return {Car} : Nouvelle voiture dans sa nouvelle position.
      */
@@ -113,6 +119,10 @@ public class Car implements Iterable<int[]> {
         return result;
     }
 
+    /* @desc Constructeur pour ne pas devoir faire de copie inutile.
+     *      Celui-ci est utilisé lorsque l'on fait une copie de la voiture
+     *      pour la placer dans un nouveau parking.
+     */
     Car ( ArrayList<Integer> x_pos, ArrayList<Integer> y_pos, Direction dir, int carNum) {
         this.x_position = x_pos;
         this.y_position = y_pos;
@@ -122,6 +132,10 @@ public class Car implements Iterable<int[]> {
         this.dir = dir;
     }
 
+    /* @desc Constructeur de la voiture utilisé lors du lancement du
+     *      programme. Il va calculer toutes informations nécessaires
+     *      pour le bon fonctionnement de cette classe.
+     */
     Car ( ArrayList<Integer> x_pos, ArrayList<Integer> y_pos) {
         this.x_position = x_pos;
         this.y_position = y_pos;
