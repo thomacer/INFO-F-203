@@ -31,7 +31,7 @@ public class ParkingIN {
 			this.parse_emplaceme(file_reader, baseParking);
 			file_reader.close();
 		}
-		catch( FileNotFoundException exception){
+		catch(FileNotFoundException exception){
 			System.out.print("File not found!Try again");
 		}
 		catch(IOException file){
@@ -76,10 +76,10 @@ public class ParkingIN {
                 xPos = new ArrayList<Integer>(0);
                 yPos = new ArrayList<Integer>(0);
 
-				xPos.add( this.get_next_int(line, line.indexOf("(")) ); //premier x coord
-				yPos.add( this.get_next_int(line, line.indexOf(",")) ); //premier y coord
-				xPos.add( this.get_next_int(line, line.lastIndexOf("(")) ); //deuximee x coord
-				yPos.add( this.get_next_int(line, line.lastIndexOf(",")) ); //deuxiem y coord
+				yPos.add( this.get_next_int(line, line.indexOf("(")) ); //premier x coord
+				xPos.add( this.get_next_int(line, line.indexOf(",")) ); //premier y coord
+				yPos.add( this.get_next_int(line, line.lastIndexOf("(")) ); //deuximee x coord
+				xPos.add( this.get_next_int(line, line.lastIndexOf(",")) ); //deuxiem y coord
 			    parkingRef.add_car(xPos, yPos);			//ajout des position
 			}
 			
@@ -113,8 +113,8 @@ public class ParkingIN {
 					this._exit[1]=i-j;
 					this._exit[2]=this._xSize-1;							//(1,0)
 					this._exit[3]=i-j;
-					System.out.print("fin");
-					System.out.print("("+this._exit[0]+","+this._exit[1]+")"+", "+"("+this._exit[2]+","+this._exit[3]+")");
+					// System.out.print("fin");
+					// System.out.print("("+this._exit[0]+","+this._exit[1]+")"+", "+"("+this._exit[2]+","+this._exit[3]+")");
 					}
 				}
 				line=file.readLine();				//derniere ligne du tableau
