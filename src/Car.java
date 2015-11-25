@@ -16,6 +16,19 @@ public class Car implements Iterable<int[]> {
     private ArrayList<Integer> y_position;
     private Direction dir;
 
+    public ArrayList<Integer> get_x_pos () {
+        return this.x_position; 
+    }
+
+    public ArrayList<Integer> get_y_pos () {
+        return this.y_position; 
+    }
+
+    public boolean equals (Car other) {
+        return this.get_x_pos().equals(other.get_x_pos())
+            && this.get_y_pos().equals(other.get_y_pos());
+    }
+
     /* @desc Iterateur sur les coordonnées de la voiture.
      */
     @Override
