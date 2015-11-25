@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Queue;
 
 public class RushHour {
     private Parking baseParking;
@@ -6,7 +7,6 @@ public class RushHour {
     private ArrayList<ArrayList<Integer>> parkingGraph = new ArrayList(new ArrayList(0));
     // Chaques configuration de parking vont être stockée ici.
     private ArrayList<Parking> parkingList = new ArrayList<Parking>(0);
-
 
     // TODO Mettre les opération sur les matrices dans une classe ou quelque
     // chose comme ça pour une lecture plus facile du code.
@@ -69,8 +69,6 @@ public class RushHour {
 
         int j; // Sert à savoir quel noeud à été ajouté
         for ( Car specific_car : parkingConf ) {
-            // TODO Trouver un moyen plus joli pour faire le backtracking.
-
             // On avance la voiture tant que c'est possible.
             Parking tmp_parking_conf = parkingConf.move_forward( specific_car );
             while ( tmp_parking_conf != null ) {
@@ -94,6 +92,60 @@ public class RushHour {
             }
         }
         return i;
+    }
+
+    /* @desc Parcour en breadth first du graph pour trouver le chemin le plus
+     *      court pour accêder à la sortie.
+     *
+     * @param {baseParking} : Configuration du parking au départ.
+     *
+     * @return {Parking[]} La trajet à travers les différentes configurations
+     *      de parking pour arriver à la sortie.
+     */
+    private Parking[] find_shortest_path (int baseParking) {
+        boolean[] nodeMark = new boolean[this.parkingList.size()];
+
+        // Va stocker l'antécédent à chaques noeuds traité.
+        // À chaque "case" de ce tableau il va être stocké
+        // l'index de son antécédent.
+        int[] nodePath = new int[this.parkingList.size()];
+        path[0] = 0;
+
+        // Va stocker la distance par apport à la base.
+        int[] countNode = new int[this.parkingList.size()];
+        countNode[0] = 0;
+
+        Queue<Integer> queue = new Queue<>(); // Stock les noeuds à traiter.
+        int currentNode = baseParking;
+        int newNode;
+
+        while ( !(this.parkingList.get(currentNode).isWin()) ) {
+            for (int i = 0; i < this.parkingList.size(); ++i) {
+                if ( this.parkingGraph.get(currentNode).get(i) && !(nodeMark[i]) ) {
+                    // Si le noeud est accessible et n'a pas encore été traité.
+                    queue.add(i);
+                }
+            }
+            
+            newNode = queue.remove();
+            if (newNode == null) {
+                // Si on est arrivé au dernier noeud et qu'on a toujours 
+                // pas trouvé de chemin gagnant.
+                return null;
+            }
+            nodePath[newNode] = currentNode; // On met d'où vient le nouveau noeud.W
+            countNode[newNode] = (countNode[currentNode] + 1); // Incrémente le compteur.
+            currentNode = newNode;
+        }
+        // Si l'on sort normalement de la boucle, on a trouvé un chemin.
+        // Il faut désormait créer une liste avec tout les chemins emprunté
+        int resultSize = countNode[currentNode];
+        Parking[] result = new Parking[resultSize];
+        for (int i = resultSize; i >= 0; --i) {
+            result[i] = this.parkingList.get(currentNode);
+            currentNode = nodePath[currentNode];
+        }
+        return result;
     }
 
     public static void main (String[] args) {
