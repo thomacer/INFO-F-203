@@ -364,7 +364,7 @@ public class Parking implements Iterable<Car> {
             if (this._exit[0] == 0) {
                 // Si la sortie à été définie à gauche. 
                 int[] currentPos = this._get_head_b(this._goal_car);
-                for (int i = currentPos[0]; i >= 0; --i) {
+                for (int i = (currentPos[0] + 1); i >= 0; --i) {
                     if ( this.parkingMatrix[i][currentPos[1]] > 0 ) {
                         // Si il y a un obstacle sur le chemin on ne sait pas gagner
                         this._isWin = false;
@@ -374,7 +374,7 @@ public class Parking implements Iterable<Car> {
             } else {
                 // Si la sortie à été définie à droite.
                 int[] currentPos = this._get_head_f(this._goal_car);
-                for (int i = currentPos[0]; i < this._xSize; ++i) {
+                for (int i = (currentPos[0] + 1); i < this._xSize; ++i) {
                     if ( this.parkingMatrix[i][currentPos[1]] > 0 ) {
                         // Si il y a un obstacle sur le chemin on ne sait pas gagner
                         this._isWin = false;
