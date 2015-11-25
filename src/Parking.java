@@ -291,6 +291,7 @@ public class Parking implements Iterable<Car> {
             }
             else{
                 res+="|";   
+                
             }
         }
         return res;
