@@ -66,6 +66,12 @@ public class RushHour {
             // occupé d'être traité.
             return i;
         }
+        if ( parkingConf.is_won() ) {
+            // Inutile de faire plus de génération si la partie est gagnée
+            // Les graphes généré seront redondant car ils sont des sous-cas
+            // d'un cas gagnant.
+            return i;
+        }
 
         int j; // Sert à savoir quel noeud à été ajouté
         for ( Car specific_car : parkingConf ) {
@@ -165,6 +171,7 @@ public class RushHour {
 
             ParkingIN parsedParking = new ParkingIN(args[0]);
             Parking baseParking = parsedParking.parse_input_file();
+            System.out.println(baseParking);
             main.generate_parkings(baseParking);
             Parking[] result = main.find_shortest_path(0);
 
