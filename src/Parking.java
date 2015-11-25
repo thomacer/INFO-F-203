@@ -203,6 +203,7 @@ public class Parking implements Iterable<Car> {
             chaine+=c;
         }
         return chaine;
+    }
 
     /* @desc Permet la représentation du parking sous la forme d'un dessin.
      *      Ex pour la taille 4x4:
@@ -292,9 +293,9 @@ public class Parking implements Iterable<Car> {
             result += "+\n";
 
             ++i;
-        }*/
             ++j;
         }
+        }*/
         return result;
     }
     private String is_exit(int ligne,int mode){
