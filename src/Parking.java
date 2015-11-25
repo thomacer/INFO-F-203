@@ -37,8 +37,7 @@ public class Parking implements Iterable<Car> {
 
             @Override
             public Car next() {
-                ++currentIndex;
-                return _carList.get(currentIndex);
+                return _carList.get(currentIndex++);
             }
 
             @Override
@@ -101,9 +100,11 @@ public class Parking implements Iterable<Car> {
             // Si BACKWARD il faut trouver la plus petite coord.
             head = this._get_head_b(movedCar);
         }
-        return ( (this.parkingMatrix[head[0]][head[1]] == 0)
-            && (0 <= head[0] && head[0] < this._xSize)
-            && (0 <= head[1] && head[1] < this._ySize) );
+        // System.out.println( head[0] + "x" +  head[1] ); // DEBUG 
+        
+        return ( (0 <= head[0] && head[0] < this._xSize)
+            && (0 <= head[1] && head[1] < this._ySize) )
+            && (this.parkingMatrix[head[0]][head[1]] == 0);
     }
 
     /* @desc Renvoie un la manière dont le parking serait si
@@ -117,8 +118,7 @@ public class Parking implements Iterable<Car> {
         // Vérification que la voiture sait avancer.
         Car newCarPos = toMoveCar.forward();
 
-        if (!this._check_movement(toMoveCar, _Direction.FORWARD)) {
-            System.out.println("null");
+        if (!this._check_movement(newCarPos, _Direction.FORWARD)) {
             return null;
         }
 
@@ -147,7 +147,7 @@ public class Parking implements Iterable<Car> {
         // Vérification que la voiture sait avancer.
         Car newCarPos = toMoveCar.backward();
 
-        if (!this._check_movement(toMoveCar, _Direction.BACKWARD)) {
+        if (!this._check_movement(newCarPos, _Direction.BACKWARD)) {
             return null;
         }
 
