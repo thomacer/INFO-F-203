@@ -5,13 +5,12 @@ import java.io.IOException;
 
 public class ParkingOUT {
 	private String _filename;
-	private int _xSize;
-	private int _ySize;
+	private Parking[] _chemin;
 	
-	ParkingOUT(String filename,int xSize,int ySize){
+	ParkingOUT(String filename,Parking[] chemin){
 		this._filename=("Solution_"+filename);
-		this._xSize=xSize;
-		this._ySize=ySize;
+		this._chemin=chemin.clone();
+
 	}
 	
 	public BufferedWriter creating_file(){

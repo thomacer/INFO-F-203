@@ -89,7 +89,7 @@ public class ParkingIN {
 	}
 	public void parse_exit(BufferedReader file){
 		try{
-			this._exit=new int[4];			// position 0,1 premiere coorde position 2,3 deuxieme coordonne
+			this._exit=new int[2];			// position 0,1 premiere coorde position 2,3 deuxieme coordonne
 			String line;
 			line=file.readLine();		//premiere ligne +---+
 			int j=1;					//conteur pour savoir le nombre de ligne qu'on saute

@@ -196,6 +196,12 @@ public class Parking implements Iterable<Car> {
 
         return newCar;
     }
+    private String make_line(String c,int fin){
+        String chaine="";
+        for (int i=0;i<fin;++i){
+            chaine+=c;
+        }
+        return chaine;
 
     /* @desc Permet la représentation du parking sous la forme d'un dessin.
      *      Ex pour la taille 4x4:
@@ -214,26 +220,46 @@ public class Parking implements Iterable<Car> {
     @Override
     public String toString() {
         // Création des limites de la grille: "+---+---+---+---+\n"
-        String delimiter = "+";
-        for (int i = 0; i < this.x_size; ++i) {
-            delimiter += "---+";
-        }
-        delimiter += "\n";
-
-        String result = "";
-        int i = 0;
-        while (true) {
-            // Ajout de "|   |   |   |"
-            for (int j = 0; i < this.x_size; ++i) {
-                int carNum = this.parkingMatrix[i][j];
-                if ( carNum > 0 ) {
-                    // TODO Faire en fonciton de la taille du chiffre
-                } else {
-                    result += "|   ";
-                }
+        String delimiter = "";
+        //for (int i = 0; i < this.x_size; ++i) {
+          //  delimiter += "---+";
+        ///}
+        //delimiter += "\n";
+        //String res="";
+        delimiter+=this.make_line("+---",this._xSize);
+        delimiter+="+\n";
+        String result="";
+        int taille=delimiter.length();
+        int j=1;
+        for (int i=1;j<=this._ySize*2-1;++i){
+            if(i%2==1){
+                result+=this.is_exit(i-j,0);
+                result+=this.make_line(" ", taille-3);
+                result+=this.is_exit(j-i,1);
+                result+="\n"; 
             }
-            result += "|\n";
-
+            else if(i%2==0){
+                ++j;
+                result+="+";
+                result+=this.make_line("   +", this._xSize);
+                result+="\n";
+                }   
+        }
+        result=delimiter+result+delimiter;
+        //String result = "";
+        //int i = 0;
+        //while (true) {
+            // Ajout de "|   |   |   |"
+          //  for (int j = 0; i < this.x_size; ++i) {
+            //    int carNum = this.parkingMatrix[i][j];
+              //  if ( carNum > 0 ) {
+                    // TODO Faire en fonciton de la taille du chiffre
+                //} else {
+                  //  result += "|   ";
+                //}
+            //}
+            //result += "|\n";
+        /*
             if (i == (this.y_size - 1))  {
                 // Fin du tableau
                 result += delimiter;
@@ -246,8 +272,28 @@ public class Parking implements Iterable<Car> {
             result += "+\n";
 
             ++i;
-        }
+        }*/
         return result;
+    }
+    private String is_exit(int ligne,int mode){
+        String res="";
+        if (mode==0){
+            if (this._exit[0]==0 && ligne==this._exit[1]){
+                res+=" ";
+            }
+            else{
+                res+="|";   
+            }
+        }
+        else if(mode==1){
+            if (this._exit[0]==this._xSize-1 && this._exit[1]==ligne){
+                res+=" ";
+            }
+            else{
+                res+="|";   
+            }
+        }
+        return res;
     }
 
     /* @desc Constructeur du parking avec les informations de base.
