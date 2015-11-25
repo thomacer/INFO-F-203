@@ -61,7 +61,8 @@ public class Car implements Iterable<int[]> {
             }
             result = new Car( newXpos,
                               this.y_position, 
-                              this.dir
+                              this.dir,
+                              this.personalNum
                              );
         } else {
             // Change la position de tout les éléments
@@ -71,7 +72,8 @@ public class Car implements Iterable<int[]> {
             }
             result = new Car( this.x_position,
                               newYpos,
-                              this.dir
+                              this.dir,
+                              this.personalNum
                              );
         }
         return result;
@@ -93,7 +95,8 @@ public class Car implements Iterable<int[]> {
 
             result = new Car( newXpos,
                               this.y_position, 
-                              this.dir
+                              this.dir,
+                              this.personalNum
                              );
         } else {
             // Change la position de tout les éléments
@@ -103,18 +106,18 @@ public class Car implements Iterable<int[]> {
             }
             result = new Car( this.x_position,
                               newYpos,
-                              this.dir
+                              this.dir,
+                              this.personalNum
                              );
         }
         return result;
     }
 
-    Car ( ArrayList<Integer> x_pos, ArrayList<Integer> y_pos, Direction dir) {
+    Car ( ArrayList<Integer> x_pos, ArrayList<Integer> y_pos, Direction dir, int carNum) {
         this.x_position = x_pos;
         this.y_position = y_pos;
 
-        this.personalNum = this.carNumber;
-        ++this.carNumber;
+        this.personalNum = carNum;
 
         this.dir = dir;
     }
@@ -126,6 +129,7 @@ public class Car implements Iterable<int[]> {
         this.personalNum = this.carNumber;
         ++this.carNumber;
 
+        // Déduction de la direction de la voiture.
         if (x_pos.get(0) == x_pos.get(1)) {
             // Conformément à l'énoncé toutes voiture doit au moins
             // être de taille 2.
