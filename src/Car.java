@@ -119,6 +119,11 @@ public class Car implements Iterable<int[]> {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return Integer.toString(this.personalNum);
+    }
+
     /* @desc Constructeur pour ne pas devoir faire de copie inutile.
      *      Celui-ci est utilisé lorsque l'on fait une copie de la voiture
      *      pour la placer dans un nouveau parking.
