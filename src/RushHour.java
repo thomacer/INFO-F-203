@@ -1,10 +1,9 @@
 import java.util.ArrayList;
-import java.util.Queue;
+import java.util.LinkedList;
 
 public class RushHour {
-    private Parking baseParking;
-
-    private ArrayList<ArrayList<Integer>> parkingGraph = new ArrayList(new ArrayList(0));
+    // private Parking baseParking;
+    private ArrayList<ArrayList<Integer>> parkingGraph = new ArrayList<>(new ArrayList<>(0));
     // Chaques configuration de parking vont être stockée ici.
     private ArrayList<Parking> parkingList = new ArrayList<Parking>(0);
 
@@ -15,14 +14,14 @@ public class RushHour {
     private void _add_entry_to_graph () {
         // Ajout à chaque colonne d'une nouvelle entrée.
         for ( int i = 0; i < parkingGraph.size(); ++i ) {
-            parkingGraph.get(i).add(false);
+            parkingGraph.get(i).add(0);
         }
 
         // Création de la nouvelle colonne
         int newSize = (parkingGraph.size() + 1);
-        ArrayList<Integer> newColumn = new ArrayList(newSize);
+        ArrayList<Integer> newColumn = new ArrayList<>(newSize);
         for ( int i = 0; i < newColumn.size(); ++i ) {
-            newColumn.set(i, false);
+            newColumn.set(i, 0);
         }
         parkingGraph.add(newColumn);
     }
@@ -109,26 +108,27 @@ public class RushHour {
         // À chaque "case" de ce tableau il va être stocké
         // l'index de son antécédent.
         int[] nodePath = new int[this.parkingList.size()];
-        path[0] = 0;
+        nodePath[0] = 0;
 
         // Va stocker la distance par apport à la base.
         int[] countNode = new int[this.parkingList.size()];
         countNode[0] = 0;
 
-        Queue<Integer> queue = new Queue<>(); // Stock les noeuds à traiter.
+        LinkedList<Integer> queue = new LinkedList<>(); // Stock les noeuds à traiter.
         int currentNode = baseParking;
         int newNode;
 
-        while ( !(this.parkingList.get(currentNode).isWin()) ) {
+        while ( !(this.parkingList.get(currentNode).is_won()) ) {
             for (int i = 0; i < this.parkingList.size(); ++i) {
-                if ( this.parkingGraph.get(currentNode).get(i) && !(nodeMark[i]) ) {
+                if ( this.parkingGraph.get(currentNode).get(i) > 0 && !(nodeMark[i]) ) {
                     // Si le noeud est accessible et n'a pas encore été traité.
-                    queue.add(i);
+                    queue.addFirst(i);
                 }
             }
             
-            newNode = queue.remove();
-            if (newNode == null) {
+            if ( queue.size() > 0 ) {
+                newNode = queue.pop();
+            } else {
                 // Si on est arrivé au dernier noeud et qu'on a toujours 
                 // pas trouvé de chemin gagnant.
                 return null;
@@ -148,14 +148,19 @@ public class RushHour {
         return result;
     }
 
-    public static void main (String[] args) {
-        if ( args.length > 1) {
-            ParkingIN parsedParking = new ParkingIN(args[1]);
-            baseParking = parsedParking.parseParking();
+    RushHour() {
+    }
 
-            _generate_parkings(baseParking);
+    public static void main (String[] args) {
+        if ( args.length > 0) {
+            RushHour main = new RushHour();
+
+            ParkingIN parsedParking = new ParkingIN(args[0]);
+            Parking baseParking = parsedParking.parse_input_file();
+            System.out.println(baseParking);
+            main._generate_parkings(baseParking);
         } else {
-            // print usage.
+            System.out.println("Veuillez passer le fichier en argument.");
         }
     }
 }
