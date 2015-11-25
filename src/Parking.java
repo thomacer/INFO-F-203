@@ -20,6 +20,21 @@ public class Parking implements Iterable<Car> {
         return this._isWin; 
     }
 
+    public boolean equals (Parking other) {
+        boolean result = true;
+        for (int i = 0; i < this._carList.size(); ++i) {
+            if ( !(this.get(i).equals(other.get(i))) ) {
+                result = false;
+                break;
+            }
+        }
+        return result;
+    }
+
+    public Car get(int index) {
+        return this._carList.get(index);
+    }
+
     /* http://stackoverflow.com/questions/5849154/can-we-write-our-own-iterator-in-java
      * @desc Iterateur sur les véhicules de la classe pour acceder
      *      au différents véhicules en dehors de la classe. 
@@ -121,15 +136,14 @@ public class Parking implements Iterable<Car> {
         if (!this._check_movement(newCarPos, _Direction.FORWARD)) {
             return null;
         }
-
         // COPY de {_carList} mais en remplaçant {toMoveCar}.
-        ArrayList<Car> result = new ArrayList<Car>( this._carList.size() );
+        ArrayList<Car> result = new ArrayList<Car>();
 
         for ( int i = 0; i < this._carList.size(); ++i ) {
             if ( this._carList.get(i) == toMoveCar ) {
-                result.set(i, newCarPos);
+                result.add(newCarPos);
             } else {
-                result.set(i, this._carList.get(i)); // TODO .clone());
+                result.add(this._carList.get(i)); // TODO .clone());
             }
         }
 
@@ -152,13 +166,13 @@ public class Parking implements Iterable<Car> {
         }
 
         // COPY de {_carList} mais en remplaçant {toMoveCar}.
-        ArrayList<Car> result = new ArrayList<Car>( this._carList.size() );
+        ArrayList<Car> result = new ArrayList<Car>();
 
         for ( int i = 0; i < this._carList.size(); ++i ) {
             if ( this._carList.get(i) == toMoveCar ) {
-                result.set(i, newCarPos);
+                result.add(newCarPos);
             } else {
-                result.set(i, this._carList.get(i)); // TODO .clone());
+                result.add(this._carList.get(i));
             }
         }
 
