@@ -122,6 +122,37 @@ public class Parking implements Iterable<Car> {
             && (this.parkingMatrix[head[0]][head[1]] == 0);
     }
 
+    /* @desc Vérifie si le parking actuelle est gagnant ou non.
+     */
+    private void _check_win () {
+        // La voiture "goal" qui est toujours dans la liste à l'index "0".
+        this._goal_car = this._carList.get(0);
+        this._isWin = true;
+
+        // Vérification que le parking est une configuration gagnant ou non.
+        if (this._exit[0] == 0) {
+            // Si la sortie à été définie à gauche. 
+            int[] currentPos = this._get_head_b(this._goal_car);
+            for (int i = (currentPos[0] - 1); i >= 0; --i) {
+                if ( this.parkingMatrix[i][currentPos[1]] > 0 ) {
+                    // Si il y a un obstacle sur le chemin on ne sait pas gagner
+                    this._isWin = false;
+                    break;
+                }
+            }
+        } else {
+            // Si la sortie à été définie à droite.
+            int[] currentPos = this._get_head_f(this._goal_car);
+            for (int i = (currentPos[0] + 1); i < this._xSize; ++i) {
+                if ( this.parkingMatrix[i][currentPos[1]] > 0 ) {
+                    // Si il y a un obstacle sur le chemin on ne sait pas gagner
+                    this._isWin = false;
+                    break;
+                }
+            }
+        }
+    }
+
     /* @desc Renvoie un la manière dont le parking serait si
      *      la voiture {toMoveCar} était bougée en avant.
      *
@@ -208,6 +239,8 @@ public class Parking implements Iterable<Car> {
         }
 
         this._carList.add( newCar );
+
+        this._check_win();
 
         return newCar;
     }
@@ -356,32 +389,7 @@ public class Parking implements Iterable<Car> {
 
         // Ajout de la voiture "goal" 
         if (_carList.size() > 0) {
-            // La voiture "goal" qui est toujours dans la liste à l'index "0".
-            this._goal_car = _carList.get(0);
-            this._isWin = true;
-
-            // Vérification que le parking est une configuration gagnant ou non.
-            if (this._exit[0] == 0) {
-                // Si la sortie à été définie à gauche. 
-                int[] currentPos = this._get_head_b(this._goal_car);
-                for (int i = (currentPos[0] + 1); i >= 0; --i) {
-                    if ( this.parkingMatrix[i][currentPos[1]] > 0 ) {
-                        // Si il y a un obstacle sur le chemin on ne sait pas gagner
-                        this._isWin = false;
-                        break;
-                    }
-                }
-            } else {
-                // Si la sortie à été définie à droite.
-                int[] currentPos = this._get_head_f(this._goal_car);
-                for (int i = (currentPos[0] + 1); i < this._xSize; ++i) {
-                    if ( this.parkingMatrix[i][currentPos[1]] > 0 ) {
-                        // Si il y a un obstacle sur le chemin on ne sait pas gagner
-                        this._isWin = false;
-                        break;
-                    }
-                }
-            }
+            this._check_win();
         } else {
             this._isWin = false;
         }
