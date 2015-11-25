@@ -40,7 +40,7 @@ public class ParkingIN {
         return baseParking;
 	}
 	
-	public void parse_parking(BufferedReader file){
+	private void parse_parking(BufferedReader file){
 		try{
 			String line;
 			line=file.readLine();
@@ -50,7 +50,7 @@ public class ParkingIN {
 			System.out.print("Erreur --"+ioe.toString()); // TODO Throw au lieu d'un simple message d'erreur.
 		}
 	}
-	public void parse_element(BufferedReader file){
+	private void parse_element(BufferedReader file){
 		try{
 			String line;
 			line=file.readLine();	//emplacement:
@@ -64,7 +64,7 @@ public class ParkingIN {
 			System.out.print("Erreur --"+ioe.toString());
 		}
 	}
-	public void parse_emplaceme(BufferedReader file, Parking parkingRef){
+	private void parse_emplaceme(BufferedReader file, Parking parkingRef){
 		try{
 			String line;
 			line=file.readLine();	//emplacement
@@ -87,7 +87,7 @@ public class ParkingIN {
 			System.out.print("Erreur --"+ioe.toString());
 		}
 	}
-	public void parse_exit(BufferedReader file){
+	private void parse_exit(BufferedReader file){
 		try{
 			this._exit=new int[2];			// position 0,1 premiere coorde position 2,3 deuxieme coordonne
 			String line;
