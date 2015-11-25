@@ -61,9 +61,9 @@ public class Car implements Iterable<int[]> {
         Car result;
         if ( this.dir == Direction.HORIZONTAL ) {
             // Change la position de tout les éléments
-            ArrayList<Integer> newXpos = new ArrayList<>(this.x_position.size());
+            ArrayList<Integer> newXpos = new ArrayList<>();
             for ( int i = 0; i < this.x_position.size(); ++i ) {
-                newXpos.set(i, this.x_position.get(i) + 1);
+                newXpos.add(this.x_position.get(i) + 1);
             }
             result = new Car( newXpos,
                               this.y_position, 
@@ -72,9 +72,9 @@ public class Car implements Iterable<int[]> {
                              );
         } else {
             // Change la position de tout les éléments
-            ArrayList<Integer> newYpos = new ArrayList<>(this.y_position.size());
+            ArrayList<Integer> newYpos = new ArrayList<>();
             for ( int i = 0; i < this.y_position.size(); ++i ) {
-                newYpos.set(i, this.y_position.get(i) + 1);
+                newYpos.add(this.y_position.get(i) + 1);
             }
             result = new Car( this.x_position,
                               newYpos,
@@ -94,9 +94,9 @@ public class Car implements Iterable<int[]> {
         Car result;
         if ( this.dir == Direction.HORIZONTAL ) {
             // Change la position de tout les éléments
-            ArrayList<Integer> newXpos = new ArrayList<>(this.x_position.size());
+            ArrayList<Integer> newXpos = new ArrayList<>();
             for ( int i = 0; i < this.x_position.size(); ++i ) {
-                newXpos.set(i, this.x_position.get(i) - 1);
+                newXpos.add(this.x_position.get(i) - 1);
             }
 
             result = new Car( newXpos,
@@ -106,9 +106,9 @@ public class Car implements Iterable<int[]> {
                              );
         } else {
             // Change la position de tout les éléments
-            ArrayList<Integer> newYpos = new ArrayList<>(this.y_position.size());
+            ArrayList<Integer> newYpos = new ArrayList<>();
             for ( int i = 0; i < this.y_position.size(); ++i ) {
-                newYpos.set(i, this.y_position.get(i) - 1);
+                newYpos.add(this.y_position.get(i) - 1);
             }
             result = new Car( this.x_position,
                               newYpos,

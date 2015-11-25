@@ -63,7 +63,7 @@ public class Parking implements Iterable<Car> {
                 head = pos;
             }
         }
-        return head;.
+        return head;
     }
 
     /* @desc Renvoie la partie la plus avancée lorsqu'il s'agit de 
@@ -118,6 +118,7 @@ public class Parking implements Iterable<Car> {
         Car newCarPos = toMoveCar.forward();
 
         if (!this._check_movement(toMoveCar, _Direction.FORWARD)) {
+            System.out.println("null");
             return null;
         }
 
@@ -243,9 +244,29 @@ public class Parking implements Iterable<Car> {
                 result+="+";
                 result+=this.make_line("   +", this._xSize);
                 result+="\n";
-                }   
+            }   
         }
         result=delimiter+result+delimiter;
+        /*
+        delimiter += "\n";
+
+        String result = delimiter;
+        int j = 0;
+        while (true) {
+            // Ajout de "|   |   |   |"
+            result += "|";
+            for (int i = 0; i < this.x_size; ++i) {
+                int carNum = this.parkingMatrix[i][j];
+                if ( carNum > 0 ) {
+                    // TODO Faire en fonciton de la taille du chiffre
+                    result += String.format("%3d ", carNum);
+                } else {
+                    result += "    ";
+                }
+            }
+            result += "|\n";
+
+            if (j >= (this.y_size - 1))  {
         //String result = "";
         //int i = 0;
         //while (true) {
@@ -259,20 +280,21 @@ public class Parking implements Iterable<Car> {
                 //}
             //}
             //result += "|\n";
-        /*
             if (i == (this.y_size - 1))  {
                 // Fin du tableau
                 result += delimiter;
                 break;
             }
             // Ajout de "+   +   +   +"
-            for (int j = 0; i < this.x_size; ++i) {
+            for (int i = 0; i < this.x_size; ++i) {
                 result += "+   ";
             }
             result += "+\n";
 
             ++i;
         }*/
+            ++j;
+        }
         return result;
     }
     private String is_exit(int ligne,int mode){
