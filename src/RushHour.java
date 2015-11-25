@@ -3,9 +3,9 @@ import java.util.LinkedList;
 
 public class RushHour {
     // private Parking baseParking;
-    private ArrayList<ArrayList<Integer>> parkingGraph = new ArrayList<>(new ArrayList<>(0));
+    private ArrayList<ArrayList<Integer>> parkingGraph = new ArrayList<>();
     // Chaques configuration de parking vont être stockée ici.
-    private ArrayList<Parking> parkingList = new ArrayList<Parking>(0);
+    private ArrayList<Parking> parkingList = new ArrayList<Parking>();
 
     // TODO Mettre les opération sur les matrices dans une classe ou quelque
     // chose comme ça pour une lecture plus facile du code.
@@ -14,16 +14,17 @@ public class RushHour {
     private void _add_entry_to_graph () {
         // Ajout à chaque colonne d'une nouvelle entrée.
         for ( int i = 0; i < parkingGraph.size(); ++i ) {
-            parkingGraph.get(i).add(0);
+            this.parkingGraph.get(i).add(0);
         }
 
         // Création de la nouvelle colonne
         int newSize = (parkingGraph.size() + 1);
-        ArrayList<Integer> newColumn = new ArrayList<>(newSize);
-        for ( int i = 0; i < newColumn.size(); ++i ) {
-            newColumn.set(i, 0);
+        ArrayList<Integer> newColumn = new ArrayList<>();
+        for ( int i = 0; i < (this.parkingGraph.size() + 1); ++i ) {
+            newColumn.add(0);
         }
-        parkingGraph.add(newColumn);
+        this.parkingGraph.add(newColumn);
+        // System.out.println( "NEW ENTRY: " + this.parkingGraph.size() );
     }
 
     /* @desc Place dans le graph que l'on vient de générer.
@@ -35,10 +36,10 @@ public class RushHour {
     private int _put_in_graph (Parking newParking) {
         int i = 0;
         // Recherche pour savoir si il y a déjà un {newParking} dans la liste.
-        while ( (i < parkingList.size()) && (parkingList.get(i) != newParking) ) {
+        while ( (i < this.parkingList.size()) && !parkingList.get(i).equals(newParking) ) {
             ++i;
         }
-        if (i == parkingList.size()) {
+        if (i == this.parkingList.size()) {
             // Si il n'est pas dans la liste.
             parkingList.add(newParking);
             this._add_entry_to_graph(); // Rajoute de la place pour {i}
@@ -57,7 +58,7 @@ public class RushHour {
      *  @return {Index du noeud} : Retourne l'index du noeud qui a été traité.
      *      
      */
-    private int _generate_parkings(Parking parkingConf) {
+    public int generate_parkings(Parking parkingConf) {
         int i = this._put_in_graph (parkingConf);
         if ( i < (parkingList.size() - 1) ) {
             // Si i est plus petit que la taille de "parkingList - 1"
@@ -71,23 +72,23 @@ public class RushHour {
             // On avance la voiture tant que c'est possible.
             Parking tmp_parking_conf = parkingConf.move_forward( specific_car );
             while ( tmp_parking_conf != null ) {
-                j = this._generate_parkings( tmp_parking_conf );
+                j = this.generate_parkings( tmp_parking_conf );
                 // Création d'une arrête entre les deux en indiquant quel
                 // voiture à été bougée. 
-                this.parkingGraph.get(i).set(j, specific_car.get_num() );
+                this.parkingGraph.get(i).set( j, specific_car.get_num() );
 
-                tmp_parking_conf = parkingConf.move_forward( specific_car );
+                tmp_parking_conf = tmp_parking_conf.move_forward( specific_car );
             }
 
             // On recule la voiture tant que c'est possible.
             tmp_parking_conf = parkingConf.move_backward( specific_car );
             while ( tmp_parking_conf != null ) {
-                j = this._generate_parkings( tmp_parking_conf );
+                j = this.generate_parkings( tmp_parking_conf );
                 // Création d'une arrête entre les deux en indiquant quel
                 // voiture à été bougée. 
                 this.parkingGraph.get(i).set( j, specific_car.get_num() );
 
-                tmp_parking_conf = parkingConf.move_backward( specific_car );
+                tmp_parking_conf = tmp_parking_conf.move_backward( specific_car );
             }
         }
         return i;
@@ -101,7 +102,8 @@ public class RushHour {
      * @return {Parking[]} La trajet à travers les différentes configurations
      *      de parking pour arriver à la sortie.
      */
-    private Parking[] find_shortest_path (int baseParking) {
+    public Parking[] find_shortest_path (int baseParking) {
+        // Permet de marquer si un noeud a dejà été traité ou non.
         boolean[] nodeMark = new boolean[this.parkingList.size()];
 
         // Va stocker l'antécédent à chaques noeuds traité.
@@ -114,7 +116,8 @@ public class RushHour {
         int[] countNode = new int[this.parkingList.size()];
         countNode[0] = 0;
 
-        LinkedList<Integer> queue = new LinkedList<>(); // Stock les noeuds à traiter.
+        // Stock les noeuds à traiter.
+        LinkedList<Integer> queue = new LinkedList<>();
         int currentNode = baseParking;
         int newNode;
 
@@ -122,6 +125,7 @@ public class RushHour {
             for (int i = 0; i < this.parkingList.size(); ++i) {
                 if ( this.parkingGraph.get(currentNode).get(i) > 0 && !(nodeMark[i]) ) {
                     // Si le noeud est accessible et n'a pas encore été traité.
+                    nodeMark[i] = true;
                     queue.addFirst(i);
                 }
             }
@@ -133,6 +137,7 @@ public class RushHour {
                 // pas trouvé de chemin gagnant.
                 return null;
             }
+
             nodePath[newNode] = currentNode; // On met d'où vient le nouveau noeud.W
             countNode[newNode] = (countNode[currentNode] + 1); // Incrémente le compteur.
             currentNode = newNode;
@@ -140,7 +145,10 @@ public class RushHour {
         // Si l'on sort normalement de la boucle, on a trouvé un chemin.
         // Il faut désormait créer une liste avec tout les chemins emprunté
         int resultSize = countNode[currentNode];
-        Parking[] result = new Parking[resultSize];
+        Parking[] result = new Parking[resultSize + 1];
+        // Ajouter 1 car le count commence à 0 pour des raisons de simplicité.
+
+        // Création de la liste résultat, contenant le trajet dans l'ordre.
         for (int i = resultSize; i >= 0; --i) {
             result[i] = this.parkingList.get(currentNode);
             currentNode = nodePath[currentNode];
@@ -157,8 +165,15 @@ public class RushHour {
 
             ParkingIN parsedParking = new ParkingIN(args[0]);
             Parking baseParking = parsedParking.parse_input_file();
-            System.out.println(baseParking);
-            main._generate_parkings(baseParking);
+            main.generate_parkings(baseParking);
+            Parking[] result = main.find_shortest_path(0);
+
+            // Pour le test.
+            for (int i = 0; i < result.length; ++i) {
+                System.out.println(result[i]);
+            }
+            // ------------
+
         } else {
             System.out.println("Veuillez passer le fichier en argument.");
         }
