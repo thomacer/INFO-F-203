@@ -8,12 +8,12 @@ public class Parking implements Iterable<Car> {
         BACKWARD
     }
 
-    private int x_size;
-    private int y_size;
+    private int _xSize;
+    private int _ySize;
     private int[] _exit;
     private boolean _isWin = false;
-    private Car goal_car;
-    private ArrayList<Car> carList = new ArrayList<Car>(0);
+    private Car _goal_car;
+    private ArrayList<Car> _carList = new ArrayList<Car>(0);
     private int[][] parkingMatrix;
 
     public boolean is_won () {
@@ -32,13 +32,13 @@ public class Parking implements Iterable<Car> {
 
             @Override
             public boolean hasNext() {
-                return currentIndex < carList.size();
+                return currentIndex < _carList.size();
             }
 
             @Override
             public Car next() {
                 ++currentIndex;
-                return carList.get(currentIndex);
+                return _carList.get(currentIndex);
             }
 
             @Override
@@ -102,8 +102,8 @@ public class Parking implements Iterable<Car> {
             head = this._get_head_b(movedCar);
         }
         return ( (this.parkingMatrix[head[0]][head[1]] == 0)
-            && (0 <= head[0] && head[0] < this.x_size)
-            && (0 <= head[1] && head[1] < this.y_size) );
+            && (0 <= head[0] && head[0] < this._xSize)
+            && (0 <= head[1] && head[1] < this._ySize) );
     }
 
     /* @desc Renvoie un la manière dont le parking serait si
@@ -122,18 +122,18 @@ public class Parking implements Iterable<Car> {
             return null;
         }
 
-        // COPY de {carList} mais en remplaçant {toMoveCar}.
-        ArrayList<Car> result = new ArrayList<Car>( this.carList.size() );
+        // COPY de {_carList} mais en remplaçant {toMoveCar}.
+        ArrayList<Car> result = new ArrayList<Car>( this._carList.size() );
 
-        for ( int i = 0; i < this.carList.size(); ++i ) {
-            if ( this.carList.get(i) == toMoveCar ) {
+        for ( int i = 0; i < this._carList.size(); ++i ) {
+            if ( this._carList.get(i) == toMoveCar ) {
                 result.set(i, newCarPos);
             } else {
-                result.set(i, this.carList.get(i)); // TODO .clone());
+                result.set(i, this._carList.get(i)); // TODO .clone());
             }
         }
 
-        return new Parking(this.x_size, this.y_size, this._exit, result);
+        return new Parking(this._xSize, this._ySize, this._exit, result);
     }
 
     /* @desc Renvoie un la manière dont le parking serait si
@@ -151,24 +151,24 @@ public class Parking implements Iterable<Car> {
             return null;
         }
 
-        // COPY de {carList} mais en remplaçant {toMoveCar}.
-        ArrayList<Car> result = new ArrayList<Car>( this.carList.size() );
+        // COPY de {_carList} mais en remplaçant {toMoveCar}.
+        ArrayList<Car> result = new ArrayList<Car>( this._carList.size() );
 
-        for ( int i = 0; i < this.carList.size(); ++i ) {
-            if ( this.carList.get(i) == toMoveCar ) {
+        for ( int i = 0; i < this._carList.size(); ++i ) {
+            if ( this._carList.get(i) == toMoveCar ) {
                 result.set(i, newCarPos);
             } else {
-                result.set(i, this.carList.get(i)); // TODO .clone());
+                result.set(i, this._carList.get(i)); // TODO .clone());
             }
         }
 
-        return new Parking(this.x_size, this.y_size, this._exit, result);
+        return new Parking(this._xSize, this._ySize, this._exit, result);
     }
 
     public Car set_goal_car (ArrayList<Integer> xPos, ArrayList<Integer> yPos) {
-        this.goal_car = this.add_car (xPos, yPos); 
+        this._goal_car = this.add_car (xPos, yPos); 
 
-        return this.goal_car;
+        return this._goal_car;
     }
 
     /* @desc Ajoute une voiture au parking, ainsi qu'à la matrice du parking.
@@ -193,7 +193,7 @@ public class Parking implements Iterable<Car> {
             }
         }
 
-        this.carList.add( newCar );
+        this._carList.add( newCar );
 
         return newCar;
     }
@@ -222,7 +222,7 @@ public class Parking implements Iterable<Car> {
     public String toString() {
         // Création des limites de la grille: "+---+---+---+---+\n"
         String delimiter = "";
-        //for (int i = 0; i < this.x_size; ++i) {
+        //for (int i = 0; i < this._xSize; ++i) {
           //  delimiter += "---+";
         ///}
         //delimiter += "\n";
@@ -255,7 +255,7 @@ public class Parking implements Iterable<Car> {
         while (true) {
             // Ajout de "|   |   |   |"
             result += "|";
-            for (int i = 0; i < this.x_size; ++i) {
+            for (int i = 0; i < this._xSize; ++i) {
                 int carNum = this.parkingMatrix[i][j];
                 if ( carNum > 0 ) {
                     // TODO Faire en fonciton de la taille du chiffre
@@ -266,12 +266,12 @@ public class Parking implements Iterable<Car> {
             }
             result += "|\n";
 
-            if (j >= (this.y_size - 1))  {
+            if (j >= (this._ySize - 1))  {
         //String result = "";
         //int i = 0;
         //while (true) {
             // Ajout de "|   |   |   |"
-          //  for (int j = 0; i < this.x_size; ++i) {
+          //  for (int j = 0; i < this._xSize; ++i) {
             //    int carNum = this.parkingMatrix[i][j];
               //  if ( carNum > 0 ) {
                     // TODO Faire en fonciton de la taille du chiffre
@@ -280,13 +280,13 @@ public class Parking implements Iterable<Car> {
                 //}
             //}
             //result += "|\n";
-            if (i == (this.y_size - 1))  {
+            if (i == (this._ySize - 1))  {
                 // Fin du tableau
                 result += delimiter;
                 break;
             }
             // Ajout de "+   +   +   +"
-            for (int i = 0; i < this.x_size; ++i) {
+            for (int i = 0; i < this._xSize; ++i) {
                 result += "+   ";
             }
             result += "+\n";
@@ -321,36 +321,36 @@ public class Parking implements Iterable<Car> {
 
     /* @desc Constructeur du parking avec les informations de base.
      *
-     * @param {x_size} : Taille horizontale du parking.
-     * @param {y_size} : Taille verticale du parking.
+     * @param {_xSize} : Taille horizontale du parking.
+     * @param {_ySize} : Taille verticale du parking.
      * @param {exit} : Coordonnée [x, y] de la sortie du parking.
      */
-    Parking (int x_size, int y_size, int[] exit) {
-        this.x_size = x_size;
-        this.y_size = y_size;
+    Parking (int _xSize, int _ySize, int[] exit) {
+        this._xSize = _xSize;
+        this._ySize = _ySize;
         this._exit=exit.clone();
 
-        this.parkingMatrix = new int[x_size][y_size];
+        this.parkingMatrix = new int[_xSize][_ySize];
     }
 
     /* @desc Constructeur du parking, où l'on passe directement toutes les voitures
      *      et le constructeur s'occupe de directement créer sa matrice.
      *
-     * @param {x_size} : Taille horizontale du parking.
-     * @param {y_size} : Taille verticale du parking.
+     * @param {_xSize} : Taille horizontale du parking.
+     * @param {_ySize} : Taille verticale du parking.
      * @param {exit} : Coordonnée [x, y] de la sortie du parking.
-     * @param {carList} : Liste des voitures présentes dans le parking,
+     * @param {_carList} : Liste des voitures présentes dans le parking,
      *      à utilisé pour calculer la matrice directement.
      */
-    Parking (int x_size, int y_size, int[] exit, ArrayList<Car> carList) {
-        this.x_size = x_size;
-        this.y_size = y_size;
-        this.carList = carList;
+    Parking (int _xSize, int _ySize, int[] exit, ArrayList<Car> _carList) {
+        this._xSize = _xSize;
+        this._ySize = _ySize;
+        this._carList = _carList;
         this._exit = exit.clone();
 
         // On place les voitures dans la matrice.
-        this.parkingMatrix = new int[x_size][y_size];
-        for ( Car car : carList ) {
+        this.parkingMatrix = new int[_xSize][_ySize];
+        for ( Car car : _carList ) {
             for ( int[] pos : car ) {
                 if (this.parkingMatrix[pos[0]][pos[1]] > 0) {
                     // throw "Position déjà occupée par une autre voiture.";
@@ -361,15 +361,15 @@ public class Parking implements Iterable<Car> {
         }
 
         // Ajout de la voiture "goal" 
-        if (carList.size() > 0) {
+        if (_carList.size() > 0) {
             // La voiture "goal" qui est toujours dans la liste à l'index "0".
-            this.goal_car = carList.get(0);
+            this._goal_car = _carList.get(0);
             this._isWin = true;
 
             // Vérification que le parking est une configuration gagnant ou non.
             if (this._exit[0] == 0) {
                 // Si la sortie à été définie à gauche. 
-                int[] currentPos = this._get_head_b(this.goal_car);
+                int[] currentPos = this._get_head_b(this._goal_car);
                 for (int i = currentPos[0]; i >= 0; --i) {
                     if ( this.parkingMatrix[i][currentPos[1]] > 0 ) {
                         // Si il y a un obstacle sur le chemin on ne sait pas gagner
@@ -379,8 +379,8 @@ public class Parking implements Iterable<Car> {
                 }
             } else {
                 // Si la sortie à été définie à droite.
-                int[] currentPos = this._get_head_f(this.goal_car);
-                for (int i = currentPos[0]; i < this.x_size; ++i) {
+                int[] currentPos = this._get_head_f(this._goal_car);
+                for (int i = currentPos[0]; i < this._xSize; ++i) {
                     if ( this.parkingMatrix[i][currentPos[1]] > 0 ) {
                         // Si il y a un obstacle sur le chemin on ne sait pas gagner
                         this._isWin = false;
