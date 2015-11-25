@@ -1,0 +1,14 @@
+Parking: 3 fois 3
++---+---+---+
+|
++   +   +   +
+|           |
++   +   +   +
+|           |
++---+---+---+
+Elements du Parking:
+    voiture Goal: 1
+    Autres voitures: 1
+Emplacements:
+    voiture Goal: [(0,0), (0,1)]
+    voiture 1: [(0,2), (1,2)]
