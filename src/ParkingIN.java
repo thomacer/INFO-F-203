@@ -103,16 +103,12 @@ public class ParkingIN {
 				if (line.indexOf(" ")==0){					//en debut de ligne
 					this._exit[0]=0;							//(0,0) (1,0)
 					this._exit[1]=i-j;
-					this._exit[2]=1;							//(0,2) (1,2)
-					this._exit[3]=i-j;
-					System.out.print("debut");
-					System.out.print("("+this._exit[0]+","+this._exit[1]+")"+", "+"("+this._exit[2]+","+this._exit[3]+")");
+					//System.out.print("debut");
+					//System.out.print("("+this._exit[0]+","+this._exit[1]+")"+", "+"("+this._exit[2]+","+this._exit[3]+")");
 					}
 				else if(line.lastIndexOf("|")!=line.length()-1) {		//en fin de ligne
-					this._exit[0]=this._xSize-2;							//(3,2) (4,2)
+					this._exit[0]=this._xSize-1;							//(3,2) (4,2)
 					this._exit[1]=i-j;
-					this._exit[2]=this._xSize-1;							//(1,0)
-					this._exit[3]=i-j;
 					// System.out.print("fin");
 					// System.out.print("("+this._exit[0]+","+this._exit[1]+")"+", "+"("+this._exit[2]+","+this._exit[3]+")");
 					}
