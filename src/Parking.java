@@ -12,12 +12,24 @@ public class Parking implements Iterable<Car> {
     private int _ySize;
     private int[] _exit;
     private boolean _isWin = false;
-    private Car _goal_car;
     private ArrayList<Car> _carList = new ArrayList<Car>(0);
     private int[][] parkingMatrix;
 
+    /* @desc Permet de vérifier si le parking est une configuration
+     *      gagnante ou non.
+     *
+     * @return {boolean} true si gagnant, sinon faux.
+     */
     public boolean is_won () {
         return this._isWin; 
+    }
+
+    /* @desc Permet d'acceder à une voiture d'un parking à un index donné.
+     *
+     * @return {Car} La voiture à l'index passé en paramêtre.
+     */
+    public Car get(int index) {
+        return this._carList.get(index);
     }
 
     public boolean equals (Parking other) {
@@ -29,10 +41,6 @@ public class Parking implements Iterable<Car> {
             }
         }
         return result;
-    }
-
-    public Car get(int index) {
-        return this._carList.get(index);
     }
 
     /* http://stackoverflow.com/questions/5849154/can-we-write-our-own-iterator-in-java
@@ -126,13 +134,13 @@ public class Parking implements Iterable<Car> {
      */
     private void _check_win () {
         // La voiture "goal" qui est toujours dans la liste à l'index "0".
-        this._goal_car = this._carList.get(0);
         this._isWin = true;
 
         // Vérification que le parking est une configuration gagnant ou non.
         if (this._exit[0] == 0) {
-            // Si la sortie à été définie à gauche. 
-            int[] currentPos = this._get_head_b(this._goal_car);
+            // Si la sortie à été définie à gauche de la "Goal Car"
+            // (toujours à l'index 0).
+            int[] currentPos = this._get_head_b(this._carList.get(0));
             for (int i = (currentPos[0] - 1); i >= 0; --i) {
                 if ( this.parkingMatrix[i][currentPos[1]] > 0 ) {
                     // Si il y a un obstacle sur le chemin on ne sait pas gagner
@@ -141,8 +149,9 @@ public class Parking implements Iterable<Car> {
                 }
             }
         } else {
-            // Si la sortie à été définie à droite.
-            int[] currentPos = this._get_head_f(this._goal_car);
+            // Si la sortie à été définie à droite de la "Goal Car"
+            // (toujours à l'index 0).
+            int[] currentPos = this._get_head_f(this._carList.get(0));
             for (int i = (currentPos[0] + 1); i < this._xSize; ++i) {
                 if ( this.parkingMatrix[i][currentPos[1]] > 0 ) {
                     // Si il y a un obstacle sur le chemin on ne sait pas gagner
@@ -210,12 +219,6 @@ public class Parking implements Iterable<Car> {
         return new Parking(this._xSize, this._ySize, this._exit, result);
     }
 
-    public Car set_goal_car (ArrayList<Integer> xPos, ArrayList<Integer> yPos) {
-        this._goal_car = this.add_car (xPos, yPos); 
-
-        return this._goal_car;
-    }
-
     /* @desc Ajoute une voiture au parking, ainsi qu'à la matrice du parking.
      *
      * NB : Une voiture prend toujours au moins 2 positions dans le parking,
@@ -230,12 +233,7 @@ public class Parking implements Iterable<Car> {
     public Car add_car (ArrayList<Integer> xPos, ArrayList<Integer> yPos) {
         Car newCar = new Car(xPos, yPos);
         for ( int[] pos : newCar ) {
-            if (this.parkingMatrix[pos[0]][pos[1]] > 0) {
-                
-                // TODO error checking throw "Position déjà occupée par une autre voiture.";
-            } else {
-                this.parkingMatrix[pos[0]][pos[1]] = newCar.get_num(); 
-            }
+            this.parkingMatrix[pos[0]][pos[1]] = newCar.get_num(); 
         }
 
         this._carList.add( newCar );
@@ -244,12 +242,63 @@ public class Parking implements Iterable<Car> {
 
         return newCar;
     }
+
     private String make_line(String c,int fin){
         String chaine="";
         for (int i=0;i<fin;++i){
             chaine+=c;
         }
         return chaine;
+    }
+
+    private String is_car(int ligne,int fin){
+        String res="";
+        for (int j = 0; j < this._xSize; ++j) {
+            int carNum = this.parkingMatrix[j][ligne];
+            if ( carNum > 0 ) {
+                if (carNum==1){
+                  res+=" G ";
+                  //res+= String.format("%3s", "G");
+                }
+                else if(carNum>1){
+                  res +=" V"+carNum;
+              }
+            }
+            else{ 
+                res+="   ";
+            }
+            if (j==this._xSize-1){
+            res+="";
+            }
+            else{
+              res+=" ";
+            }
+
+          }
+          res+=make_line(" ",fin-res.length());
+          return res;
+    }
+
+    private String is_exit(int ligne,int mode){
+        String res="";
+        if (mode==0){
+            if (this._exit[0]==0 && ligne==this._exit[1]){
+                res+=" ";
+            }
+            else{
+                res+="|";   
+            }
+        }
+        else if(mode==1){
+            if (this._exit[0]==this._xSize-1 && this._exit[1]==ligne){
+                res+=" ";
+            }
+            else{
+                res+="|";   
+                
+            }
+        }
+        return res;
     }
 
     /* @desc Permet la représentation du parking sous la forme d'un dessin.
@@ -297,54 +346,6 @@ public class Parking implements Iterable<Car> {
         result=delimiter+result+delimiter;
         return result;
     }
-    private String is_car(int ligne,int fin){
-        String res="";
-        for (int j = 0; j < this._xSize; ++j) {
-            int carNum = this.parkingMatrix[j][ligne];
-            if ( carNum > 0 ) {
-                if (carNum==1){
-                  res+=" G ";
-                  //res+= String.format("%3s", "G");
-                }
-                else if(carNum>1){
-                  res +=" V"+carNum;
-              }
-            }
-            else{ 
-                res+="   ";
-            }
-            if (j==this._xSize-1){
-            res+="";
-            }
-            else{
-              res+=" ";
-            }
-
-          }
-          res+=make_line(" ",fin-res.length());
-        return res;
-  }
-    private String is_exit(int ligne,int mode){
-        String res="";
-        if (mode==0){
-            if (this._exit[0]==0 && ligne==this._exit[1]){
-                res+=" ";
-            }
-            else{
-                res+="|";   
-            }
-        }
-        else if(mode==1){
-            if (this._exit[0]==this._xSize-1 && this._exit[1]==ligne){
-                res+=" ";
-            }
-            else{
-                res+="|";   
-                
-            }
-        }
-        return res;
-    }
 
     /* @desc Constructeur du parking avec les informations de base.
      *
@@ -379,15 +380,11 @@ public class Parking implements Iterable<Car> {
         this.parkingMatrix = new int[_xSize][_ySize];
         for ( Car car : _carList ) {
             for ( int[] pos : car ) {
-                if (this.parkingMatrix[pos[0]][pos[1]] > 0) {
-                    // throw "Position déjà occupée par une autre voiture.";
-                } else {
-                    this.parkingMatrix[pos[0]][pos[1]] = car.get_num();
-                }
+                this.parkingMatrix[pos[0]][pos[1]] = car.get_num();
             }
         }
 
-        // Ajout de la voiture "goal" 
+        // Vérification si on a une configuration gagnante.
         if (_carList.size() > 0) {
             this._check_win();
         } else {
