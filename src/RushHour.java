@@ -24,7 +24,6 @@ public class RushHour {
             newColumn.add(0);
         }
         this.parkingGraph.add(newColumn);
-        // System.out.println( "NEW ENTRY: " + this.parkingGraph.size() );
     }
 
     /* @desc Place dans le graph que l'on vient de générer.
@@ -125,28 +124,26 @@ public class RushHour {
         // Stock les noeuds à traiter.
         LinkedList<Integer> queue = new LinkedList<>();
         int currentNode = baseParking;
-        int newNode;
 
         while ( !(this.parkingList.get(currentNode).is_won()) ) {
             for (int i = 0; i < this.parkingList.size(); ++i) {
                 if ( this.parkingGraph.get(currentNode).get(i) > 0 && !(nodeMark[i]) ) {
                     // Si le noeud est accessible et n'a pas encore été traité.
+                    // System.out.println("POUR " + currentNode + " : " + i);
                     nodeMark[i] = true;
-                    queue.addFirst(i);
+                    nodePath[i] = currentNode; 
+                    countNode[i] = (countNode[currentNode] + 1);
+                    queue.add(i);
                 }
             }
             
             if ( queue.size() > 0 ) {
-                newNode = queue.pop();
+                currentNode = queue.poll();
             } else {
                 // Si on est arrivé au dernier noeud et qu'on a toujours 
                 // pas trouvé de chemin gagnant.
                 return null;
             }
-
-            nodePath[newNode] = currentNode; // On met d'où vient le nouveau noeud.W
-            countNode[newNode] = (countNode[currentNode] + 1); // Incrémente le compteur.
-            currentNode = newNode;
         }
         // Si l'on sort normalement de la boucle, on a trouvé un chemin.
         // Il faut désormait créer une liste avec tout les chemins emprunté
@@ -171,10 +168,11 @@ public class RushHour {
 
             ParkingIN parsedParking = new ParkingIN(args[0]);
             Parking baseParking = parsedParking.parse_input_file();
-            System.out.println(baseParking);
+            // System.out.println(baseParking);
             main.generate_parkings(baseParking);
             Parking[] result = main.find_shortest_path(0);
 
+            System.out.println("--------------------------------\n\n");
             // Pour le test.
             for (int i = 0; i < result.length; ++i) {
                 System.out.println(result[i]);
