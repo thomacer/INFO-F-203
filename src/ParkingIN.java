@@ -95,28 +95,29 @@ public class ParkingIN {
 			int j=1;					//conteur pour savoir le nombre de ligne qu'on saute
 			for (int i=1;(i<=this._ySize*2-1);++i){
 				line=file.readLine();
-				if (i%2==0){					//pas les ligne qui contien +---+
+				if (i%2==0){
+                    //pas les ligne qui contien +---+
 					line=file.readLine();
 					++i;
 					++j;
 				}
-				if (line.indexOf(" ")==0){					//en debut de ligne
+				if (line.charAt(0) == ' '){					//en debut de ligne
 					this._exit[0]=0;							//(0,0) (1,0)
 					this._exit[1]=i-j;
 					//System.out.print("debut");
 					//System.out.print("("+this._exit[0]+","+this._exit[1]+")"+", "+"("+this._exit[2]+","+this._exit[3]+")");
-					}
-				else if(line.lastIndexOf("|")!=line.length()-1) {		//en fin de ligne
+                }
+				else if(line.lastIndexOf('|') == 0) {		//en fin de ligne
 					this._exit[0]=this._xSize-1;							//(3,2) (4,2)
 					this._exit[1]=i-j;
 					// System.out.print("fin");
 					// System.out.print("("+this._exit[0]+","+this._exit[1]+")"+", "+"("+this._exit[2]+","+this._exit[3]+")");
-					}
-				}
-				line=file.readLine();				//derniere ligne du tableau
-				//System.out.print(line);
+                }
+            }
+            line=file.readLine();				//derniere ligne du tableau
+            //System.out.print(line);
 
-			}
+        }
 		catch(IOException ioe){
 			System.out.print("Erreur --"+ioe.toString());
 		}
