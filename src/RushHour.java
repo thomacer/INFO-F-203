@@ -142,7 +142,10 @@ public class RushHour {
             } else {
                 // Si on est arrivé au dernier noeud et qu'on a toujours 
                 // pas trouvé de chemin gagnant.
-                return null;
+                Parking[] result = new Parking[2];
+                result[0]=this.parkingList.get(baseParking);
+                result[1]=null;
+                return result;
             }
         }
         // Si l'on sort normalement de la boucle, on a trouvé un chemin.
@@ -171,12 +174,13 @@ public class RushHour {
             // System.out.println(baseParking);
             main.generate_parkings(baseParking);
             Parking[] result = main.find_shortest_path(0);
-
-            System.out.println("--------------------------------\n\n");
+            ParkingOUT resultParking=new ParkingOUT(result);
+            resultParking.printing();
+            //System.out.println("--------------------------------\n\n");
             // Pour le test.
-            for (int i = 0; i < result.length; ++i) {
-                System.out.println(result[i]);
-            }
+            //for (int i = 0; i < result.length; ++i) {
+              //  System.out.println(result[i]);
+            //}
             // ------------
 
         } else {
