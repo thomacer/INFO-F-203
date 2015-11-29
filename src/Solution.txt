@@ -1,13 +1,34 @@
 Solution finale :
-+---+---+---+---+---+
-|     V2  V2        |
-+   +   +   +   +   +
-|         V3        |
-+   +   +   +   +   +
-| G   G   V3  V4  V4 
-+   +   +   +   +   +
-|                   |
-+   +   +   +   +   +
-|                   |
-+---+---+---+---+---+
-Il n'y a aucune possibilité pour sortir la voiture Goal!.
+Mouvement 1:
++---+---+---+
+| G   G   V2 
++   +   +   +
+|         V2|
++   +   +   +
+|           |
++---+---+---+
+Deplacement Goal: -> [(0,0)(1,0)]
+Deplacement Voiture 2: -> [(2,0)(2,1)]
+
+Mouvement 2:
++---+---+---+
+| G   G      
++   +   +   +
+|         V2|
++   +   +   +
+|         V2|
++---+---+---+
+Deplacement Goal: -> [(0,0)(1,0)]-> [(0,0)(1,0)]
+Deplacement Voiture 2: -> [(2,0)(2,1)]-> [(2,1)(2,2)]
+
+Mouvement 3:
++---+---+---+
+|     G   G  
++   +   +   +
+|         V2|
++   +   +   +
+|         V2|
++---+---+---+
+Deplacement Goal: -> [(0,0)(1,0)]-> [(0,0)(1,0)]-> [(1,0)(2,0)]
+Deplacement Voiture 2: -> [(2,0)(2,1)]-> [(2,1)(2,2)]-> [(2,1)(2,2)]
+

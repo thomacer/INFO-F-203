@@ -14,7 +14,7 @@ public class Parking implements Iterable<Car> {
     private boolean _isWin = false;
     private ArrayList<Car> _carList = new ArrayList<Car>(0);
     private int[][] _parkingMatrix;
-    
+
     /* @desc Constructeur du parking avec les informations de base.
      *
      * @param {_xSize} : Taille horizontale du parking.
@@ -74,6 +74,9 @@ public class Parking implements Iterable<Car> {
      */
     public Car get(int index) {
         return this._carList.get(index);
+    }
+    public int get_numCar(){
+        return this._carList.size();
     }
 
     public boolean equals (Parking other) {
