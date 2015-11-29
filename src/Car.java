@@ -4,24 +4,58 @@ import java.util.Iterator;
 import java.lang.Iterable;
 
 public class Car implements Iterable<int[]> {
-    public enum Direction {
+    public enum _Direction {
         HORIZONTAL,
         VERTICAL
     }
 
-    static private int carNumber = 1;
-    private int personalNum;
+    static private int _carNumber = 1;
+    private int _personalNum;
 
-    private ArrayList<Integer> x_position;
-    private ArrayList<Integer> y_position;
-    private Direction dir;
+    private ArrayList<Integer> _x_position;
+    private ArrayList<Integer> _y_position;
+    private _Direction _dir;
+    
+        /* @desc Constructeur pour ne pas devoir faire de copie inutile.
+     *      Celui-ci est utilisé lorsque l'on fait une copie de la voiture
+     *      pour la placer dans un nouveau parking.
+     */
+    Car ( ArrayList<Integer> x_pos, ArrayList<Integer> y_pos,_Direction dir, int carNum) {
+        this._x_position = x_pos;
+        this._y_position = y_pos;
+
+        this._personalNum = carNum;
+
+        this._dir = dir;
+    }
+
+    /* @desc Constructeur de la voiture utilisé lors du lancement du
+     *      programme. Il va calculer toutes informations nécessaires
+     *      pour le bon fonctionnement de cette classe.
+     */
+    Car ( ArrayList<Integer> x_pos, ArrayList<Integer> y_pos) {
+        this._x_position = x_pos;
+        this._y_position = y_pos;
+
+        this._personalNum = this._carNumber;
+        ++this._carNumber;
+
+        // Déduction de la_direction de la voiture.
+        if (x_pos.get(0) == x_pos.get(1)) {
+            // Conformément à l'énoncé toutes voiture doit au moins
+            // être de taille 2.
+            this._dir =_Direction.VERTICAL;
+        } else {
+            this._dir =_Direction.HORIZONTAL;
+        }
+    }
 
     public ArrayList<Integer> get_x_pos () {
-        return this.x_position; 
+        return this._x_position; 
     }
 
     public ArrayList<Integer> get_y_pos () {
-        return this.y_position; 
+        return this._y_position; 
     }
 
     public boolean equals (Car other) {
@@ -39,12 +73,12 @@ public class Car implements Iterable<int[]> {
 
             @Override
             public boolean hasNext() {
-                return currentIndex < x_position.size();
+                return currentIndex < _x_position.size();
             }
 
             @Override
             public int[] next() {
-                int[] result = { x_position.get(currentIndex), y_position.get(currentIndex) };
+                int[] result = { _x_position.get(currentIndex), _y_position.get(currentIndex) };
                 ++currentIndex;
                 return result;
             }
@@ -62,7 +96,7 @@ public class Car implements Iterable<int[]> {
      * @return Le numéro de la voiture.
      */
     public int get_num () {
-        return this.personalNum;
+        return this._personalNum;
     }
 
     /* @desc Renvoie la position de la voiture si on doit
@@ -72,27 +106,27 @@ public class Car implements Iterable<int[]> {
      */
     public Car forward () {
         Car result;
-        if ( this.dir == Direction.HORIZONTAL ) {
+        if ( this._dir ==_Direction.HORIZONTAL ) {
             // Change la position de tout les éléments
             ArrayList<Integer> newXpos = new ArrayList<>();
-            for ( int i = 0; i < this.x_position.size(); ++i ) {
-                newXpos.add(this.x_position.get(i) + 1);
+            for ( int i = 0; i < this._x_position.size(); ++i ) {
+                newXpos.add(this._x_position.get(i) + 1);
             }
             result = new Car( newXpos,
-                              this.y_position, 
-                              this.dir,
-                              this.personalNum
+                              this._y_position, 
+                              this._dir,
+                              this._personalNum
                              );
         } else {
             // Change la position de tout les éléments
             ArrayList<Integer> newYpos = new ArrayList<>();
-            for ( int i = 0; i < this.y_position.size(); ++i ) {
-                newYpos.add(this.y_position.get(i) + 1);
+            for ( int i = 0; i < this._y_position.size(); ++i ) {
+                newYpos.add(this._y_position.get(i) + 1);
             }
-            result = new Car( this.x_position,
+            result = new Car( this._x_position,
                               newYpos,
-                              this.dir,
-                              this.personalNum
+                              this._dir,
+                              this._personalNum
                              );
         }
         return result;
@@ -105,28 +139,28 @@ public class Car implements Iterable<int[]> {
      */
     public Car backward () {
         Car result;
-        if ( this.dir == Direction.HORIZONTAL ) {
+        if ( this._dir ==_Direction.HORIZONTAL ) {
             // Change la position de tout les éléments
             ArrayList<Integer> newXpos = new ArrayList<>();
-            for ( int i = 0; i < this.x_position.size(); ++i ) {
-                newXpos.add(this.x_position.get(i) - 1);
+            for ( int i = 0; i < this._x_position.size(); ++i ) {
+                newXpos.add(this._x_position.get(i) - 1);
             }
 
             result = new Car( newXpos,
-                              this.y_position, 
-                              this.dir,
-                              this.personalNum
+                              this._y_position, 
+                              this._dir,
+                              this._personalNum
                              );
         } else {
             // Change la position de tout les éléments
             ArrayList<Integer> newYpos = new ArrayList<>();
-            for ( int i = 0; i < this.y_position.size(); ++i ) {
-                newYpos.add(this.y_position.get(i) - 1);
+            for ( int i = 0; i < this._y_position.size(); ++i ) {
+                newYpos.add(this._y_position.get(i) - 1);
             }
-            result = new Car( this.x_position,
+            result = new Car( this._x_position,
                               newYpos,
-                              this.dir,
-                              this.personalNum
+                              this._dir,
+                              this._personalNum
                              );
         }
         return result;
@@ -134,40 +168,6 @@ public class Car implements Iterable<int[]> {
 
     @Override
     public String toString() {
-        return Integer.toString(this.personalNum);
-    }
-
-    /* @desc Constructeur pour ne pas devoir faire de copie inutile.
-     *      Celui-ci est utilisé lorsque l'on fait une copie de la voiture
-     *      pour la placer dans un nouveau parking.
-     */
-    Car ( ArrayList<Integer> x_pos, ArrayList<Integer> y_pos, Direction dir, int carNum) {
-        this.x_position = x_pos;
-        this.y_position = y_pos;
-
-        this.personalNum = carNum;
-
-        this.dir = dir;
-    }
-
-    /* @desc Constructeur de la voiture utilisé lors du lancement du
-     *      programme. Il va calculer toutes informations nécessaires
-     *      pour le bon fonctionnement de cette classe.
-     */
-    Car ( ArrayList<Integer> x_pos, ArrayList<Integer> y_pos) {
-        this.x_position = x_pos;
-        this.y_position = y_pos;
-
-        this.personalNum = this.carNumber;
-        ++this.carNumber;
-
-        // Déduction de la direction de la voiture.
-        if (x_pos.get(0) == x_pos.get(1)) {
-            // Conformément à l'énoncé toutes voiture doit au moins
-            // être de taille 2.
-            this.dir = Direction.VERTICAL;
-        } else {
-            this.dir = Direction.HORIZONTAL;
-        }
+        return Integer.toString(this._personalNum);
     }
 }

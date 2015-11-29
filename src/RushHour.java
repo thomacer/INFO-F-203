@@ -3,27 +3,29 @@ import java.util.LinkedList;
 
 public class RushHour {
     // private Parking baseParking;
-    private ArrayList<ArrayList<Integer>> parkingGraph = new ArrayList<>();
+    private ArrayList<ArrayList<Integer>> _parkingGraph = new ArrayList<>();
     // Chaques configuration de parking vont être stockée ici.
-    private ArrayList<Parking> parkingList = new ArrayList<Parking>();
+    private ArrayList<Parking> _parkingList = new ArrayList<Parking>();
 
     // TODO Mettre les opération sur les matrices dans une classe ou quelque
     // chose comme ça pour une lecture plus facile du code.
+    RushHour() {
+    }
     /* @desc Ajoute une entrée (pour le sommet) dans le graph.
      */
     private void _add_entry_to_graph () {
         // Ajout à chaque colonne d'une nouvelle entrée.
-        for ( int i = 0; i < parkingGraph.size(); ++i ) {
-            this.parkingGraph.get(i).add(0);
+        for ( int i = 0; i < _parkingGraph.size(); ++i ) {
+            this._parkingGraph.get(i).add(0);
         }
 
         // Création de la nouvelle colonne
-        int newSize = (parkingGraph.size() + 1);
+        int newSize = (_parkingGraph.size() + 1);
         ArrayList<Integer> newColumn = new ArrayList<>();
-        for ( int i = 0; i < (this.parkingGraph.size() + 1); ++i ) {
+        for ( int i = 0; i < (this._parkingGraph.size() + 1); ++i ) {
             newColumn.add(0);
         }
-        this.parkingGraph.add(newColumn);
+        this._parkingGraph.add(newColumn);
     }
 
     /* @desc Place dans le graph que l'on vient de générer.
@@ -35,12 +37,12 @@ public class RushHour {
     private int _put_in_graph (Parking newParking) {
         int i = 0;
         // Recherche pour savoir si il y a déjà un {newParking} dans la liste.
-        while ( (i < this.parkingList.size()) && !parkingList.get(i).equals(newParking) ) {
+        while ( (i < this._parkingList.size()) && !_parkingList.get(i).equals(newParking) ) {
             ++i;
         }
-        if (i == this.parkingList.size()) {
+        if (i == this._parkingList.size()) {
             // Si il n'est pas dans la liste.
-            parkingList.add(newParking);
+            _parkingList.add(newParking);
             this._add_entry_to_graph(); // Rajoute de la place pour {i}
         }
 
@@ -59,8 +61,8 @@ public class RushHour {
      */
     public int generate_parkings(Parking parkingConf) {
         int i = this._put_in_graph (parkingConf);
-        if ( i < (parkingList.size() - 1) ) {
-            // Si i est plus petit que la taille de "parkingList - 1"
+        if ( i < (_parkingList.size() - 1) ) {
+            // Si i est plus petit que la taille de "_parkingList - 1"
             // ça veut dire que l'on a déjà traité ce sommet, ou qu'il est
             // occupé d'être traité.
             return i;
@@ -80,7 +82,7 @@ public class RushHour {
                 j = this.generate_parkings( tmp_parking_conf );
                 // Création d'une arrête entre les deux en indiquant quel
                 // voiture à été bougée. 
-                this.parkingGraph.get(i).set( j, specific_car.get_num() );
+                this._parkingGraph.get(i).set( j, specific_car.get_num() );
 
                 tmp_parking_conf = tmp_parking_conf.move_forward( specific_car );
             }
@@ -91,7 +93,7 @@ public class RushHour {
                 j = this.generate_parkings( tmp_parking_conf );
                 // Création d'une arrête entre les deux en indiquant quel
                 // voiture à été bougée. 
-                this.parkingGraph.get(i).set( j, specific_car.get_num() );
+                this._parkingGraph.get(i).set( j, specific_car.get_num() );
 
                 tmp_parking_conf = tmp_parking_conf.move_backward( specific_car );
             }
@@ -109,25 +111,25 @@ public class RushHour {
      */
     public Parking[] find_shortest_path (int baseParking) {
         // Permet de marquer si un noeud a dejà été traité ou non.
-        boolean[] nodeMark = new boolean[this.parkingList.size()];
+        boolean[] nodeMark = new boolean[this._parkingList.size()];
 
         // Va stocker l'antécédent à chaques noeuds traité.
         // À chaque "case" de ce tableau il va être stocké
         // l'index de son antécédent.
-        int[] nodePath = new int[this.parkingList.size()];
+        int[] nodePath = new int[this._parkingList.size()];
         nodePath[0] = 0;
 
         // Va stocker la distance par apport à la base.
-        int[] countNode = new int[this.parkingList.size()];
+        int[] countNode = new int[this._parkingList.size()];
         countNode[0] = 0;
 
         // Stock les noeuds à traiter.
         LinkedList<Integer> queue = new LinkedList<>();
         int currentNode = baseParking;
 
-        while ( !(this.parkingList.get(currentNode).is_won()) ) {
-            for (int i = 0; i < this.parkingList.size(); ++i) {
-                if ( this.parkingGraph.get(currentNode).get(i) > 0 && !(nodeMark[i]) ) {
+        while ( !(this._parkingList.get(currentNode).is_won()) ) {
+            for (int i = 0; i < this._parkingList.size(); ++i) {
+                if ( this._parkingGraph.get(currentNode).get(i) > 0 && !(nodeMark[i]) ) {
                     // Si le noeud est accessible et n'a pas encore été traité.
                     // System.out.println("POUR " + currentNode + " : " + i);
                     nodeMark[i] = true;
@@ -143,7 +145,7 @@ public class RushHour {
                 // Si on est arrivé au dernier noeud et qu'on a toujours 
                 // pas trouvé de chemin gagnant.
                 Parking[] result = new Parking[2];
-                result[0]=this.parkingList.get(baseParking);
+                result[0]=this._parkingList.get(baseParking);
                 result[1]=null;
                 return result;
             }
@@ -156,13 +158,10 @@ public class RushHour {
 
         // Création de la liste résultat, contenant le trajet dans l'ordre.
         for (int i = resultSize; i >= 0; --i) {
-            result[i] = this.parkingList.get(currentNode);
+            result[i] = this._parkingList.get(currentNode);
             currentNode = nodePath[currentNode];
         }
         return result;
-    }
-
-    RushHour() {
     }
 
     public static void main (String[] args) {

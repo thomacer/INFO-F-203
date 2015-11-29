@@ -13,8 +13,52 @@ public class Parking implements Iterable<Car> {
     private int[] _exit;
     private boolean _isWin = false;
     private ArrayList<Car> _carList = new ArrayList<Car>(0);
-    private int[][] parkingMatrix;
+    private int[][] _parkingMatrix;
+    
+    /* @desc Constructeur du parking avec les informations de base.
+     *
+     * @param {_xSize} : Taille horizontale du parking.
+     * @param {_ySize} : Taille verticale du parking.
+     * @param {exit} : Coordonnée [x, y] de la sortie du parking.
+     */
+    Parking (int _xSize, int _ySize, int[] exit) {
+        this._xSize = _xSize;
+        this._ySize = _ySize;
+        this._exit=exit.clone();
 
+        this._parkingMatrix = new int[_xSize][_ySize];
+    }
+
+    /* @desc Constructeur du parking, où l'on passe directement toutes les voitures
+     *      et le constructeur s'occupe de directement créer sa matrice.
+     *
+     * @param {_xSize} : Taille horizontale du parking.
+     * @param {_ySize} : Taille verticale du parking.
+     * @param {exit} : Coordonnée [x, y] de la sortie du parking.
+     * @param {_carList} : Liste des voitures présentes dans le parking,
+     *      à utilisé pour calculer la matrice directement.
+     */
+    Parking (int _xSize, int _ySize, int[] exit, ArrayList<Car> _carList) {
+        this._xSize = _xSize;
+        this._ySize = _ySize;
+        this._carList = _carList;
+        this._exit = exit.clone();
+
+        // On place les voitures dans la matrice.
+        this._parkingMatrix = new int[_xSize][_ySize];
+        for ( Car car : _carList ) {
+            for ( int[] pos : car ) {
+                this._parkingMatrix[pos[0]][pos[1]] = car.get_num();
+            }
+        }
+
+        // Vérification si on a une configuration gagnante.
+        if (_carList.size() > 0) {
+            this._check_win();
+        } else {
+            this._isWin = false;
+        }
+    }
     /* @desc Permet de vérifier si le parking est une configuration
      *      gagnante ou non.
      *
@@ -96,7 +140,7 @@ public class Parking implements Iterable<Car> {
      * @return {int[]} Renvoie les coordonnés.
      */
     private int[] _get_head_b(Car carToGet) {
-        int[] head = {this.parkingMatrix.length, this.parkingMatrix.length};
+        int[] head = {this._parkingMatrix.length, this._parkingMatrix.length};
         for ( int[] pos : carToGet ) {
             if ( (pos[0] < head[0]) || (pos[1] < head[1]) ) {
                 head = pos;
@@ -127,7 +171,7 @@ public class Parking implements Iterable<Car> {
         
         return ( (0 <= head[0] && head[0] < this._xSize)
             && (0 <= head[1] && head[1] < this._ySize) )
-            && (this.parkingMatrix[head[0]][head[1]] == 0);
+            && (this._parkingMatrix[head[0]][head[1]] == 0);
     }
 
     /* @desc Vérifie si le parking actuelle est gagnant ou non.
@@ -221,7 +265,7 @@ public class Parking implements Iterable<Car> {
     public Car add_car (ArrayList<Integer> xPos, ArrayList<Integer> yPos) {
         Car newCar = new Car(xPos, yPos);
         for ( int[] pos : newCar ) {
-            this.parkingMatrix[pos[0]][pos[1]] = newCar.get_num(); 
+            this._parkingMatrix[pos[0]][pos[1]] = newCar.get_num(); 
         }
 
         this._carList.add( newCar );
@@ -242,7 +286,7 @@ public class Parking implements Iterable<Car> {
     private String is_car(int ligne,int fin){
         String res="";
         for (int j = 0; j < this._xSize; ++j) {
-            int carNum = this.parkingMatrix[j][ligne];
+            int carNum = this._parkingMatrix[j][ligne];
             if ( carNum > 0 ) {
                 if (carNum==1){
                   res+=" G ";
@@ -333,50 +377,5 @@ public class Parking implements Iterable<Car> {
         }
         result=delimiter+result+delimiter;
         return result;
-    }
-
-    /* @desc Constructeur du parking avec les informations de base.
-     *
-     * @param {_xSize} : Taille horizontale du parking.
-     * @param {_ySize} : Taille verticale du parking.
-     * @param {exit} : Coordonnée [x, y] de la sortie du parking.
-     */
-    Parking (int _xSize, int _ySize, int[] exit) {
-        this._xSize = _xSize;
-        this._ySize = _ySize;
-        this._exit=exit.clone();
-
-        this.parkingMatrix = new int[_xSize][_ySize];
-    }
-
-    /* @desc Constructeur du parking, où l'on passe directement toutes les voitures
-     *      et le constructeur s'occupe de directement créer sa matrice.
-     *
-     * @param {_xSize} : Taille horizontale du parking.
-     * @param {_ySize} : Taille verticale du parking.
-     * @param {exit} : Coordonnée [x, y] de la sortie du parking.
-     * @param {_carList} : Liste des voitures présentes dans le parking,
-     *      à utilisé pour calculer la matrice directement.
-     */
-    Parking (int _xSize, int _ySize, int[] exit, ArrayList<Car> _carList) {
-        this._xSize = _xSize;
-        this._ySize = _ySize;
-        this._carList = _carList;
-        this._exit = exit.clone();
-
-        // On place les voitures dans la matrice.
-        this.parkingMatrix = new int[_xSize][_ySize];
-        for ( Car car : _carList ) {
-            for ( int[] pos : car ) {
-                this.parkingMatrix[pos[0]][pos[1]] = car.get_num();
-            }
-        }
-
-        // Vérification si on a une configuration gagnante.
-        if (_carList.size() > 0) {
-            this._check_win();
-        } else {
-            this._isWin = false;
-        }
     }
 }

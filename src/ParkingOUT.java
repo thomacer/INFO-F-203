@@ -35,24 +35,28 @@ public class ParkingOUT {
 			if (this._chemin[this._chemin.length-1]!=null){
 				for (int i=0;i<this._chemin.length;++i){
 					content="Mouvement "+(i+1)+":\n";
+					// System.out.print(this._chemin[i].get(1).get_x_pos());
+					//System.out.print(this._chemin[i].get(1).get_y_pos());
 					content+=this._chemin[i].toString();
 					file.write(content);
 				}
 			}
 			else{
-				System.out.print("bon");
 				content=this._chemin[0].toString();
 				file.write(content);
 				content="Il n'y a aucune possibilité pour sortir la voiture Goal!.";
+				file.write(content);
+				System.out.print(this._chemin[0].get(1).get_x_pos());
+				System.out.print(this._chemin[0].get(2).get_x_pos());
+				System.out.print(this._chemin[0].get(3).get_x_pos());
+				System.out.print(this._chemin[0].get(0).get_x_pos());
+				//System.out.print(this._chemin[0].get(1).get_y_pos());
 			}
 
 			//content=;		
 			//System.out.print(content);
 			
 			
-			
-			
-			file.write(content);
 			file.close();
 		}
 		catch(IOException e){
