@@ -141,24 +141,12 @@ public class Parking implements Iterable<Car> {
             // Si la sortie à été définie à gauche de la "Goal Car"
             // (toujours à l'index 0).
             int[] currentPos = this._get_head_b(this._carList.get(0));
-            for (int i = (currentPos[0] - 1); i >= 0; --i) {
-                if ( this.parkingMatrix[i][currentPos[1]] > 0 ) {
-                    // Si il y a un obstacle sur le chemin on ne sait pas gagner
-                    this._isWin = false;
-                    break;
-                }
-            }
+            this._isWin = (currentPos[0] == this._exit[0]);
         } else {
             // Si la sortie à été définie à droite de la "Goal Car"
             // (toujours à l'index 0).
             int[] currentPos = this._get_head_f(this._carList.get(0));
-            for (int i = (currentPos[0] + 1); i < this._xSize; ++i) {
-                if ( this.parkingMatrix[i][currentPos[1]] > 0 ) {
-                    // Si il y a un obstacle sur le chemin on ne sait pas gagner
-                    this._isWin = false;
-                    break;
-                }
-            }
+            this._isWin = (currentPos[0] == this._exit[0]);
         }
     }
 
