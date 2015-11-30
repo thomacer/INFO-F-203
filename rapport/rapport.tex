@@ -59,7 +59,19 @@ title=\lst
         \item L'emplacement des voitures dans ce parking.
     \end{itemize}
     Qui vont être parsé pour pouvoir créer un parking de base, qui est notre
-    cas de base à partir duquel il va falloir trouver le plus court chemin.
+    cas de base à partir duquel il va falloir trouver le plus court
+    chemin.\newline
+    Conformément à l'énoncé quelques l'algorithme ne va gèrer que les cas où:
+    \begin{itemize}
+        \item Le fichier d'input est correctement écrit (pas d'erreur dans
+            celui-ci), à la même manière que dans l'exemple.
+        \item La voiture goal se déplace horizontalement (la sortie est sur la
+            droite ou la gauche).
+        \item Il n'y a pas de voiture de taille 1 (car impossible de savoir si
+            elle se déplace horizontalement ou verticalement).
+        \item Pas de parking de taille 0 (car pas possible d'y mettre une
+            voiture goal)
+    \end{itemize}
 
 \section{Description de la résolution du problême.}
     Le problême va se faire en plusieurs étapes:
@@ -82,24 +94,24 @@ title=\lst
     situation gagnant2).\newline
 
     % \includegraphics[scale=0.2]{gen0.png} \newline
-    \newpage
+    % \newpage
     \begin{tikzpicture}
         [scale=.8,auto=left,every node/.style={circle,fill=blue!20}]
         \node (n0) at (1, 10) {\includegraphics[scale=0.15]{gen0.png}};
-        \node (n1) at (5, 10) {\includegraphics[scale=0.15]{gen1.png}};
-        \node (n2) at (9, 10) {\includegraphics[scale=0.15]{gen2.png}};
-        \node (n3) at (13, 10) {\includegraphics[scale=0.15]{gen3.png}};
+        \node (n1) at (4, 10) {\includegraphics[scale=0.15]{gen1.png}};
+        \node (n2) at (7, 10) {\includegraphics[scale=0.15]{gen2.png}};
+        \node (n3) at (10, 10) {\includegraphics[scale=0.15]{gen3.png}};
         % Premier win
 
         %Autre situation à partir de n0
-        \node (n4) at (1, 7) {\includegraphics[scale=0.15]{gen4.png}};
-        \node (n5) at (4, 7) {\includegraphics[scale=0.15]{gen5.png}};
-        \node (n6) at (7, 7) {\includegraphics[scale=0.15]{gen6.png}};
-        \node (n7) at (10, 7) {\includegraphics[scale=0.15]{gen7.png}};
-        \node (n8) at (13, 7) {\includegraphics[scale=0.15]{gen8.png}};
-        \node (n9) at (13, 4) {\includegraphics[scale=0.15]{gen9.png}};
+        \node (n4) at (1, 7) {\includegraphics[scale=0.13]{gen4.png}};
+        \node (n5) at (2, 5) {\includegraphics[scale=0.13]{gen5.png}};
+        \node (n6) at (4, 4) {\includegraphics[scale=0.13]{gen6.png}};
+        \node (n7) at (7, 4) {\includegraphics[scale=0.13]{gen7.png}};
+        \node (n8) at (10, 4) {\includegraphics[scale=0.13]{gen8.png}};
+        \node (n9) at (13, 4) {\includegraphics[scale=0.13]{gen9.png}};
 
-        \node (n10) at (13, 4) {\includegraphics[scale=0.15]{gen10.png}};
+        \node (n10) at (13, 4) {\includegraphics[scale=0.13]{gen10.png}};
 
         \foreach \from/\to in {n0/n1, n1/n2, n2/n3, n0/n4, n4/n5, n5/n6, n6/n7,
         n7/n8, n8/n9}
@@ -107,10 +119,54 @@ title=\lst
     \end{tikzpicture}
 
 \subsection{Génération des configurations.}
+    Pour générer l'ensemble des solutions un algorithme de backtracking est
+    utilisé, il fait avancer/reculer un maximum chaques voitures dans chaques
+    configuration que cela va engendrer.
 \subsection{Recherche du plus court chemin.}
+    Pour trouver le plus court chemin parmis ceux générés. L'algorithme le plus
+    évident pour effectuer un tel travail est l'algorithme de Dijkstra.
+    Or ici nous avons un cas spécial de
+    l'algorithme de Dijkstra car la distance entre chaques noeuds est de 1, là
+    où l'algorithme de Dijkstra fait une recherche dans un graph où
+    la distance entre deux noeuds est à chaques fois différente.
+    Ainsi la \emph{min-priority queue} n'est pas nécessaire, une simple
+    \emph{queue} peut être utilisé.
+    L'algorithme ressemble donc à un parcour en largeur (\emph{breadth-first})
+    qui s'arrête au premier parking \emph{gagnant} rencontré. \newline
 
+    Exemple en mettant en évidence les profondeurs du parcour: \newline
+    \begin{tikzpicture}
+        [scale=.8,auto=left,every node/.style={circle,fill=blue!20}]
+        \node (n0) at (1, 10) {\includegraphics[scale=0.15]{gen0.png}};
+        \node (n1) at (4, 10) {\includegraphics[scale=0.15]{gen1.png}};
+        \node (n2) at (7, 10) {\includegraphics[scale=0.15]{gen2.png}};
+        \node[color=green] (n3) at (10, 10) {\includegraphics[scale=0.15]{gen3.png}};
+        % Premier win
+
+        %Autre situation à partir de n0
+        \node (n4) at (1, 7) {\includegraphics[scale=0.13]{gen4.png}};
+        \node (n5) at (2, 5) {\includegraphics[scale=0.13]{gen5.png}};
+        \node (n6) at (4, 4) {\includegraphics[scale=0.13]{gen6.png}};
+        \node (n7) at (7, 4) {\includegraphics[scale=0.13]{gen7.png}};
+        \node (n8) at (10, 4) {\includegraphics[scale=0.13]{gen8.png}};
+        \node (n9) at (13, 4) {\includegraphics[scale=0.13]{gen9.png}};
+
+        \node (n10) at (13, 4) {\includegraphics[scale=0.13]{gen10.png}};
+
+        \foreach \from/\to in {n0/n1, n1/n2, n2/n3, n0/n4, n4/n5, n5/n6, n6/n7,
+        n7/n8, n8/n9}
+        \draw (\from) -- (\to);
+        \draw[color=red]  (1, 8) to[out=10,in=-90] (3, 10);
+        \draw[color=red]  (1, 6) to[out=0,in=-85] (5, 10);
+        \draw[color=red]  (3, 5) to[out=90,in=-85] (8, 10);
+        \draw[color=red] (6, 4) to[out=90,in=-85] (11, 10);
+    \end{tikzpicture}
+
+
+
+\section{Optimisation}
 \begin{thebibliography}
-\bibitem{rushhourdijkstra}
+\bibitem{Rush Hour and Dijkstra's algorithm}
     Mark Stamp, Brad Engel McIntosh Ewekk, Victor Morrow,
     \emph{Rush Hour and Dijkstra's algorithm}
     http://www.cs.sjsu.edu/~stamp/cv/papers/rh.pdf
