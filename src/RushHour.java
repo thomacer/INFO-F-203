@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.lang.UnsupportedOperationException;
 
 public class RushHour {
     /* @desc Place dans la liste.
@@ -111,13 +112,11 @@ public class RushHour {
         while ( !(parkingList.get(currentNode).is_won()) ) {
             Parking currentParking = parkingList.get(currentNode);
             for ( Car aCar : currentParking ) {
-                System.out.println("new");
-
                 Parking newParkingConf = currentParking.move_forward(aCar);
-                _update_lists(queue, newParkingConf, nodePath, countNode, parkingList, currentNode);
+                _update_lists(queue, parkingList, nodePath, countNode, newParkingConf, currentNode);
                     
                 newParkingConf = currentParking.move_backward(aCar);
-                _update_lists(queue, newParkingConf, nodePath, countNode, parkingList, currentNode);
+                _update_lists(queue, parkingList, nodePath, countNode, newParkingConf, currentNode);
             }
             
             if ( queue.size() > 0 ) {
@@ -126,10 +125,11 @@ public class RushHour {
                 // Si on est arrivé au dernier noeud et qu'on a toujours 
                 // pas trouvé de chemin gagnant.
                 // TODO Throw une erreur plutôt
-                Parking[] result = new Parking[2];
-                result[0] = baseParking;
-                result[1] = null;
-                return result;
+                // Parking[] result = new Parking[2];
+                // result[0] = baseParking;
+                // result[1] = null;
+                // return result;
+                throw new UnsupportedOperationException();
             }
         }
 
@@ -142,17 +142,21 @@ public class RushHour {
 
             ParkingIN parsedParking = new ParkingIN(args[0]);
             Parking baseParking = parsedParking.parse_input_file();
-            // System.out.println(baseParking);
-            // main.generate_parkings(baseParking);
-            Parking[] result = main.find_shortest_path(baseParking);
-            ParkingOUT resultParking=new ParkingOUT(result);
-            resultParking.printing();
-            System.out.println("--------------------------------\n\n");
-             // Pour le test.
-            for (int i = 0; i < result.length; ++i) {
-                System.out.println(result[i]);
+
+            Parking[] result = {};
+            try {
+                result = main.find_shortest_path(baseParking);
+                ParkingOUT.printing(result);
+
+                for (int i = 0; i < result.length; ++i) {
+                    System.out.println(result[i]);
+                }
+
+
+            } catch(UnsupportedOperationException e) {
+                ParkingOUT.print_no_result (baseParking);
             }
-            // ------------
+
 
         } else {
             System.out.println("Veuillez passer le fichier en argument.");
