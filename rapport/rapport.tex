@@ -39,42 +39,41 @@ stringstyle=\color{mymauve}, % string literal style
 tabsize=2, % sets default tabsize to 2 spaces
 title=\lst
 }
+\title{Rapport projet d'algorithmique 2}
+\date{le 1 decembre 2015}
 
 \begin{document}
-\section{Description du problÃ¨me}
-    Dans un parking similaire Ã  un est tableau de plusieurs cases,
-    oÃ¹ chaques cases peut contenir soit une voiture qui peut avancer
-    ou reculer selon son orientation (\emph{verticale} ou \emph{horizontale})
-    soit un espace vide, dÃ©terminer pour une des voitures de ce parking
-    (la voiture \emph{goal}) comment atteindre la sortie de ce parking en
-    faisant bouger les voitures le moins possible.
+\maketitle
+\section{Introduction}
+\parindent Dans un parking d'un centre commercial, Mademoiselle Goal désire sortir sa voiture le plus rapidement possible en exécutant le moins de man½uvre possible. Evidement le parking n'est pas vide, alors Mademoiselle Goal demande à ses amis les informaticien de l'aider. Notre but et de trouver sous forme de graphe (un noeud du graphe représente une configuration du parking) le plus court chemin (le moins de manoeuvre possible) afin d'aider Mademoiselle Goal à rentrer chez elle.
 
-\section{Cas de base.}
-    Est fourni comme input pour le problÃªme un fichier: \newline
+\section{Cas de base}
+\parindent Notre parking est un tableau n x n dans lequel plusieurs voiture s'y trouve. Parmi ces voitures, la voiture de Mlle, qui a notamment l'indicatif "G". Dans ce tableau, chaque cases peut contenir une voiture, généralement une voiture occupe deux cases. Il faut savoir qu'une voiture peut avancer ou reculer selon son orientation (verticale ou horizontale) jusqu'a la limite du tableau. L'unique voiture qui a le droit de sortir du tableau est bien évidement la voiture Goal.
+
+\parindent Toutes les information nécessaire à l'algorithme sont dans un fichier que notre programme recoit comme input grâce au argv.
+\parindetn Voici un exemple de fichier:
     \lstinputlisting{../test/test1.txt}
-    Il nous donne des informations sur:
+    Celui ci nous renseigne sur:
     \begin{itemize}
         \item La taille du parking.
         \item La position de la sortie.
         \item L'emplacement des voitures dans ce parking.
     \end{itemize}
-    Qui vont Ãªtre parsÃ© pour pouvoir crÃ©er un parking de base, qui est notre
-    cas de base Ã  partir duquel il va falloir trouver le plus court
-    chemin.\newline
-    ConformÃ©ment Ã  l'Ã©noncÃ© quelques l'algorithme ne va gÃ¨rer que les cas oÃ¹:
-    \begin{itemize}
-        \item Le fichier d'input est correctement Ã©crit (pas d'erreur dans
-            celui-ci), Ã  la mÃªme maniÃ¨re que dans l'exemple.
-        \item La voiture goal se dÃ©place horizontalement (la sortie est sur la
+    Toute ces informations vont être parsé pour pouvoir créer un parking initial, qui sera notre
+    cas de base à partir duquel il va falloir trouver le plus court chemin.\newline
+    Conformément à l?énoncé, l?algorithme ne fonctionnera que dans les cas suivant :
+        \begin{itemize}
+        \item Le fichier d'input est correctement écrit (pas d'erreur dans celui-ci), de la même manière que dans l'exemple.
+        \item La voiture goal se déplace horizontalement (la sortie est sur la
             droite ou la gauche).
         \item Il n'y a pas de voiture de taille 1 (car impossible de savoir si
-            elle se dÃ©place horizontalement ou verticalement).
+            elle se déplace horizontalement ou verticalement).
         \item Pas de parking de taille 0 (car pas possible d'y mettre une
-            voiture goal)
+            voiture goal).
     \end{itemize}
 
 \section{Exemple d'utilisation.}
-Exemple d'execution en utilisant l'exemple au dessus.
+Exemple d'exécution en utilisant l'exemple au dessus.
 
 \begin{lstlisting}
 +---+---+---+---+---+
@@ -162,8 +161,8 @@ Exemple d'execution en utilisant l'exemple au dessus.
 +---+---+---+---+---+
 \end{lstlisting}
 
-\section{Description de la rÃ©solution du problÃªme.}
-    Le problÃªme va se faire en plusieurs Ã©tapes:
+\section{Description de la résolution du problème.}
+    Le problème va se faire en plusieurs étapes:
     \begin{enumerate}
         \item GÃ©nÃ©rer tout les configurations\footnote{Une configuration de
             parking est un parking avec les voitures Ã  une certaine place.
