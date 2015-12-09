@@ -10,7 +10,8 @@
 
 \usepackage{graphicx}
 \usepackage{tikz}
-\usepackage{color} or \usepackage{xcolor}
+\usepackage{xcolor}
+\usepackage[]{algorithm2e}
 
 \lstset{ %
 backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
@@ -37,9 +38,11 @@ showtabs=false,                  % show tabs within strings adding particular un
 stepnumber=2,                    % the step between two line-numbers.  If it's 1, each line will be numbered
 stringstyle=\color{mymauve}, % string literal style
 tabsize=2, % sets default tabsize to 2 spaces
-title=\lst
+title=\lst.
 }
 \title{Rapport projet d'algorithmique 2}
+\author{PERALE Thomas (000408160)\\
+        RUSU George ()\\}
 \date{le 1 decembre 2015}
 
 \begin{document}
@@ -305,6 +308,22 @@ moment où va être traité le parking):
     \draw[dashed] (8, 8) -- (9, 8);
 \end{tikzpicture}
 
+\begin{algorithm}[H]
+    \KwData{currentParking = baseParking;}
+    \KwResult{shortestParkingPath;}
+    \While{Queue.isNotEmpty() \emph{AND} currentParking.isNotWin() } {
+        carList = currentParking.move\_each\_car\_forward();
+        carList.append\_if\_not\_already\_threated();
+
+        carList = currentParking.move\_each\_car\_backward();
+        carList.append\_if\_not\_already\_threated();
+
+        currentParking = Queue.pop()
+    }
+    \caption{Pseudo code de l'algorithme}
+\end{algorithm}
+
+\section{Optimisation possible}
 
 \begin{thebibliography}
 \bibitem{Rush Hour and Dijkstra's algorithm}
