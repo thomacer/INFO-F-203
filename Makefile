@@ -1,5 +1,12 @@
-install:
-#
+CC=javac
+SRCFILES=$(wildcard src/*.java)
+LOC=./src
+
+all: ${LOC}/RushHour.java
+	${CC} -cp .:${LOC} $^
+
+clean:
+	rm ${LOC}/*.class
 
 listing:
 	bash mklisting src/*
