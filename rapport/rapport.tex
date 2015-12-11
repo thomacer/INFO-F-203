@@ -324,7 +324,12 @@ moment oÃ¹ va Ãªtre traitÃ© le parking):
 \end{algorithm}
 
 \section{Optimisation possible}
-
+Une optimisation possible du problême est de ne pas seulement considérer les
+déplacements \emph{d'une case} mais aussi les mouvements de plusieurs cases
+(sur les lignes des voitures). De cette façon on peut générer moins de cas.
+Le problême est qu'avec cette optimisation on génère moins de cas seulement si pour
+résoudre le problême il faut faire avancer deux fois ou plus une voiture sur sa
+ligne, sinon le nombre d'opération dans l'algorithme sera plus élevé.
 \begin{thebibliography}
 \bibitem{Rush Hour and Dijkstra's algorithm}
     Mark Stamp, Brad Engel McIntosh Ewekk, Victor Morrow,
