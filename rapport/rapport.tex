@@ -1,8 +1,7 @@
 \documentclass[10pt, a4paper]{article}
-\usepackage[utf8]{inputenc}
+\usepackage[latin1]{inputenc}
 \usepackage{listings}
 \usepackage{hyperref}
-
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \lhead{PERALE Thomas et RUSU George}
@@ -12,49 +11,23 @@
 \usepackage{tikz}
 \usepackage{xcolor}
 \usepackage[]{algorithm2e}
-
-\lstset{ %
-backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
-basicstyle=\footnotesize,        % the size of the fonts that are used for the code
-breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
-breaklines=true,                 % sets automatic line breaking
-captionpos=b,                    % sets the caption-position to bottom
-commentstyle=\color{mygreen},    % comment style
-deletekeywords={\ldots},            % if you want to delete keywords from the given language
-escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
-extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
-frame=single,                      % adds a frame around the code
-keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
-keywordstyle=\color{blue},       % keyword style
-language=Octave,                 % the language of the code
-otherkeywords={*,\ldots},           % if you want to add more keywords to the set
-numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
-numbersep=5pt,                   % how far the line-numbers are from the code
-numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
-rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g.  comments (green here))
-showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
-showstringspaces=false,          % underline spaces within strings only
-showtabs=false,                  % show tabs within strings adding particular underscores
-stepnumber=2,                    % the step between two line-numbers.  If it's 1, each line will be numbered
-stringstyle=\color{mymauve}, % string literal style
-tabsize=2, % sets default tabsize to 2 spaces
-title=\lst.
-}
-\title{Rapport projet d'algorithmique 2}
-\author{PERALE Thomas (000408160)\\
-        RUSU George ()\\}
-\date{le 1 decembre 2015}
+\usepackage{indentfirst}
 
 \begin{document}
+\title{Rapport projet d'algorithmique 2}
+\author{PERALE Thomas (000408160)\\
+        RUSU George (000407965)\\}
+\date{le 1 décembre 2015}
+
 \maketitle
 \section{Introduction}
-\parindent Dans un parking d'un centre commercial, Mademoiselle Goal désire sortir sa voiture le plus rapidement possible en exécutant le moins de man½uvre possible. Evidement le parking n'est pas vide, alors Mademoiselle Goal demande à ses amis les informaticien de l'aider. Notre but et de trouver sous forme de graphe (un noeud du graphe représente une configuration du parking) le plus court chemin (le moins de manoeuvre possible) afin d'aider Mademoiselle Goal à rentrer chez elle.
+Dans un parking d'un centre commercial, Mademoiselle Goal désire sortir sa voiture le plus rapidement possible en exécutant le moins de man½uvre possible. Evidement le parking n'est pas vide, alors Mademoiselle Goal demande à ses amis les informaticien de l'aider. Notre but et de trouver sous forme de graphe (un noeud du graphe représente une configuration du parking) le plus court chemin (le moins de manoeuvre possible) afin d'aider Mademoiselle Goal à rentrer chez elle.
 
 \section{Cas de base}
-\parindent Notre parking est un tableau n x n dans lequel plusieurs voiture s'y trouve. Parmi ces voitures, la voiture de Mlle, qui a notamment l'indicatif "G". Dans ce tableau, chaque cases peut contenir une voiture, généralement une voiture occupe deux cases. Il faut savoir qu'une voiture peut avancer ou reculer selon son orientation (verticale ou horizontale) jusqu'a la limite du tableau. L'unique voiture qui a le droit de sortir du tableau est bien évidement la voiture Goal.
+Notre parking est un tableau n x n dans lequel plusieurs voiture s'y trouve. Parmi ces voitures, la voiture de Mlle, qui a notamment l'indicatif "G". Dans ce tableau, chaque cases peut contenir une voiture, généralement une voiture occupe deux cases. Il faut savoir qu'une voiture peut avancer ou reculer selon son orientation (verticale ou horizontale) jusqu'a la limite du tableau. L'unique voiture qui a le droit de sortir du tableau est bien évidement la voiture Goal.
 
-\parindent Toutes les information nécessaire à l'algorithme sont dans un fichier que notre programme recoit comme input grâce au argv.
-\parindetn Voici un exemple de fichier:
+\indent Toutes les information nécessaire à l'algorithme sont dans un fichier que notre programme reçoit comme input grâce au argv.
+Voici un exemple de fichier:
     \lstinputlisting{../test/test1.txt}
     Celui ci nous renseigne sur:
     \begin{itemize}
@@ -63,8 +36,8 @@ title=\lst.
         \item L'emplacement des voitures dans ce parking.
     \end{itemize}
     Toute ces informations vont être parsé pour pouvoir créer un parking initial, qui sera notre
-    cas de base à partir duquel il va falloir trouver le plus court chemin.\newline
-    Conformément à l?énoncé, l?algorithme ne fonctionnera que dans les cas suivant :
+    cas de base à partir duquel il va falloir trouver le plus court chemin.\\
+    Conformément à l'énoncé, l'algorithme ne fonctionnera que dans les cas suivant:
         \begin{itemize}
         \item Le fichier d'input est correctement écrit (pas d'erreur dans celui-ci), de la même manière que dans l'exemple.
         \item La voiture goal se déplace horizontalement (la sortie est sur la
@@ -167,22 +140,20 @@ Exemple d'exécution en utilisant l'exemple au dessus.
 \section{Description de la résolution du problème.}
     Le problème va se faire en plusieurs étapes:
     \begin{enumerate}
-        \item GÃ©nÃ©rer tout les configurations\footnote{Une configuration de
-            parking est un parking avec les voitures Ã  une certaine place.
-            Quand on dit toutes les configurations possible on entend
-            qu'Ã  chaque fois qu'une voiture va bouger dans le parking on a une
-            configuration diffÃ©rente.} de parking possible.
-        \item Lors de cette gÃ©nÃ©ration, crÃ©er un graphe dans lequel chaques
-            configurations nouvellement crÃ©e est lier Ã  la configuration
-            d'oÃ¹ elle vient.
-        \item Une fois ces configurations gÃ©nÃ©rÃ©es, appliquer un algorithme de
-            recherche du plus court chemin sur le graphe des configurations.
+        \item Générer toutes les configurations\footnote{Une configuration d'un
+            parking est un parking dans lequel une voiture a changer de position.
+            A chaque tour, une voiture bougera dans le parking, c'est pour cette raison qu'on parle de
+            configuration différente.} de parking possible.
+        \item Lors de cette génération, créer un graphe dans lequel chaque
+            configurations nouvellement créé est lié à la configuration d'où elle vient.
+        \item Une fois ces configurations générées, il suffit d'appliquer un algorithme de
+            recherche du plus court chemin sur le graphe dont les noeud sont des configurations.
     \end{enumerate}
 
-    Exemple\footnote{Les exemples sont crÃ©Ã©s Ã  partir de
-    http://analogbit.com/software/puzzletools/ .} de graphe associer aux
-    configurations lors d'une gÃ©nÃ©ration non exhaustive (on abouti Ã  deux
-    situation gagnant2).
+   Exemple\footnote{Les exemples sont créés à  partir de
+    http://analogbit.com/software/puzzletools/ .} de graphe associé aux
+    configurations lors d'une génération non exhaustive (on abouti à  deux
+    situation gagnante).
 
     % \includegraphics[scale=0.2]{gen0.png} \newline
     % \newpage
@@ -209,23 +180,19 @@ Exemple d'exécution en utilisant l'exemple au dessus.
         \draw (\from) -- (\to);
     \end{tikzpicture}
 
-\subsection{GÃ©nÃ©ration des configurations.}
-    Pour gÃ©nÃ©rer l'ensemble des solutions un algorithme de backtracking est
-    utilisÃ©, il fait avancer/reculer un maximum chaques voitures dans chaques
-    configuration que cela va engendrer.
-\subsection{Recherche du plus court chemin.}
-    Pour trouver le plus court chemin parmis ceux gÃ©nÃ©rÃ©s. L'algorithme le plus
-    Ã©vident pour effectuer un tel travail est l'algorithme de Dijkstra.
-    Or ici nous avons un cas spÃ©cial de
-    l'algorithme de Dijkstra car la distance entre chaques noeuds est de 1, lÃ 
-    oÃ¹ l'algorithme de Dijkstra fait une recherche dans un graph oÃ¹
-    la distance entre deux noeuds est Ã  chaques fois diffÃ©rente.
-    Ainsi la \emph{min-priority queue} n'est pas nÃ©cessaire, une simple
-    \emph{queue} peut Ãªtre utilisÃ©.
-    L'algorithme ressemble donc Ã  un parcour en largeur (\emph{breadth-first})
-    qui s'arrÃªte au premier parking \emph{gagnant} rencontrÃ©. \newline
+\subsection{Génération des configurations.}
+    Pour générer l'ensemble des solutions, un algorithme de backtracking est
+    utilisé. Celui-ci fait avancer ou reculer un maximum chaque voitures dans chaque configuration.
+    \subsection{Recherche du plus court chemin.}
+    Pour trouver le plus court chemin parmi ceux déjà générés, nous allons utiliser l'algorithme le plus
+    évident: l'algorithme de Dijkstra.
+    Or ici, nous avons un cas spécial de l'algorithme de Dijkstra car la distance entre chaque noeuds est de 1,or l'algorithme de Dijkstra fait une recherche dans un graphe dans lequel la distance entre deux noeuds est à chaque fois différente.
+    Ainsi la \emph{min-priority queue} n'est pas nécessaire, une simple
+    \emph{queue} peut être utilisé.
+    L'algorithme ressemble donc à un parcour en largeur (\emph{breadth-first})
+    qui s'arrêtera au premier parking \emph{gagnant} rencontré. \newline
 
-    Exemple en mettant en Ã©vidence les profondeurs du parcour: \newline
+    Exemple en mettant en évidence les profondeurs du parcours: \newline
     \begin{tikzpicture}
         [scale=.8,auto=left,every node/.style={circle,fill=blue!20}]
         \node (n0) at (1, 10) {\includegraphics[scale=0.15]{gen0.png}};
@@ -256,21 +223,17 @@ Exemple d'exécution en utilisant l'exemple au dessus.
 
 
 \section{Optimisation}
-Une optimisation possible pour l'algorithme est de combiner la gÃ©nÃ©ration des
-configurations avec la recherche du plus court chemins. Pour chaques noeuds que
-l'on traite de notre queue (en commenÃ§ant par le premier), on gÃ©nÃ¨re toutes les
-configurations possible Ã  partir de lÃ , et ajoute chacune des nouvelles
-configurations Ã  cette queue pour Ãªtre traitÃ© plus tard. En traitant les noeuds
-de cette faÃ§on on fait aussi un parcour par couche (chaques couches gÃ©nÃ¨re la
-suivante) mais on gÃ©nÃ¨re beaucoup moins de configuration comme on va arrÃªter
-d'en gÃ©nÃ©rer dÃ©s qu'on tombe sur une configuration gagnante.
-
-\newline
+Une optimisation possible pour l'algorithme est de combiner la génération des
+configurations avec la recherche du plus court chemins. Pour chaque noeuds que
+l'on traite de notre queue (en commençant par le premier), on générera toutes les
+configurations possible à partir de là , et on ajoutera chacune des nouvelles
+configurations à cette queue pour être traité plus tard. En traitant les noeuds
+de cette façon, on fait aussi un parcours par couche (chaque couches génér la
+suivante) mais on générera beaucoup moins de configuration puisqu'on va arrêter
+d'en générer d'autres si on tombe sur une configuration gagnante.\\
 
 Exemple du traitement des parkings par couches (les chiffres correspondent au
-moment oÃ¹ va Ãªtre traitÃ© le parking):
-
-\newline
+moment où le parking va être traité).\\
 
 \begin{tikzpicture}
     [scale=.8,auto=left,every node/.style={circle,fill=blue!20}]
@@ -330,11 +293,16 @@ déplacements \emph{d'une case} mais aussi les mouvements de plusieurs cases
 Le problême est qu'avec cette optimisation on génère moins de cas seulement si pour
 résoudre le problême il faut faire avancer deux fois ou plus une voiture sur sa
 ligne, sinon le nombre d'opération dans l'algorithme sera plus élevé.
+\section{Fichier output}
+La solution trouvée sera affiché en ligne de commande, comme affiché dans la section "Cas de base". Mais aussi dans un fichier .txt nommé Solution.txt dont voici quelque exemple:
+
+
+THOMAS AJOUTE LE FICHIER SOLUTION.TXT DANS UN CARRé.
+MAIS RAJOUTE AUSSI SIL TE PLAIT L'EXEMPLE DU FICHIER TEST2 OU IL N'Y A PAS DE POSSIBILITé
+
+>>>>>>> 9a08733efe595134f4acf943389ecb7279d9ac6b
 \begin{thebibliography}
-\bibitem{Rush Hour and Dijkstra's algorithm}
-    Mark Stamp, Brad Engel McIntosh Ewekk, Victor Morrow,
-    \emph{Rush Hour and Dijkstra's algorithm}
-    http://www.cs.sjsu.edu/~stamp/cv/papers/rh.pdf
+\indent Mark Stamp, Brad Engel McIntosh Ewekk, Victor Morrow,\emph{Rush Hour and Dijkstra's algorithm} http://www.cs.sjsu.edu/~stamp/cv/papers/rh.pdf.
 
 \end{thebibliography}
 
