@@ -9,7 +9,10 @@ public class Car implements Iterable<int[]> {
         VERTICAL
     }
 
-    static private int _carNumber = 1;
+    static private final int _GOAL_CAR_NUM = 1; 
+    // Par convention la voiture goal va toujours être la première ajoutée.
+
+    static private int _carNumber = _GOAL_CAR_NUM;
     private int _personalNum;
 
     private ArrayList<Integer> _x_position;
@@ -62,6 +65,10 @@ public class Car implements Iterable<int[]> {
         return this.get_x_pos().equals(other.get_x_pos())
             && this.get_y_pos().equals(other.get_y_pos());
     }
+
+    public boolean is_goal() {
+        return this.get_num() == _GOAL_CAR_NUM;
+    }        
 
     /* @desc Iterateur sur les coordonnées de la voiture.
      */
