@@ -124,11 +124,6 @@ public class RushHour {
             } else {
                 // Si on est arrivé au dernier noeud et qu'on a toujours 
                 // pas trouvé de chemin gagnant.
-                // TODO Throw une erreur plutôt
-                // Parking[] result = new Parking[2];
-                // result[0] = baseParking;
-                // result[1] = null;
-                // return result;
                 throw new UnsupportedOperationException();
             }
         }
