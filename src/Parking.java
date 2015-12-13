@@ -5,7 +5,8 @@ import java.util.ArrayList;
 public class Parking implements Iterable<Car> {
     private enum _Direction {
         FORWARD,
-        BACKWARD
+        BACKWARD,
+        NONE
     }
 
     private int _xSize;
@@ -14,6 +15,7 @@ public class Parking implements Iterable<Car> {
     private boolean _isWin = false;
     private ArrayList<Car> _carList = new ArrayList<Car>(0);
     private int[][] _parkingMatrix;
+    private Car _movedCar;
 
     /* @desc Constructeur du parking avec les informations de base.
      *
@@ -25,6 +27,7 @@ public class Parking implements Iterable<Car> {
         this._xSize = _xSize;
         this._ySize = _ySize;
         this._exit=exit.clone();
+        this._movedCar = null;
 
         this._parkingMatrix = new int[_xSize][_ySize];
     }
@@ -38,11 +41,12 @@ public class Parking implements Iterable<Car> {
      * @param {_carList} : Liste des voitures présentes dans le parking,
      *      à utilisé pour calculer la matrice directement.
      */
-    Parking (int _xSize, int _ySize, int[] exit, ArrayList<Car> _carList) {
+    Parking (int _xSize, int _ySize, int[] exit, Car movedCar, ArrayList<Car> _carList) {
         this._xSize = _xSize;
         this._ySize = _ySize;
         this._carList = _carList;
         this._exit = exit.clone();
+        this._movedCar = movedCar;
 
         // On place les voitures dans la matrice.
         this._parkingMatrix = new int[_xSize][_ySize];
@@ -75,6 +79,7 @@ public class Parking implements Iterable<Car> {
     public Car get(int index) {
         return this._carList.get(index);
     }
+
     public int get_numCar(){
         return this._carList.size();
     }
@@ -197,6 +202,10 @@ public class Parking implements Iterable<Car> {
         }
     }
 
+    public Car get_moved_car () {
+        return this._movedCar;
+    }
+
     /* @desc Renvoie un la manière dont le parking serait si
      *      la voiture {toMoveCar} était bougée en avant.
      *
@@ -222,7 +231,7 @@ public class Parking implements Iterable<Car> {
             }
         }
 
-        return new Parking(this._xSize, this._ySize, this._exit, result);
+        return new Parking(this._xSize, this._ySize, this._exit, newCarPos, result);
     }
 
     /* @desc Renvoie un la manière dont le parking serait si
@@ -251,7 +260,7 @@ public class Parking implements Iterable<Car> {
             }
         }
 
-        return new Parking(this._xSize, this._ySize, this._exit, result);
+        return new Parking(this._xSize, this._ySize, this._exit, newCarPos, result);
     }
 
     /* @desc Ajoute une voiture au parking, ainsi qu'à la matrice du parking.

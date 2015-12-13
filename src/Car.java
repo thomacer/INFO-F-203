@@ -9,6 +9,14 @@ public class Car implements Iterable<int[]> {
         VERTICAL
     }
 
+    public enum _Movement {
+        SUD,
+        NORD,
+        EST,
+        OUEST,
+        NONE
+    }
+
     static private final int _GOAL_CAR_NUM = 1; 
     // Par convention la voiture goal va toujours être la première ajoutée.
 
@@ -18,18 +26,25 @@ public class Car implements Iterable<int[]> {
     private ArrayList<Integer> _x_position;
     private ArrayList<Integer> _y_position;
     private _Direction _dir;
+    private _Movement _movement;
+
     
         /* @desc Constructeur pour ne pas devoir faire de copie inutile.
      *      Celui-ci est utilisé lorsque l'on fait une copie de la voiture
      *      pour la placer dans un nouveau parking.
      */
-    Car ( ArrayList<Integer> x_pos, ArrayList<Integer> y_pos,_Direction dir, int carNum) {
+    Car ( ArrayList<Integer> x_pos, ArrayList<Integer> y_pos, _Movement mov, int carNum) {
         this._x_position = x_pos;
         this._y_position = y_pos;
 
         this._personalNum = carNum;
 
-        this._dir = dir;
+        this._movement = mov;
+        if (mov == _Movement.SUD || mov == _Movement.NORD ) {
+            this._dir = _Direction.VERTICAL;
+        } else {
+            this._dir = _Direction.HORIZONTAL;
+        }
     }
 
     /* @desc Constructeur de la voiture utilisé lors du lancement du
@@ -51,6 +66,8 @@ public class Car implements Iterable<int[]> {
         } else {
             this._dir =_Direction.HORIZONTAL;
         }
+
+        this._movement = _Movement.NONE;
     }
 
     public ArrayList<Integer> get_x_pos () {
@@ -121,7 +138,7 @@ public class Car implements Iterable<int[]> {
             }
             result = new Car( newXpos,
                               this._y_position, 
-                              this._dir,
+                              _Movement.EST,
                               this._personalNum
                              );
         } else {
@@ -132,7 +149,7 @@ public class Car implements Iterable<int[]> {
             }
             result = new Car( this._x_position,
                               newYpos,
-                              this._dir,
+                              _Movement.SUD,
                               this._personalNum
                              );
         }
@@ -155,7 +172,7 @@ public class Car implements Iterable<int[]> {
 
             result = new Car( newXpos,
                               this._y_position, 
-                              this._dir,
+                              _Movement.OUEST,
                               this._personalNum
                              );
         } else {
@@ -166,15 +183,69 @@ public class Car implements Iterable<int[]> {
             }
             result = new Car( this._x_position,
                               newYpos,
-                              this._dir,
+                              _Movement.NORD,
                               this._personalNum
                              );
         }
         return result;
     }
 
-    @Override
+    public String posPreviousToString() {
+        String res = "[";
+        if (this._movement == _Movement.SUD) {
+            for (int[] pos : this) {
+                res += "( " + pos[0] + ", " + (pos[1] - 1) + " ) ";     
+            }
+            res += "] ->";
+        } else if (this._movement == _Movement.NORD) {
+            for (int[] pos : this) {
+                res += "( " + pos[0] + ", " + (pos[1] + 1) + " ) ";     
+            }
+            res += "] ->";
+        } else if (this._movement == _Movement.OUEST) {
+            for (int[] pos : this) {
+                res += "( " + (pos[0] + 1) + ", " + pos[1] + " ) ";     
+            }
+            res += "] ->";
+        } else if (this._movement == _Movement.EST) {
+            for (int[] pos : this) {
+                res += "( " + (pos[0] - 1) + ", " + pos[1] + " ) ";     
+            }
+            res += "] ->";
+        } else {
+            res = "";
+        }
+        return res;
+    }
+
+    /* @desc Renvoie la position sous forme d'un String.
+     */
+    public String posToString() {
+        String res = "[";
+        for (int[] pos : this) {
+            res += "( " + pos[0] + ", " + pos[1] + " ) ";     
+        }
+        res += "] ";
+        return res;
+    }
+    
+    /* @desc Pour représenter une voiture dans un terminal.
+     */
     public String toString() {
-        return Integer.toString(this._personalNum);
+        String res = this.posToString();
+
+        if (this._movement == _Movement.SUD) {
+            res += "Sud";
+        } else if (this._movement == _Movement.NORD) {
+            res += "Nord";
+        } else if (this._movement == _Movement.OUEST) {
+            res += "Ouest";
+        } else if (this._movement == _Movement.EST) {
+            res += "Est";
+        } else {
+            res += "Départ";
+        }
+
+        return res;
     }
 }

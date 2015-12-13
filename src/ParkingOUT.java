@@ -20,7 +20,23 @@ public class ParkingOUT {
         return bw;
     }
 
+    static public void printToConsole(Parking[] resultPath){
+        for (int carNum = 1; carNum <= resultPath[0].get_numCar(); ++carNum) {
+            System.out.println("\nDéplacement éffectués par la voiture " + carNum + ":");
+            System.out.println("1. " + resultPath[0].get(carNum - 1));
+            int count = 2;
+            for (int j = 1; j < resultPath.length; ++j) {
+                if (resultPath[j].get_moved_car().get_num() == carNum) {
+                    System.out.println(count + ". " + resultPath[j].get_moved_car());
+                    ++count;
+                }
+                
+            }
+        }
+    }
+
     static public void printing(Parking[] resultPath){
+        ParkingOUT.printToConsole(resultPath);
         String content;
         String[] mouvement;
         BufferedWriter file=creating_file();
@@ -57,7 +73,6 @@ public class ParkingOUT {
                 content += "\n";
             }
 
-            System.out.print(content);
             file.write(content);
             file.close();
         } catch(IOException e){
@@ -87,7 +102,6 @@ public class ParkingOUT {
             }
             content += "\n";
 
-            System.out.print(content);
             file.write(content);
 
             file.close();
