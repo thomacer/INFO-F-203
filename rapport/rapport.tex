@@ -21,13 +21,27 @@
 
 \maketitle
 \section{Introduction}
-Dans un parking d'un centre commercial, Mademoiselle Goal désire sortir sa voiture le plus rapidement possible en exécutant le moins de man½uvre possible. Evidement le parking n'est pas vide, alors Mademoiselle Goal demande à ses amis les informaticien de l'aider. Notre but et de trouver sous forme de graphe (un noeud du graphe représente une configuration du parking) le plus court chemin (le moins de manoeuvre possible) afin d'aider Mademoiselle Goal à rentrer chez elle.
+Dans le parking d'un centre commercial, Mademoiselle Goal désire sortir
+sa voiture le plus rapidement possible en exécutant le moins de manoeuvre
+possible. Evidemment le parking n'est pas vide, alors Mademoiselle Goal
+demande à ses amis les informaticiens de l'aider. Notre but et de trouver
+à l'aide de graphe (un noeud du graphe représente une configuration du parking)
+le plus court chemin (le moins de manoeuvre possible)
+pour d'aider Mademoiselle Goal à rentrer chez elle.
 
 \section{Cas de base}
-Notre parking est un tableau n x n dans lequel plusieurs voiture s'y trouve. Parmi ces voitures, la voiture de Mlle, qui a notamment l'indicatif "G". Dans ce tableau, chaque cases peut contenir une voiture, généralement une voiture occupe deux cases. Il faut savoir qu'une voiture peut avancer ou reculer selon son orientation (verticale ou horizontale) jusqu'a la limite du tableau. L'unique voiture qui a le droit de sortir du tableau est bien évidement la voiture Goal.
+Notre parking est un tableau n x n dans lequel plusieurs voiture s'y trouve.
+Parmi ces voitures, la voiture de Mlle (noté "G").
+Dans ce tableau, chaque cases peut contenir une parite de voiture (elles
+occupent  deux cases).
+Il faut savoir qu'une voiture peut avancer ou reculer selon son orientation
+(verticale ou horizontale) jusqu'à la limite du tableau.
+L'unique voiture qui a le droit de sortir du tableau est bien évidemment
+la voiture Goal.
 
-\indent Toutes les information nécessaire à l'algorithme sont dans un fichier que notre programme reçoit comme input grâce au argv.
-Voici un exemple de fichier:
+\indent Toutes les information nécessaire à l'algorithme sont dans un fichier
+que notre programme reçoit en argument. \newline
+\indent Voici un exemple de fichier:
     \lstinputlisting{../test/test1.txt}
     Celui ci nous renseigne sur:
     \begin{itemize}
@@ -35,7 +49,7 @@ Voici un exemple de fichier:
         \item La position de la sortie.
         \item L'emplacement des voitures dans ce parking.
     \end{itemize}
-    Toute ces informations vont être parsé pour pouvoir créer un parking initial, qui sera notre
+    Toute ces informations vont être parsées pour pouvoir créer un parking initial, qui sera notre
     cas de base à partir duquel il va falloir trouver le plus court chemin.\\
     Conformément à l'énoncé, l'algorithme ne fonctionnera que dans les cas suivant:
         \begin{itemize}
@@ -44,12 +58,16 @@ Voici un exemple de fichier:
             droite ou la gauche).
         \item Il n'y a pas de voiture de taille 1 (car impossible de savoir si
             elle se déplace horizontalement ou verticalement).
-        \item Pas de parking de taille 0 (car pas possible d'y mettre une
-            voiture goal).
+        \item Parking de taille supérieure ou égale à 2.
     \end{itemize}
 
 \section{Exemple d'utilisation.}
-Exemple d'exécution en utilisant l'exemple au dessus.
+Exemple de réseultat en utilisant l'exemple de fichier au dessus passé en
+argument. \newline
+\indent En utilisant la commande ci-dessous une fois le programme compilé avec \emph{make}:
+\begin{lstlisting}
+java -cp .:./src RushHour ./test/test1.txt
+\end{lstlisting}
 
 \begin{lstlisting}
 +---+---+---+---+---+
@@ -141,19 +159,20 @@ Exemple d'exécution en utilisant l'exemple au dessus.
     Le problème va se faire en plusieurs étapes:
     \begin{enumerate}
         \item Générer toutes les configurations\footnote{Une configuration d'un
-            parking est un parking dans lequel une voiture a changer de position.
-            A chaque tour, une voiture bougera dans le parking, c'est pour cette raison qu'on parle de
-            configuration différente.} de parking possible.
+            parking est un parking où chaque voiture a une position possible.
+            À chaque tour, une voiture bougera dans le parking, c'est pour cette
+            raison qu'on parle de configuration différente.} de parking
+            possible.
         \item Lors de cette génération, créer un graphe dans lequel chaque
-            configurations nouvellement créé est lié à la configuration d'où elle vient.
+            configuration nouvellement créé est lié à la configuration d'où elle vient.
         \item Une fois ces configurations générées, il suffit d'appliquer un algorithme de
             recherche du plus court chemin sur le graphe dont les noeud sont des configurations.
     \end{enumerate}
 
    Exemple\footnote{Les exemples sont créés à  partir de
     http://analogbit.com/software/puzzletools/ .} de graphe associé aux
-    configurations lors d'une génération non exhaustive (on abouti à  deux
-    situation gagnante).
+    configurations lors d'une génération non exhaustive (on aboutit à  deux
+    situations gagnantes).
 
     % \includegraphics[scale=0.2]{gen0.png} \newline
     % \newpage
@@ -182,11 +201,15 @@ Exemple d'exécution en utilisant l'exemple au dessus.
 
 \subsection{Génération des configurations.}
     Pour générer l'ensemble des solutions, un algorithme de backtracking est
-    utilisé. Celui-ci fait avancer ou reculer un maximum chaque voitures dans chaque configuration.
+    utilisé. Celui-ci fait avancer ou reculer un maximum chaque voiture pour
+    chaque configuration.
     \subsection{Recherche du plus court chemin.}
-    Pour trouver le plus court chemin parmi ceux déjà générés, nous allons utiliser l'algorithme le plus
-    évident: l'algorithme de Dijkstra.
-    Or ici, nous avons un cas spécial de l'algorithme de Dijkstra car la distance entre chaque noeuds est de 1,or l'algorithme de Dijkstra fait une recherche dans un graphe dans lequel la distance entre deux noeuds est à chaque fois différente.
+    Pour trouver le plus court chemin parmi ceux déjà générés, on peut
+    utiliser l'algorithme le plus évident: \emph{l'algorithme de Dijkstra}.
+    Or ici, nous avons un cas spécial de l'algorithme de Dijkstra car
+    la distance entre chaque noeuds est de 1, et l'algorithme fait une
+    recherche dans un graphe où la distance entre deux noeuds est à 
+    chaque fois différente.\newline
     Ainsi la \emph{min-priority queue} n'est pas nécessaire, une simple
     \emph{queue} peut être utilisé.
     L'algorithme ressemble donc à un parcour en largeur (\emph{breadth-first})
@@ -223,17 +246,18 @@ Exemple d'exécution en utilisant l'exemple au dessus.
 
 
 \section{Optimisation}
-Une optimisation possible pour l'algorithme est de combiner la génération des
-configurations avec la recherche du plus court chemins. Pour chaque noeuds que
-l'on traite de notre queue (en commençant par le premier), on générera toutes les
-configurations possible à partir de là , et on ajoutera chacune des nouvelles
-configurations à cette queue pour être traité plus tard. En traitant les noeuds
-de cette façon, on fait aussi un parcours par couche (chaque couches génér la
-suivante) mais on générera beaucoup moins de configuration puisqu'on va arrêter
-d'en générer d'autres si on tombe sur une configuration gagnante.\\
+Une optimisation choisie pour l'algorithme est de combiner la génération des
+configurations avec la recherche du plus court chemins. Pour chaque noeud que
+l'on traite de notre queue (en commençant par le cas de base), on générera toutes les
+configurations possible, et on les ajoutera
+à cette queue pour être traité plus tard. En traitant les noeuds
+de cette façon, on fait un parcours par couche (chaque couche génère la
+suivante) mais on va génerer beaucoup moins de configurations car
+la génération des noeuds suivants se fait par couche.
 
 Exemple du traitement des parkings par couches (les chiffres correspondent au
-moment où le parking va être traité).\\
+moment où le parking va être traité et les \emph{"\ldots"} montre qu'on a
+généré une étape en plus).\\
 
 \begin{tikzpicture}
     [scale=.8,auto=left,every node/.style={circle,fill=blue!20}]
@@ -273,16 +297,17 @@ moment où le parking va être traité).\\
 
 \begin{algorithm}[H]
     \KwData{currentParking = baseParking;}
-    \KwResult{shortestParkingPath;}
+    \KwData{Queue.add(baseParking);}
     \While{Queue.isNotEmpty() \emph{AND} currentParking.isNotWin() } {
         carList = currentParking.move\_each\_car\_forward();
-        carList.append\_if\_not\_already\_threated();
+        Queue.append\_if\_not\_already\_threated(carList);
 
         carList = currentParking.move\_each\_car\_backward();
-        carList.append\_if\_not\_already\_threated();
+        Queue.append\_if\_not\_already\_threated(carList);
 
         currentParking = Queue.pop()
     }
+    \KwResult{shortestParkingPath;}
     \caption{Pseudo code de l'algorithme}
 \end{algorithm}
 
@@ -292,7 +317,7 @@ déplacements \emph{d'une case} mais aussi les mouvements de plusieurs cases
 (sur les lignes des voitures). De cette façon on peut générer moins de cas.
 Le problême est qu'avec cette optimisation on génère moins de cas seulement si pour
 résoudre le problême il faut faire avancer deux fois ou plus une voiture sur sa
-ligne, sinon le nombre d'opération dans l'algorithme sera plus élevé.
+ligne, sinon le nombre d'opération dans l'algorithme sera plus élevée.
 \section{Fichier output}
 La solution trouvée sera affiché en ligne de commande, comme affiché dans la section "Cas de base". Mais aussi dans un fichier .txt nommé Solution.txt dont voici quelque exemple:
 
@@ -301,8 +326,12 @@ THOMAS AJOUTE LE FICHIER SOLUTION.TXT DANS UN CARRé.
 MAIS RAJOUTE AUSSI SIL TE PLAIT L'EXEMPLE DU FICHIER TEST2 OU IL N'Y A PAS DE POSSIBILITé
 
 \begin{thebibliography}
-\indent Mark Stamp, Brad Engel McIntosh Ewekk, Victor Morrow,\emph{Rush Hour and Dijkstra's algorithm} http://www.cs.sjsu.edu/~stamp/cv/papers/rh.pdf.
-
+\indent Mark Stamp, Brad Engel McIntosh Ewekk, Victor Morrow,\emph{Rush Hour
+and Dijkstra's algorithm} \url{http://www.cs.sjsu.edu/~stamp/cv/papers/rh.pdf}.
+\newline
+\indent Bernard Fortz,  Olivier Markowitch, \emph{Algorithme 2}
+\url{https://dochub.be/document/dl/68} \newline
+\end{itemize}
 \end{thebibliography}
 
 \end{document}
