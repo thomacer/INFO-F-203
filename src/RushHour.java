@@ -144,8 +144,7 @@ public class RushHour {
         if ( args.length > 0) {
             RushHour main = new RushHour();
 
-            ParkingIN parsedParking = new ParkingIN(args[0]);
-            Parking baseParking = parsedParking.parse_input_file();
+            Parking baseParking = ParkingIN.parse_input_file(args[0]);
 
             Parking[] result = {};
             try {
