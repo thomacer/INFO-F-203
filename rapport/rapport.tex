@@ -22,28 +22,27 @@
 \maketitle
 \section{Introduction}
 Dans le parking d'un centre commercial, Mademoiselle Goal désire sortir
-sa voiture le plus rapidement possible en exécutant le moins de manoeuvre
+sa voiture le plus rapidement possible en exécutant le moins de manoeuvres
 possible. Evidemment le parking n'est pas vide, alors Mademoiselle Goal
-demande à ses amis les informaticiens de l'aider. Notre but et de trouver
-à l'aide de graphe (un noeud du graphe représente une configuration du parking)
-le plus court chemin (le moins de manoeuvre possible)
-pour d'aider Mademoiselle Goal à rentrer chez elle.
+demande à ses amis les informaticiens de l'aider. Notre but est de trouver
+à l'aide d'un graphe (un noeud du graphe représente une configuration du parking)
+le plus court chemin (le moins de manoeuvres possible)
+pour aider Mademoiselle Goal à rentrer chez elle.
 
 \section{Cas de base}
-Notre parking est un tableau n x n dans lequel plusieurs voiture s'y trouve.
-Parmi ces voitures, la voiture de Mlle (noté "G").
-Dans ce tableau, chaque cases peut contenir une parite de voiture (elles
-occupent  deux cases).
+Notre parking est un tableau n x n dans lequel plusieurs voitures s'y trouvent.
+Parmi ces voitures, la voiture de Mlle (noté \emph{"G"}).
+Dans ce tableau, chaque case peut contenir une partie de voiture (chaque
+voiture occupe deux cases).
 Il faut savoir qu'une voiture peut avancer ou reculer selon son orientation
 (verticale ou horizontale) jusqu'à la limite du tableau.
-L'unique voiture qui a le droit de sortir du tableau est bien évidemment
-la voiture Goal.
+L'unique voiture qui a le droit de sortir du tableau la voiture Goal.
 
-\indent Toutes les information nécessaire à l'algorithme sont dans un fichier
+\indent Toutes les informations nécessaires à l'algorithme sont dans un fichier
 que notre programme reçoit en argument. \newline
 \indent Voici un exemple de fichier:
     \lstinputlisting{../test/test1.txt}
-    Celui ci nous renseigne sur:
+    Celui-ci nous renseigne sur:
     \begin{itemize}
         \item La taille du parking.
         \item La position de la sortie.
@@ -51,7 +50,8 @@ que notre programme reçoit en argument. \newline
     \end{itemize}
     Toute ces informations vont être parsées pour pouvoir créer un parking initial, qui sera notre
     cas de base à partir duquel il va falloir trouver le plus court chemin.\\
-    Conformément à l'énoncé, l'algorithme ne fonctionnera que dans les cas suivant:
+    Conformément à l'énoncé, l'algorithme ne fonctionnera que dans les cas
+    suivants:
         \begin{itemize}
         \item Le fichier d'input est correctement écrit (pas d'erreur dans celui-ci), de la même manière que dans l'exemple.
         \item La voiture goal se déplace horizontalement (la sortie est sur la
@@ -62,7 +62,7 @@ que notre programme reçoit en argument. \newline
     \end{itemize}
 
 \section{Exemple d'utilisation.}
-Exemple de réseultat en utilisant l'exemple de fichier au dessus passé en
+Exemple de résultat en utilisant l'exemple de fichier au-dessus passé en
 argument. \newline
 \indent En utilisant la commande ci-dessous une fois le programme compilé avec \emph{make}:
 \begin{lstlisting}
@@ -162,11 +162,12 @@ java -cp .:./src RushHour ./test/test1.txt
             parking est un parking où chaque voiture a une position possible.
             À chaque tour, une voiture bougera dans le parking, c'est pour cette
             raison qu'on parle de configuration différente.} de parking
-            possible.
+            possibles.
         \item Lors de cette génération, créer un graphe dans lequel chaque
-            configuration nouvellement créé est lié à la configuration d'où elle vient.
+            configuration nouvellement créée est liée à la configuration d'où
+            elle vient.
         \item Une fois ces configurations générées, il suffit d'appliquer un algorithme de
-            recherche du plus court chemin sur le graphe dont les noeud sont des configurations.
+            recherche du plus court chemin sur le graphe dont les noeuds sont des configurations.
     \end{enumerate}
 
    Exemple\footnote{Les exemples sont créés à  partir de
@@ -206,13 +207,13 @@ java -cp .:./src RushHour ./test/test1.txt
     \subsection{Recherche du plus court chemin.}
     Pour trouver le plus court chemin parmi ceux déjà générés, on peut
     utiliser l'algorithme le plus évident: \emph{l'algorithme de Dijkstra}.
-    Or ici, nous avons un cas spécial de l'algorithme de Dijkstra car
-    la distance entre chaque noeuds est de 1, et l'algorithme fait une
+    Or ici, nous avons un cas spécial de l'algorithme de \emph{Dijkstra} car
+    la distance entre chaque noeud est de 1, alors que l'algorithme fait une
     recherche dans un graphe où la distance entre deux noeuds est à 
     chaque fois différente.\newline
     Ainsi la \emph{min-priority queue} n'est pas nécessaire, une simple
-    \emph{queue} peut être utilisé.
-    L'algorithme ressemble donc à un parcour en largeur (\emph{breadth-first})
+    \emph{queue} peut être utilisée.
+    L'algorithme ressemble donc à un parcours en largeur (\emph{breadth-first})
     qui s'arrêtera au premier parking \emph{gagnant} rencontré. \newline
 
     Exemple en mettant en évidence les profondeurs du parcours: \newline
@@ -247,16 +248,15 @@ java -cp .:./src RushHour ./test/test1.txt
 
 \section{Optimisation}
 Une optimisation choisie pour l'algorithme est de combiner la génération des
-configurations avec la recherche du plus court chemins. Pour chaque noeud que
-l'on traite de notre queue (en commençant par le cas de base), on générera toutes les
-configurations possible, et on les ajoutera
-à cette queue pour être traité plus tard. En traitant les noeuds
-de cette façon, on fait un parcours par couche (chaque couche génère la
-suivante) mais on va génerer beaucoup moins de configurations car
-la génération des noeuds suivants se fait par couche.
+configurations avec la recherche du plus court chemin. Pour chaque noeud que
+l'on traite de notre \emph{queue} (en commençant par le cas de base), on générera toutes les
+configurations possibles, et on les ajoutera
+à cette \emph{queue} pour être traitées plus tard. En traitant les noeuds
+de cette façon, chaque couche une fois traitée génère la suivante ce qui fait que beaucoup moins
+de configurations sont générées.
 
 Exemple du traitement des parkings par couches (les chiffres correspondent au
-moment où le parking va être traité et les \emph{"\ldots"} montre qu'on a
+moment où le parking va être traité et les \emph{"\ldots"} montrent qu'on a
 généré une étape en plus).\\
 
 \begin{tikzpicture}
@@ -312,14 +312,18 @@ généré une étape en plus).\\
 \end{algorithm}
 
 \section{Optimisation possible}
-Une optimisation possible du problême est de ne pas seulement considérer les
-déplacements \emph{d'une case} mais aussi les mouvements de plusieurs cases
+Une optimisation possible du problême est de ne pas seulement considérer lors
+de la génération des configurations les
+déplacements \emph{d'une case} mais aussi les déplacements de plusieurs cases
 (sur les lignes des voitures). De cette façon on peut générer moins de cas.
+\newline
 Le problême est qu'avec cette optimisation on génère moins de cas seulement si pour
 résoudre le problême il faut faire avancer deux fois ou plus une voiture sur sa
-ligne, sinon le nombre d'opération dans l'algorithme sera plus élevée.
+ligne, sinon le nombre d'opérations dans l'algorithme sera plus élevé.
 \section{Fichier output}
-La solution trouvée sera affiché en ligne de commande, comme affiché dans la section "Cas de base". Mais aussi dans un fichier .txt nommé Solution.txt dont voici quelque exemple:
+La solution trouvée sera affichée en ligne de commande, comme dans
+la section "Cas de base" de l'énoncé. Mais aussi dans un fichier .txt
+nommé \emph{Solution.txt} dont voici quelques exemples:
 
 
 THOMAS AJOUTE LE FICHIER SOLUTION.TXT DANS UN CARRé.
