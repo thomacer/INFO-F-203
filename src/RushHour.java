@@ -9,9 +9,8 @@ public class RushHour {
      *
      * @return {boolean} true si ajouté dans la liste sinon false (déjà dans la liste).
      */
-    static private boolean _put_in_list (Parking newParking, ArrayList<Parking> parkingList) {
+    static private int _put_in_list (Parking newParking, ArrayList<Parking> parkingList) {
         int i = 0;
-        boolean result;
         // Recherche pour savoir si il y a déjà un {newParking} dans la liste.
         while ( (i < parkingList.size()) && !(parkingList.get(i).equals(newParking)) ) {
             ++i;
@@ -19,11 +18,10 @@ public class RushHour {
         if (i == parkingList.size()) {
             // Si il n'est pas dans la liste.
             parkingList.add(newParking);
-            result = true;
         } else {
-            result = false;
+            i = 0;
         }
-        return result;
+        return i;
     }
 
     /* @desc Crée la liste des parking emprunté une fois que l'algorithme
@@ -65,20 +63,23 @@ public class RushHour {
      *
      * @return {Parking[]} Liste des parkings dans l'ordre des mouvements effectué.
      */
-    static private void _update_lists(LinkedList<Integer> queue,
-                                      ArrayList<Parking> parkingList,
-                                      ArrayList<Integer> nodePath,
-                                      ArrayList<Integer> countNode,
-                                      Parking newParkingConf,
-                                      int currentNode)
+    static private int _update_lists(LinkedList<Integer> queue,
+                                     ArrayList<Parking> parkingList,
+                                     ArrayList<Integer> nodePath,
+                                     ArrayList<Integer> countNode,
+                                     Parking newParkingConf,
+                                     int currentNode)
     {
+        int result = 0;
         if (newParkingConf != null) {
-            if ( _put_in_list(newParkingConf, parkingList) ) {
+            result = _put_in_list(newParkingConf, parkingList);
+            if (result > 0) {
                 queue.add( parkingList.size() - 1 );
                 nodePath.add(currentNode);
                 countNode.add( countNode.get(currentNode) + 1 );
             }
-        }
+        } 
+        return result;
     }
 
     /* @desc Parcour en breadth first du graph pour trouver le chemin le plus
@@ -109,11 +110,19 @@ public class RushHour {
 
         int currentNode = 0;
 
+        // Va servir dans le cas où il n'y a pas de solution
+        // Stock à chaque fois la position la plus lointaine que la 
+        // voiture goal a atteind.
+        int bestParkingConf = 0;
+
         while ( !(parkingList.get(currentNode).is_won()) ) {
             Parking currentParking = parkingList.get(currentNode);
             for ( Car aCar : currentParking ) {
                 Parking newParkingConf = currentParking.move_forward(aCar);
-                _update_lists(queue, parkingList, nodePath, countNode, newParkingConf, currentNode);
+                int newPos = _update_lists(queue, parkingList, nodePath, countNode, newParkingConf, currentNode);
+                if (newPos > 0 && aCar.is_goal()) {
+                    bestParkingConf = newPos;
+                }
                     
                 newParkingConf = currentParking.move_backward(aCar);
                 _update_lists(queue, parkingList, nodePath, countNode, newParkingConf, currentNode);
@@ -124,7 +133,7 @@ public class RushHour {
             } else {
                 // Si on est arrivé au dernier noeud et qu'on a toujours 
                 // pas trouvé de chemin gagnant.
-                throw new UnsupportedOperationException();
+                throw new NoResultFoundError(_create_path(parkingList, countNode, nodePath, bestParkingConf));
             }
         }
 
@@ -141,18 +150,10 @@ public class RushHour {
             Parking[] result = {};
             try {
                 result = main.find_shortest_path(baseParking);
-                ParkingOUT.printing(result);
-
-                for (int i = 0; i < result.length; ++i) {
-                    System.out.println(result[i]);
-                }
-
-
-            } catch(UnsupportedOperationException e) {
-                ParkingOUT.print_no_result (baseParking);
+                ParkingOUT.print_win(result);
+            } catch(NoResultFoundError e) {
+                ParkingOUT.print_no_result( e.get_best() );
             }
-
-
         } else {
             System.out.println("Veuillez passer le fichier en argument.");
         }

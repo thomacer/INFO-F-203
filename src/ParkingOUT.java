@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class ParkingOUT {
-    static private final String title = "Solution finale :\n";
+    
     static private final String filename = "Solution.txt";
 
     static private BufferedWriter creating_file(){
@@ -44,21 +44,11 @@ public class ParkingOUT {
         }
     }
 
-    static public void printing(Parking[] resultPath){
-        ParkingOUT.printToConsole(resultPath);
-        String content;
-        String[] mouvement;
-
-        content = title;
-        content += resultPath[resultPath.length - 1].toString();
-        content += "Une façon de sortir du Parking en " + (resultPath.length - 1)
-            + " mouvement a été trouvée.\n\n";
-        // (resultPath.length - 1) est utilisé car le cas de base n'est pas considéré
-        // comme un mouvement.
-
+    static public String print_move(Parking[] path) {
+        String content = "";
         int precNum = -1;
-        for (int i = 1; i < resultPath.length; ++i){
-            Car movedCar = resultPath[i].get_moved_car();
+        for (int i = 1; i < path.length; ++i){
+            Car movedCar = path[i].get_moved_car();
             int newCarNum = movedCar.get_num();
             if (newCarNum != precNum) {
                 content += "\nDéplacements car " + newCarNum + ":\n";
@@ -69,6 +59,22 @@ public class ParkingOUT {
             precNum = newCarNum;
         }
 
+        return content;
+    }
+
+    static public void print_win(Parking[] resultPath){
+        ParkingOUT.printToConsole(resultPath);
+        String content;
+        String[] mouvement;
+
+        content = "Solution finale :\n";
+        content += resultPath[resultPath.length - 1].toString();
+        content += "Une façon de sortir du Parking en " + (resultPath.length - 1)
+            + " mouvement a été trouvée.\n\n";
+        // (resultPath.length - 1) est utilisé car le cas de base n'est pas considéré
+        // comme un mouvement.
+        content += print_move(resultPath);
+
         BufferedWriter file=creating_file();
         try{
             file.write(content);
@@ -78,33 +84,23 @@ public class ParkingOUT {
         }
     }
 
-    static public void print_no_result (Parking baseParking) {
-        BufferedWriter file=creating_file();
-        String content=title;
 
-        try {
-            content = baseParking.toString();
-            content += "Il n'y a aucune possibilité pour sortir la voiture Goal!.\n";
+    static public void print_no_result (Parking[] failPath) {
+        String content = "Situation finale\n";
 
-            for (Car c : baseParking){
-                if (c.is_goal()){
-                    content += "Deplacement Goal: ";
-                } else {
-                    content += "Deplacement Voiture " + c.get_num() + ": ";
-                }
+        content += failPath[failPath.length - 1].toString();
 
-                for (int[] pos : c){
-                    content += "("+pos[0]+","+pos[1]+")";
-                }
-                content+="\n";
-            }
-            content += "\n";
+        content += "Il n'y a pas moyen de sortir du parking.\n";
 
+        content += print_move(failPath);
+
+        BufferedWriter file = creating_file();
+        try{
             file.write(content);
-
             file.close();
-        } catch (IOException e) {
-            System.out.println(e);
+        } catch(IOException e){
+            System.out.print("Cannot close file!");
         }
+
     }
 }
