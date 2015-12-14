@@ -20,10 +20,19 @@ public class ParkingOUT {
         return bw;
     }
 
+    /* @desc Imprime dans la console les déplacements fait par les voitures pour
+     *      arriver à la solution.
+     *
+     * @param {resultPath} : Liste des parkings qui sont utiles pour la réponse.
+     */
     static public void printToConsole(Parking[] resultPath){
-        for (int carNum = 1; carNum <= resultPath[0].get_numCar(); ++carNum) {
+        for (int carNum = 0; carNum < resultPath[0].get_number_of_car(); ++carNum) {
+            // Pour printer comme dans l'énoncé il faut faire une voiture à la fois
+            // et rechercher dans les solutions quand est-ce que celle-ci est bougé.
+
+            // Cas de base.
             System.out.println("\nDéplacement éffectués par la voiture " + carNum + ":");
-            System.out.println("1. " + resultPath[0].get(carNum - 1));
+            System.out.println("1. " + resultPath[0].get(carNum));
             int count = 2;
             for (int j = 1; j < resultPath.length; ++j) {
                 if (resultPath[j].get_moved_car().get_num() == carNum) {
@@ -39,40 +48,29 @@ public class ParkingOUT {
         ParkingOUT.printToConsole(resultPath);
         String content;
         String[] mouvement;
+
+        content = title;
+        content += resultPath[resultPath.length - 1].toString();
+        content += "Une façon de sortir du Parking en " + (resultPath.length - 1)
+            + " mouvement a été trouvée.\n\n";
+        // (resultPath.length - 1) est utilisé car le cas de base n'est pas considéré
+        // comme un mouvement.
+
+        int precNum = -1;
+        for (int i = 1; i < resultPath.length; ++i){
+            Car movedCar = resultPath[i].get_moved_car();
+            int newCarNum = movedCar.get_num();
+            if (newCarNum != precNum) {
+                content += "\nDéplacements car " + newCarNum + ":\n";
+                content +=  movedCar.posPreviousToString() + movedCar.posToString();
+            } else {
+                content += " -> " + movedCar.posToString();
+            }
+            precNum = newCarNum;
+        }
+
         BufferedWriter file=creating_file();
         try{
-            content=title;
-
-            mouvement = new String[resultPath[0].get_numCar()];
-            for (int k = 0; k < resultPath[0].get_numCar(); ++k){
-                mouvement[k]="";
-            }
-
-            for (int i = 0; i < resultPath.length; ++i){
-                content += "Mouvement " + (i+1) + ":\n";
-                content += resultPath[i].toString();
-
-                for (Car c : resultPath[i]){
-                    if (c.is_goal()){
-                        content += "Deplacement Goal: ";
-                    } else {
-                        content += "Deplacement Voiture " + c.get_num() + ": ";
-                    }
-
-                    mouvement[c.get_num()-1]+="-> [";
-
-                    for (int[] pos:c){
-                        mouvement[c.get_num()-1] += "(" + pos[0] + "," + pos[1] + ")";
-                    }
-
-                    mouvement[c.get_num()-1]+="]";
-                    content += mouvement[c.get_num()-1];
-                    content += "\n";
-
-                }
-                content += "\n";
-            }
-
             file.write(content);
             file.close();
         } catch(IOException e){

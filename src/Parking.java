@@ -52,7 +52,9 @@ public class Parking implements Iterable<Car> {
         this._parkingMatrix = new int[_xSize][_ySize];
         for ( Car car : _carList ) {
             for ( int[] pos : car ) {
-                this._parkingMatrix[pos[0]][pos[1]] = car.get_num();
+                this._parkingMatrix[pos[0]][pos[1]] = car.get_num() + 1;
+                // On va sauvegarder le numéro + 1 car la voiture goal est 
+                // de base à 0 et donc risque de poser problême avec les cases vides.
             }
         }
 
@@ -80,8 +82,18 @@ public class Parking implements Iterable<Car> {
         return this._carList.get(index);
     }
 
-    public int get_numCar(){
+    /* @desc Renvoie le nombre de voiture dans le parking.
+     */
+    public int get_number_of_car(){
         return this._carList.size();
+    }
+
+    /* @desc Chaque nouveau parking est crée à la suite d'un déplacement 
+     *      sur une voiture, cette fonction sert à savoir qu'elle voiture à
+     *      provoquer ce nouveau parking.
+     */
+    public Car get_moved_car () {
+        return this._movedCar;
     }
 
     public boolean equals (Parking other) {
@@ -202,10 +214,6 @@ public class Parking implements Iterable<Car> {
         }
     }
 
-    public Car get_moved_car () {
-        return this._movedCar;
-    }
-
     /* @desc Renvoie un la manière dont le parking serait si
      *      la voiture {toMoveCar} était bougée en avant.
      *
@@ -277,7 +285,7 @@ public class Parking implements Iterable<Car> {
     public Car add_car (ArrayList<Integer> xPos, ArrayList<Integer> yPos) {
         Car newCar = new Car(xPos, yPos);
         for ( int[] pos : newCar ) {
-            this._parkingMatrix[pos[0]][pos[1]] = newCar.get_num(); 
+            this._parkingMatrix[pos[0]][pos[1]] = newCar.get_num() + 1; 
         }
 
         this._carList.add( newCar );
@@ -300,22 +308,19 @@ public class Parking implements Iterable<Car> {
         for (int j = 0; j < this._xSize; ++j) {
             int carNum = this._parkingMatrix[j][ligne];
             if ( carNum > 0 ) {
-                if (carNum==1){
-                  res+=" G ";
-                  //res+= String.format("%3s", "G");
+                if (carNum == 1) {
+                    res+=" G ";
+                } else if (carNum > 1) {
+                    res +=" V" + (carNum - 1); 
                 }
-                else if(carNum>1){
-                  res +=" V"+carNum;
-              }
-            }
-            else{ 
+            } else{ 
                 res+="   ";
             }
+
             if (j==this._xSize-1){
-            res+="";
-            }
-            else{
-              res+=" ";
+                res+="";
+            } else{
+                res+=" ";
             }
 
           }
@@ -363,11 +368,7 @@ public class Parking implements Iterable<Car> {
     public String toString() {
         // Création des limites de la grille: "+---+---+---+---+\n"
         String delimiter = "";
-        //for (int i = 0; i < this._xSize; ++i) {
-          //  delimiter += "---+";
-        ///}
-        //delimiter += "\n";
-        //String res="";
+
         delimiter+=this.make_line("+---",this._xSize);
         delimiter+="+\n";
         String result="";

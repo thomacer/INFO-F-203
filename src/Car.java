@@ -17,7 +17,7 @@ public class Car implements Iterable<int[]> {
         NONE
     }
 
-    static private final int _GOAL_CAR_NUM = 1; 
+    static private final int _GOAL_CAR_NUM = 0;
     // Par convention la voiture goal va toujours être la première ajoutée.
 
     static private int _carNumber = _GOAL_CAR_NUM;
@@ -211,7 +211,7 @@ public class Car implements Iterable<int[]> {
             for (int[] pos : this) {
                 res += "( " + (pos[0] - 1) + ", " + pos[1] + " ) ";     
             }
-            res += "] ->";
+            res += "] -> ";
         } else {
             res = "";
         }
