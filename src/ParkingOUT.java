@@ -84,8 +84,32 @@ public class ParkingOUT {
         }
     }
 
+    static private void print_to_console_fail (Parking lastParking) {
+        System.out.println("Il n'y a pas moyen de sortir du parking");
+        System.out.print("car la voiture ");
+
+        // ---- Detection de la voiture blocante:
+
+        int baseYpos = lastParking.get(0).get_y_pos().get(0);
+        // Comme la voiture de base est toujours horizontale on doit 
+        // juste savoir en quel ligne la voiture de base est.
+
+        int i = 1;
+        while (i < lastParking.get_number_of_car()) {
+            int newYpos1 = lastParking.get(i).get_y_pos().get(0);
+            int newYpos2 = lastParking.get(i).get_y_pos().get(1);
+            if (baseYpos == newYpos1 || baseYpos == newYpos2) {
+                // Vérification qu'une voiture est sur notre axe
+                System.out.print(lastParking.get(i).get_num());
+            }
+            ++i;
+        }
+        System.out.println(" nous empêche de sortir.");
+    }
 
     static public void print_no_result (Parking[] failPath) {
+        print_to_console_fail(failPath[failPath.length - 1]);
+
         String content = "Situation finale\n";
 
         content += failPath[failPath.length - 1].toString();
