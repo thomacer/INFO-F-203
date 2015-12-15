@@ -145,7 +145,7 @@ public class RushHour {
             RushHour main = new RushHour();
 
             Parking baseParking = ParkingIN.parse_input_file(args[0]);
-
+            ParkingOUT.print_init(baseParking);
             Parking[] result = {};
             try {
                 result = main.find_shortest_path(baseParking);
