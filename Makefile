@@ -8,10 +8,5 @@ all: ${LOC}/Main.java
 clean:
 	rm ${LOC}/*.class
 
-listing:
-	bash mklisting src/*.java
-	pdflatex -interaction=nonstopmodelisting.tex 
-	rm listing.out
-	rm listing.aux
-	rm listing.log
-	rm listing.tex
+zip:
+	zip AG2.PERALE-RUSU.zip ./src/*.java ./test/* ./rapport/rapport.tex ./rapport/*.png README.md ./Makefile ./rapport.pdf
