@@ -143,7 +143,7 @@ public class Main {
     public static void main (String[] args) {
         if ( args.length > 0) {
             Parking baseParking = ParkingIN.parse_input_file(args[0]);
-
+            ParkingOUT.print_init(baseParking);
             Parking[] result = {};
             try {
                 result = Main.find_shortest_path(baseParking);

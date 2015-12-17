@@ -1,34 +1,25 @@
 Solution finale :
-Mouvement 1:
-+---+---+---+
-| G   G   V2 
-+   +   +   +
-|         V2|
-+   +   +   +
-|           |
-+---+---+---+
-Deplacement Goal: -> [(0,0)(1,0)]
-Deplacement Voiture 2: -> [(2,0)(2,1)]
++---+---+---+---+---+
+| V1  V1  V2        |
++   +   +   +   +   +
+|         V2        |
++   +   +   +   +   +
+|             G   G  
++   +   +   +   +   +
+|             V3    |
++   +   +   +   +   +
+|             V3    |
++---+---+---+---+---+
+Une façon de sortir du Parking en 6 mouvement a été trouvée.
 
-Mouvement 2:
-+---+---+---+
-| G   G      
-+   +   +   +
-|         V2|
-+   +   +   +
-|         V2|
-+---+---+---+
-Deplacement Goal: -> [(0,0)(1,0)]-> [(0,0)(1,0)]
-Deplacement Voiture 2: -> [(2,0)(2,1)]-> [(2,1)(2,2)]
 
-Mouvement 3:
-+---+---+---+
-|     G   G  
-+   +   +   +
-|         V2|
-+   +   +   +
-|         V2|
-+---+---+---+
-Deplacement Goal: -> [(0,0)(1,0)]-> [(0,0)(1,0)]-> [(1,0)(2,0)]
-Deplacement Voiture 2: -> [(2,0)(2,1)]-> [(2,1)(2,2)]-> [(2,1)(2,2)]
-
+Déplacements voiture V1:
+[( 1, 0 ) ( 2, 0 ) ] ->[( 0, 0 ) ( 1, 0 ) ] 
+Déplacements voiture V2:
+[( 2, 1 ) ( 2, 2 ) ] ->[( 2, 0 ) ( 2, 1 ) ] 
+Déplacements voiture G:
+[( 0, 2 ) ( 1, 2 ) ] -> [( 1, 2 ) ( 2, 2 ) ] 
+Déplacements voiture V3:
+[( 3, 2 ) ( 3, 3 ) ] ->[( 3, 3 ) ( 3, 4 ) ] 
+Déplacements voiture G:
+[( 1, 2 ) ( 2, 2 ) ] -> [( 2, 2 ) ( 3, 2 ) ]  -> [( 3, 2 ) ( 4, 2 ) ] 

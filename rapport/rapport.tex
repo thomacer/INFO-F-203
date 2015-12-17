@@ -35,11 +35,10 @@ pour aider Mademoiselle Goal à rentrer chez elle.
 \section{Cas de base}
 Notre parking est un tableau n x n dans lequel plusieurs voitures s'y trouvent.
 Parmi ces voitures, la voiture de Mlle (noté \emph{"G"}).
-Dans ce tableau, chaque case peut contenir une partie de voiture (chaque
-voiture occupe deux cases).
+Dans ce tableau, chaque voiture est stocké sur deux cases.
 Il faut savoir qu'une voiture peut avancer ou reculer selon son orientation
 (verticale ou horizontale) jusqu'à la limite du tableau.
-L'unique voiture qui a le droit de sortir du tableau la voiture Goal.
+L'unique voiture qui a le droit de sortir du tableau est la voiture Goal.
 
 \indent Toutes les informations nécessaires à l'algorithme sont dans un fichier
 que notre programme reçoit en argument. \newline
@@ -65,9 +64,9 @@ que notre programme reçoit en argument. \newline
     \end{itemize}
 
 \section{Exemple d'utilisation.}
-Exemple de résultat en utilisant l'exemple de fichier au-dessus passé en
+Exemple de résultat en utilisant l'exemple de fichier ci-dessus passé en
 argument. \newline
-\indent En utilisant la commande ci-dessous une fois le programme compilé avec \emph{make}:
+\indent En utilisant la commande ci-dessous, une fois le programme compilé avec \emph{make}:
 \begin{lstlisting}[title=Commande pour executer le programme.]
 java -cp .:./src RushHour ./test/test1.txt
 \end{lstlisting}
@@ -175,7 +174,7 @@ java -cp .:./src RushHour ./test/test1.txt
 
    Exemple\footnote{Les exemples sont créés à  partir de
     http://analogbit.com/software/puzzletools/ .} de graphe associé aux
-    configurations lors d'une génération non exhaustive (on aboutit à  deux
+    configurations lors d'une génération non exhaustive (on aboutit à deux
     situations gagnantes).
 
     % \includegraphics[scale=0.2]{gen0.png} \newline
@@ -212,8 +211,7 @@ java -cp .:./src RushHour ./test/test1.txt
     utiliser l'algorithme le plus évident: \emph{l'algorithme de Dijkstra}.
     Or ici, nous avons un cas spécial de l'algorithme de \emph{Dijkstra} car
     la distance entre chaque noeud est de 1, alors que l'algorithme fait une
-    recherche dans un graphe où la distance entre deux noeuds est à 
-    chaque fois différente.\newline
+    recherche dans un graphe où la distance entre deux noeuds est à chaque fois différente.\newline
     Ainsi la \emph{min-priority queue} n'est pas nécessaire, une simple
     \emph{queue} peut être utilisée.
     L'algorithme ressemble donc à un parcours en largeur (\emph{breadth-first})
@@ -315,13 +313,13 @@ généré une étape en plus).\\
 \end{algorithm}
 
 \section{Optimisation possible}
-Une optimisation possible du problême est de ne pas seulement considérer lors
+Une optimisation possible du problème est de ne pas seulement considérer lors
 de la génération des configurations les
 déplacements \emph{d'une case} mais aussi les déplacements de plusieurs cases
 (sur les lignes des voitures). De cette façon on peut générer moins de cas.
 \newline
-Le problême est qu'avec cette optimisation on génère moins de cas seulement si pour
-résoudre le problême il faut faire avancer deux fois ou plus une voiture sur sa
+Le problème est qu'avec cette optimisation, on génère moins de cas seulement si pour
+résoudre le problème, il faut faire avancer deux fois ou plus une voiture sur sa
 ligne, sinon le nombre d'opérations dans l'algorithme sera plus élevé.
 \section{Fichier output}
 La solution trouvée sera affichée en ligne de commande, comme dans

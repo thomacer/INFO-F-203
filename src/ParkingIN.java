@@ -117,6 +117,7 @@ public class ParkingIN {
     static public Parking parse_input_file(String filename) {
         BufferedReader file_reader;
         Parking baseParking = null;
+        String content;
         try{
             file_reader=new BufferedReader(new FileReader(filename));
             int[] size = parse_parking(file_reader);
@@ -127,7 +128,7 @@ public class ParkingIN {
             baseParking = new Parking(size[0], size[1], exit);
 
             int[] numOfCar = parse_element(file_reader);
-            System.out.println("Il contient " + numOfCar[0] + " Goal car et " 
+            System.out.println("Il contient " + numOfCar[0] + " voiture Goal et " 
                     + numOfCar[1] + " autres voitures.");
 
             parse_emplacement(file_reader, numOfCar[0] + numOfCar[1], baseParking);
