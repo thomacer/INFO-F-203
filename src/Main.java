@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.lang.UnsupportedOperationException;
 
-public class RushHour {
+public class Main {
     /* @desc Place dans la liste.
      *
      * @param {newParking} : Nouveau parking à placer dans le graphe.
@@ -142,13 +142,11 @@ public class RushHour {
 
     public static void main (String[] args) {
         if ( args.length > 0) {
-            RushHour main = new RushHour();
-
             Parking baseParking = ParkingIN.parse_input_file(args[0]);
 
             Parking[] result = {};
             try {
-                result = main.find_shortest_path(baseParking);
+                result = Main.find_shortest_path(baseParking);
                 ParkingOUT.print_win(result);
             } catch(NoResultFoundError e) {
                 ParkingOUT.print_no_result( e.get_best() );
