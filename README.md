@@ -11,3 +11,6 @@ Lancer le programme
     ```
     avec comme input les fichiers que l'on désire utiliser pour les tests.
     Les fichiers uitlisés pour nos tests se trouvent dans le dossier *./test/*
+
+3. Les outputs se trouvent dans les fichiers *Cas_de_base.txt* et
+   *Solution.txt*
